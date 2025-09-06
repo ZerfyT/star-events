@@ -9,21 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 // Configure DbContext with MySQL
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-<<<<<<< HEAD
     options.UseMySql(connectionString, new MySqlServerVersion(new Version(8, 0, 25))));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 // Add Identity services with custom User and Role types
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddRoles<IdentityRole<int>>() // Use custom Role with int TKey
-=======
-    options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
-    ServerVersion.AutoDetect(connectionString)));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddRoles<IdentityRole>() // Enable Roles
->>>>>>> 1a6e91a5c3e183d04a96b5123e9fbd038a46d20b
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 
