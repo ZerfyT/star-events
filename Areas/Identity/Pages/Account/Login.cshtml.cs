@@ -14,16 +14,17 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
+using star_events.Models;
 
 namespace star_events.Areas.Identity.Pages.Account
 {
     public class LoginModel : PageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly UserManager<IdentityUser> _userManager; // Added for role checks
+        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly UserManager<ApplicationUser> _userManager; // Added for role checks
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager, ILogger<LoginModel> logger)
+        public LoginModel(SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -49,6 +50,9 @@ namespace star_events.Areas.Identity.Pages.Account
             [Required]
             [DataType(DataType.Password)]
             public string Password { get; set; }
+
+            [Display(Name = "User Type")]
+            public string UserType { get; set; } // For role selection (e.g., "Customer", "Admin", "Organizer")
 
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
@@ -83,20 +87,28 @@ namespace star_events.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User logged in with email: {Email} at {Time}", Input.Email, DateTime.Now);
                     var user = await _userManager.FindByEmailAsync(Input.Email);
-                    var roles = await _userManager.GetRolesAsync(user);
-
-                    // Role-based redirection
-                    if (roles.Contains("Admin"))
+                    if (user != null)
                     {
-                        return LocalRedirect("/Admin/Dashboard"); // Redirect to Admin dashboard
+                        var roles = await _userManager.GetRolesAsync(user);
+                        // Role-based redirection
+                        if (roles.Contains("Admin") || Input.UserType == "Admin")
+                        {
+                            return LocalRedirect("/Admin/Dashboard");
+                        }
+                        else if (roles.Contains("Organizer") || Input.UserType == "Organizer")
+                        {
+                            return LocalRedirect("/Organizer/Events");
+                        }
+                        else // Default to Customer
+                        {
+                            return LocalRedirect(returnUrl);
+                        }
                     }
-                    else if (roles.Contains("Organizer"))
+                    else
                     {
-                        return LocalRedirect("/Organizer/Events"); // Redirect to Organizer events page
-                    }
-                    else // Default to Customer
-                    {
-                        return LocalRedirect(returnUrl);
+                        _logger.LogWarning("User not found for email: {Email}", Input.Email);
+                        ModelState.AddModelError(string.Empty, "User not found. Please check your email.");
+                        return Page();
                     }
                 }
                 if (result.RequiresTwoFactor)
@@ -111,7 +123,7 @@ namespace star_events.Areas.Identity.Pages.Account
                 }
                 else
                 {
-                    _logger.LogWarning("Invalid login attempt for email: {Email} at {Time}", Input.Email, DateTime.Now);
+                    _logger.LogWarning("Invalid login attempt for email: {Email} at {Time}. Result: {Result}", Input.Email, DateTime.Now, result.ToString());
                     ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your email and password.");
                     return Page();
                 }

@@ -8,7 +8,7 @@ namespace star_events.Models
         public int PaymentID { get; set; }
 
         [Required]
-        public int BookingID { get; set; }
+        public int BookingID { get; set; }   //FK to Bookings
 
         [Required]
         [StringLength(100)]
@@ -28,6 +28,7 @@ namespace star_events.Models
         [Required]
         public DateTime PaymentDateTime { get; set; }
 
-        public Booking Booking { get; set; } // Navigation property
+        // Navigation property
+        public Booking Booking { get; set; } 
     }
 }

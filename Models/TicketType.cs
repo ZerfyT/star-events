@@ -23,9 +23,8 @@ namespace star_events.Models
         [Required]
         public int AvailableQuantity { get; set; }
 
-        public Event Event { get; set; } // Navigation property
-
-        // Navigation property to Tickets
+        // Navigation properties
+        public Event Event { get; set; } 
         public ICollection<Ticket> Tickets { get; set; }
     }
 }

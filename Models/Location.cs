@@ -21,5 +21,8 @@ namespace star_events.Models
 
         [Required]
         public int Capacity { get; set; }
+
+        // Navigation properties
+        public ICollection<Event> Events { get; set; } // 1:N with Events
     }
 }

@@ -8,6 +8,15 @@ namespace star_events.Models
         public int EventID { get; set; }
 
         [Required]
+        public int LocationID { get; set; }
+
+        [Required]
+        public int CategoryID { get; set; }
+
+        [Required]
+        public int OrganizerID { get; set; } // Maps to ApplicationUser.ID
+
+        [Required]
         [StringLength(100)]
         public string Title { get; set; }
 
@@ -21,15 +30,6 @@ namespace star_events.Models
         [Required]
         public DateTime EndDateTime { get; set; }
 
-        [Required]
-        public int OrganizerID { get; set; } // Maps to ApplicationUser.ID
-
-        [Required]
-        public int LocationID { get; set; }
-
-        [Required]
-        public int CategoryID { get; set; }
-
         [StringLength(255)]
         public string ImageURL { get; set; }
 
@@ -40,9 +40,10 @@ namespace star_events.Models
 
         // Navigation properties
         public Location Location { get; set; } // Existing
-        public ICollection<TicketType> TicketTypes { get; set; } // Existing
         public Category Category { get; set; } // New: Links to Categories table
         public ApplicationUser Organizer { get; set; } // New: Links to Users table via OrganizerID
+        public ICollection<TicketType> TicketTypes { get; set; } // Existing
+
 
     }
 }

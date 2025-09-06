@@ -31,6 +31,42 @@
                 }
             </div>
 
+            <!-- First Name Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true"
+                       aria-describedby="firstNameHelp" placeholder="First Name" />
+                <label asp-for="Input.FirstName" class="form-label">First Name</label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+                <small id="firstNameHelp" class="form-text text-muted">Enter your first name.</small>
+            </div>
+
+            <!-- Last Name Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true"
+                       aria-describedby="lastNameHelp" placeholder="Last Name" />
+                <label asp-for="Input.LastName" class="form-label">Last Name</label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+                <small id="lastNameHelp" class="form-text text-muted">Enter your last name.</small>
+            </div>
+
+            <!-- Contact No Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.ContactNo" class="form-control" autocomplete="tel" aria-required="true"
+                       aria-describedby="contactNoHelp" placeholder="Contact No" />
+                <label asp-for="Input.ContactNo" class="form-label">Contact No</label>
+                <span asp-validation-for="Input.ContactNo" class="text-danger"></span>
+                <small id="contactNoHelp" class="form-text text-muted">Enter your contact number.</small>
+            </div>
+
+            <!-- Address Field -->
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Address" class="form-control" autocomplete="street-address" aria-required="true"
+                       aria-describedby="addressHelp" placeholder="Address" />
+                <label asp-for="Input.Address" class="form-label">Address</label>
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+                <small id="addressHelp" class="form-text text-muted">Enter your address.</small>
+            </div>
+
             <!-- Email Field -->
             <div class="form-floating mb-3">
                 <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"
