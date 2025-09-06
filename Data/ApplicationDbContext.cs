@@ -6,7 +6,11 @@ using System.Net.Sockets;
 
 namespace star_events.Data
 {
+<<<<<<< HEAD
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser, Role, int>
+=======
+    public class ApplicationDbContext : IdentityDbContext
+>>>>>>> 1a6e91a5c3e183d04a96b5123e9fbd038a46d20b
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
