@@ -12,8 +12,8 @@ using star_events.Data;
 namespace star_events.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250904162934_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250906135323_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
