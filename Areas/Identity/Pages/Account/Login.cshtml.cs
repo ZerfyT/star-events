@@ -51,9 +51,6 @@ namespace star_events.Areas.Identity.Pages.Account
             [DataType(DataType.Password)]
             public string Password { get; set; }
 
-            [Display(Name = "User Type")]
-            public string UserType { get; set; } // For role selection (e.g., "Customer", "Admin", "Organizer")
-
             [Display(Name = "Remember me?")]
             public bool RememberMe { get; set; }
         }
@@ -83,6 +80,7 @@ namespace star_events.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in with email: {Email} at {Time}", Input.Email, DateTime.Now);
@@ -91,11 +89,11 @@ namespace star_events.Areas.Identity.Pages.Account
                     {
                         var roles = await _userManager.GetRolesAsync(user);
                         // Role-based redirection
-                        if (roles.Contains("Admin") || Input.UserType == "Admin")
+                        if (roles.Contains("Admin"))
                         {
                             return LocalRedirect("/Admin/Dashboard");
                         }
-                        else if (roles.Contains("Organizer") || Input.UserType == "Organizer")
+                        else if (roles.Contains("Organizer"))
                         {
                             return LocalRedirect("/Organizer/Events");
                         }

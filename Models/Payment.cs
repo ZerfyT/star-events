@@ -7,8 +7,8 @@ namespace star_events.Models
         [Key]
         public int PaymentID { get; set; }
 
-        [Required]
-        public int BookingID { get; set; }   //FK to Bookings
+        //[Required]
+        //public int BookingID { get; set; }   //FK to Bookings
 
         [Required]
         [StringLength(100)]

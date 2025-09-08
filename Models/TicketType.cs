@@ -7,8 +7,8 @@ namespace star_events.Models
         [Key]
         public int TicketTypeID { get; set; }
 
-        [Required]
-        public int EventID { get; set; }
+        //[Required]
+        //public int EventID { get; set; }
 
         [Required]
         [StringLength(50)]

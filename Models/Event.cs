@@ -7,14 +7,14 @@ namespace star_events.Models
         [Key]
         public int EventID { get; set; }
 
-        [Required]
-        public int LocationID { get; set; }
+        //[Required]
+        //public int LocationID { get; set; }
 
-        [Required]
-        public int CategoryID { get; set; }
+        //[Required]
+        //public int CategoryID { get; set; }
 
-        [Required]
-        public int OrganizerID { get; set; } // Maps to ApplicationUser.ID
+        //[Required]
+        //public int OrganizerID { get; set; } // Maps to ApplicationUser.ID
 
         [Required]
         [StringLength(100)]

@@ -8,9 +8,9 @@ namespace star_events.Models
         [Key]
         public int BookingID { get; set; }
 
-        [Required]
-        public int UserID { get; set; }
-        public int? PromotionID { get; set; } // Nullable  //FK to Promotion table
+        //[Required]
+        //public int UserID { get; set; }
+        //public int? PromotionID { get; set; } // Nullable  //FK to Promotion table
 
         [Required]
         public DateTime BookingDateTime { get; set; }

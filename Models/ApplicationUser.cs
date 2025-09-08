@@ -1,13 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace star_events.Models
 {
-    public class ApplicationUser : IdentityUser <int>
+    public class ApplicationUser : IdentityUser
     {
-        //[Required]
-        //public int RoleID { get; set; } // Foreign key to Roles table
-
         [PersonalData]
         [Required]
         public string FirstName { get; set; }
@@ -17,23 +15,17 @@ namespace star_events.Models
         public string LastName { get; set; }
 
         [PersonalData]
-        [Required]
-        public string ContactNo { get; set; }
+        public string? ContactNo { get; set; }
 
         [PersonalData]
-        public string Address { get; set; }
-
-        //[Required]
-        //[EmailAddress]
-        //[StringLength(256)]
-        //public override string Email { get; set; }
+        public string? Address { get; set; }
 
         [PersonalData]
         [Required]
+        [DefaultValue(0)]
         public int LoyaltyPoints { get; set; }
 
         // Navigation properties for relationships
-        public Role Role { get; set; } // 1:1 to Role (via RoleID)
         public ICollection<Event> OrganizedEvents { get; set; } // Events organized by this user
         public ICollection<Booking> Bookings { get; set; } // Bookings made by this user
     }

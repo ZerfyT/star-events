@@ -7,11 +7,11 @@ namespace star_events.Models
         [Key]
         public int TicketID { get; set; }
 
-        [Required]
-        public int BookingID { get; set; }  //FK to Bookings
+        //[Required]
+        //public int BookingID { get; set; }  //FK to Bookings
 
-        [Required]
-        public int TicketTypeID { get; set; }   //FK to Tickets
+        //[Required]
+        //public int TicketTypeID { get; set; }   //FK to Tickets
 
         [StringLength(255)]
         public string QRCodeValue { get; set; }
