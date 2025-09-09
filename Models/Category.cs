@@ -14,6 +14,6 @@ namespace star_events.Models
         [StringLength(255)]
         public string Description { get; set; }
 
-        public ICollection<Event> Events { get; set; } // One-to-many with Events
+        // public ICollection<Event> Events { get; set; } // One-to-many with Events
     }
 }
