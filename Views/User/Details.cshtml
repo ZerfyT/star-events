@@ -1,37 +1,129 @@
 @model star_events.Models.ApplicationUser
 
 @{
-    ViewData["Title"] = "Details";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "User Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h1>Details</h1>
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-person-circle me-3"></i>User Details</h1>
+            <p>View detailed information about this user</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Users
+            </a>
+        </div>
+    </div>
+</div>
 
-<div>
-    <h4>Category</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FirstName)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LastName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Email)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ContactNo)
-        </dd>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Address)
-        </dd>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.LoyaltyPoints)
-        </dd>
-    </dl>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="details-card">
+            <div class="card-header">
+                <h5><i class="bi bi-person-fill me-2"></i>User Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-3 text-center">
+                        <div class="avatar-lg bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                            @Model.FirstName.Substring(0, 1).ToUpper()
+                        </div>
+                        <h5 class="mb-0">@Model.FirstName @Model.LastName</h5>
+                        <small class="text-muted">User ID: @Model.Id.Substring(0, 8)...</small>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="bi bi-envelope me-2"></i>Email Address
+                                    </div>
+                                    <div class="detail-value">@Model.Email</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="detail-item">
+                                    <div class="detail-label">
+                                        <i class="bi bi-telephone me-2"></i>Contact Number
+                                    </div>
+                                    <div class="detail-value">@(string.IsNullOrEmpty(Model.ContactNo) ? "Not provided" : Model.ContactNo)</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-geo-alt me-2"></i>Address
+                    </div>
+                    <div class="detail-value">@(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-star me-2"></i>Loyalty Points
+                    </div>
+                    <div class="detail-value">
+                        <span class="badge bg-warning text-dark fs-6">
+                            <i class="bi bi-star-fill me-1"></i>
+                            @Model.LoyaltyPoints points
+                        </span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-calendar me-2"></i>Account Created
+                    </div>
+                    <div class="detail-value">@Model.Id.Substring(0, 8)...</div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-shield me-2"></i>Account Status
+                    </div>
+                    <div class="detail-value">
+                        <span class="badge bg-success">
+                            <i class="bi bi-check-circle me-1"></i>
+                            Active
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4">
+            <div class="d-flex gap-3 justify-content-center">
+                <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-primary">
+                    <i class="bi bi-pencil me-2"></i>Edit User
+                </a>
+                <a asp-action="Delete" asp-route-id="@Model?.Id" class="btn btn-danger">
+                    <i class="bi bi-trash me-2"></i>Delete User
+                </a>
+                <a asp-action="Index" class="btn btn-outline-secondary">
+                    <i class="bi bi-list me-2"></i>Back to List
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+
+@section Scripts {
+    <script>
+        // Add avatar styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .avatar-lg {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+                font-weight: 600;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+}
