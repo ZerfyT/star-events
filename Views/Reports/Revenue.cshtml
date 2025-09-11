@@ -1,0 +1,264 @@
+@model star_events.Controllers.RevenueReportViewModel
+
+@{
+    ViewData["Title"] = "Revenue Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-currency-dollar me-3"></i>Revenue Report</h1>
+            <p>Track income, payment methods, and financial performance</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel me-1"></i>Apply Filters
+                        </button>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <button type="button" class="btn btn-success" onclick="exportReport('revenue')">
+                            <i class="bi bi-download me-1"></i>Export CSV
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">$@Model.TotalRevenue.ToString("N2")</p>
+                    <p class="stats-label">Total Revenue</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-primary">
+                    <i class="bi bi-credit-card"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-primary">@Model.Payments.Count</p>
+                    <p class="stats-label">Total Payments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-4 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-info">
+                    <i class="bi bi-graph-up"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-info">$@(Model.Payments.Count > 0 ? (Model.TotalRevenue / Model.Payments.Count).ToString("N2") : "0.00")</p>
+                    <p class="stats-label">Average Payment</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payment Method Breakdown -->
+<div class="row mb-4">
+    <div class="col-xl-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-pie-chart me-2"></i>Payment Methods</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.PaymentMethodBreakdown.Any())
+                {
+                    <div class="payment-methods">
+                        @foreach (var method in Model.PaymentMethodBreakdown)
+                        {
+                            <div class="payment-method-item d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="method-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                        <i class="bi bi-credit-card"></i>
+                                    </div>
+                                    <div>
+                                        <div class="fw-semibold">@method.Method</div>
+                                        <small class="text-muted">@method.Count payments</small>
+                                    </div>
+                                </div>
+                                <div class="text-end">
+                                    <div class="fw-bold">$@method.TotalAmount.ToString("N2")</div>
+                                    <small class="text-muted">@((method.TotalAmount / Model.TotalRevenue * 100).ToString("F1"))%</small>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">No payment data available</p>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-calendar me-2"></i>Date Range Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="date-summary">
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-calendar-event me-2"></i>Report Period</span>
+                        <span class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-clock me-2"></i>Days Covered</span>
+                        <span class="fw-semibold">@((Model.EndDate - Model.StartDate).Days + 1) days</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-graph-up me-2"></i>Daily Average</span>
+                        <span class="fw-semibold">$@((Model.TotalRevenue / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("N2"))</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Payments Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-table me-2"></i>Payment Details</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="border-0">Payment ID</th>
+                                <th class="border-0">Amount</th>
+                                <th class="border-0">Method</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Date</th>
+                                <th class="border-0">Transaction ID</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var payment in Model.Payments)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="fw-semibold">#@payment.PaymentID</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">$@payment.AmountPaid.ToString("N2")</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge bg-primary">@payment.PaymentMethod</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(payment.PaymentStatus == "Completed" ? "bg-success" : payment.PaymentStatus == "Pending" ? "bg-warning" : "bg-danger")">
+                                            @payment.PaymentStatus
+                                        </span>
+                                    </td>
+                                    <td>@payment.PaymentDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        <small class="text-muted">@payment.PaymentGatewayTransactionID</small>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function exportReport(type) {
+            const startDate = document.querySelector('input[name="startDate"]').value;
+            const endDate = document.querySelector('input[name="endDate"]').value;
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("Export", "Reports")';
+            
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'reportType';
+            typeInput.value = type;
+            form.appendChild(typeInput);
+            
+            const formatInput = document.createElement('input');
+            formatInput.type = 'hidden';
+            formatInput.name = 'format';
+            formatInput.value = 'csv';
+            form.appendChild(formatInput);
+            
+            if (startDate) {
+                const startInput = document.createElement('input');
+                startInput.type = 'hidden';
+                startInput.name = 'startDate';
+                startInput.value = startDate;
+                form.appendChild(startInput);
+            }
+            
+            if (endDate) {
+                const endInput = document.createElement('input');
+                endInput.type = 'hidden';
+                endInput.name = 'endDate';
+                endInput.value = endDate;
+                form.appendChild(endInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        // Add method icon styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .method-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+}

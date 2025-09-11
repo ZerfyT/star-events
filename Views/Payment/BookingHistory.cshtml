@@ -1,0 +1,237 @@
+@model star_events.Controllers.BookingHistoryViewModel
+
+@{
+    ViewData["Title"] = "Booking History";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-ticket-perforated me-3"></i>Booking History</h1>
+            <p>View and manage all booking transactions</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Payments
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        @* <select name="status" class="form-select"> *@
+                        @*     <option value="">All Statuses</option> *@
+                        @*     <option value="Completed" @(Model.StatusFilter == "Completed" ? "selected" : "")>Completed</option> *@
+                        @*     <option value="Pending" @(Model.StatusFilter == "Pending" ? "selected" : "")>Pending</option> *@
+                        @*     <option value="Cancelled" @(Model.StatusFilter == "Cancelled" ? "selected" : "")>Cancelled</option> *@
+                        @* </select> *@
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary me-2">
+                            <i class="bi bi-funnel me-1"></i>Apply Filters
+                        </button>
+                        <button type="button" class="btn btn-success" onclick="exportBookings()">
+                            <i class="bi bi-download me-1"></i>Export
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-primary">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-primary">@Model.TotalBookings</p>
+                    <p class="stats-label">Total Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">$@Model.TotalValue.ToString("N2")</p>
+                    <p class="stats-label">Total Value</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-warning">@Model.PendingBookings</p>
+                    <p class="stats-label">Pending</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-danger">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-danger">@Model.CancelledBookings</p>
+                    <p class="stats-label">Cancelled</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bookings Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-table me-2"></i>Booking Details</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="border-0">Booking ID</th>
+                                <th class="border-0">User</th>
+                                <th class="border-0">Total Amount</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Booking Date</th>
+                                <th class="border-0">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.Bookings)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="fw-semibold">#@booking.BookingID</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                                @(booking.User?.FirstName?.Substring(0, 1).ToUpper() ?? "U")
+                                            </div>
+                                            <div>
+                                                <div class="fw-semibold">@(booking.User?.FirstName ?? "Unknown") @(booking.User?.LastName ?? "User")</div>
+                                                <small class="text-muted">@(booking.User?.Email ?? "No email")</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">$@booking.TotalAmount.ToString("N2")</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                            @booking.Status
+                                        </span>
+                                    </td>
+                                    <td>@booking.BookingDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="BookingDetails" asp-route-id="@booking.BookingID" class="btn btn-outline-info btn-action" title="View Details">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function exportBookings() {
+            const startDate = document.querySelector('input[name="startDate"]').value;
+            const endDate = document.querySelector('input[name="endDate"]').value;
+            const status = document.querySelector('select[name="status"]').value;
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("Export", "Payment")';
+            
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'exportType';
+            typeInput.value = 'bookings';
+            form.appendChild(typeInput);
+            
+            if (startDate) {
+                const startInput = document.createElement('input');
+                startInput.type = 'hidden';
+                startInput.name = 'startDate';
+                startInput.value = startDate;
+                form.appendChild(startInput);
+            }
+            
+            if (endDate) {
+                const endInput = document.createElement('input');
+                endInput.type = 'hidden';
+                endInput.name = 'endDate';
+                endInput.value = endDate;
+                form.appendChild(endInput);
+            }
+            
+            if (status) {
+                const statusInput = document.createElement('input');
+                statusInput.type = 'hidden';
+                statusInput.name = 'status';
+                statusInput.value = status;
+                form.appendChild(statusInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        // Add avatar styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .avatar-sm {
+                width: 40px;
+                height: 40px;
+                font-size: 14px;
+                font-weight: 600;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+}
