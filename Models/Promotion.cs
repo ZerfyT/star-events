@@ -6,6 +6,9 @@ namespace star_events.Models
     {
         [Key]
         public int PromotionID { get; set; }
+        
+        [Required]
+        public int EventID { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -27,6 +30,8 @@ namespace star_events.Models
         [Required]
         public bool IsActive { get; set; }
 
+        // Navigation properties
+        public Event Event { get; set; }
         public ICollection<Booking> Bookings { get; set; } // One-to-many
     }
 }

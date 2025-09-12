@@ -1,0 +1,144 @@
+@model star_events.Models.TicketType
+
+@{
+    ViewData["Title"] = "Delete Ticket Type";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-trash me-2"></i>Delete Ticket Type
+                </h1>
+                <a asp-action="Index" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to List
+                </a>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow mb-4 border-danger">
+                        <div class="card-header py-3 bg-danger text-white">
+                            <h6 class="m-0 font-weight-bold">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-warning" role="alert">
+                                <h5 class="alert-heading">
+                                    <i class="fas fa-exclamation-triangle me-2"></i>Warning!
+                                </h5>
+                                <p class="mb-0">Are you sure you want to delete this ticket type? This action cannot be undone and may affect existing bookings.</p>
+                            </div>
+                            
+                            <h5 class="mb-3">Ticket Type Information:</h5>
+                            <dl class="row">
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-tag me-1"></i>@Html.DisplayNameFor(model => model.Name)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <strong>@Html.DisplayFor(model => model.Name)</strong>
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-calendar me-1"></i>Event
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @if (Model.Event != null)
+                                    {
+                                        <span class="badge bg-info fs-6">@Model.Event.Title</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Event Assigned</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-dollar-sign me-1"></i>@Html.DisplayNameFor(model => model.Price)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <span class="text-success font-weight-bold fs-5">$@Html.DisplayFor(model => model.Price)</span>
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-boxes me-1"></i>@Html.DisplayNameFor(model => model.TotalQuantity)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    <span class="badge bg-secondary fs-6">@Html.DisplayFor(model => model.TotalQuantity)</span>
+                                </dd>
+                                
+                                <dt class="col-sm-4">
+                                    <i class="fas fa-check-circle me-1"></i>@Html.DisplayNameFor(model => model.AvailableQuantity)
+                                </dt>
+                                <dd class="col-sm-8">
+                                    @{
+                                        var availablePercentage = Model.TotalQuantity > 0 ? (double)Model.AvailableQuantity / Model.TotalQuantity * 100 : 0;
+                                        var badgeClass = availablePercentage > 50 ? "bg-success" : availablePercentage > 25 ? "bg-warning" : "bg-danger";
+                                    }
+                                    <span class="badge @badgeClass fs-6">@Html.DisplayFor(model => model.AvailableQuantity)</span>
+                                    <small class="text-muted">(@availablePercentage.ToString("F0")% available)</small>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Impact Analysis</h6>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                var soldQuantity = Model.TotalQuantity - Model.AvailableQuantity;
+                            }
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Tickets Sold:</span>
+                                    <strong class="text-warning">@soldQuantity</strong>
+                                </div>
+                                @if (soldQuantity > 0)
+                                {
+                                    <small class="text-danger">⚠️ Deleting this ticket type may affect existing bookings</small>
+                                }
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Available:</span>
+                                    <strong>@Model.AvailableQuantity</strong>
+                                </div>
+                            </div>
+                            
+                            <div class="text-center">
+                                <div class="h6 text-primary">Revenue at Risk</div>
+                                <div class="h5 text-danger">$@((soldQuantity * Model.Price).ToString("F2"))</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
+                        </div>
+                        <div class="card-body">
+                            <form asp-action="Delete" class="d-grid gap-2">
+                                <input type="hidden" asp-for="TicketTypeID" />
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this ticket type? This action cannot be undone!')">
+                                    <i class="fas fa-trash me-1"></i>Yes, Delete Ticket Type
+                                </button>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-times me-1"></i>Cancel
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

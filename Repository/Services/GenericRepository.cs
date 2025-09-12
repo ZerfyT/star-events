@@ -15,12 +15,12 @@ public class GenericRepository<T> : IGenericRepository<T> where T : class
         table = _context.Set<T>();
     }
 
-    public IEnumerable<T> GetAll()
+    public virtual IEnumerable<T> GetAll()
     {
         return table.ToList();
     }
 
-    public T GetById(object id)
+    public virtual T GetById(object id)
     {
         return table.Find(id);
     }

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using star_events.Data;
 
@@ -11,9 +12,11 @@ using star_events.Data;
 namespace star_events.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250912013344_add event id to promotion")]
+    partial class addeventidtopromotion
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -323,8 +326,7 @@ namespace star_events.Migrations
                     b.Property<int>("LocationID")
                         .HasColumnType("int");
 
-                    b.Property<string>("OrganizerID")
-                        .IsRequired()
+                    b.Property<string>("OrganizerId")
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("StartDateTime")
@@ -346,7 +348,7 @@ namespace star_events.Migrations
 
                     b.HasIndex("LocationID");
 
-                    b.HasIndex("OrganizerID");
+                    b.HasIndex("OrganizerId");
 
                     b.ToTable("Events");
                 });
@@ -611,9 +613,7 @@ namespace star_events.Migrations
 
                     b.HasOne("star_events.Models.ApplicationUser", "Organizer")
                         .WithMany()
-                        .HasForeignKey("OrganizerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrganizerId");
 
                     b.Navigation("Category");
 
@@ -666,7 +666,7 @@ namespace star_events.Migrations
             modelBuilder.Entity("star_events.Models.TicketType", b =>
                 {
                     b.HasOne("star_events.Models.Event", "Event")
-                        .WithMany()
+                        .WithMany("TicketTypes")
                         .HasForeignKey("EventID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -679,6 +679,11 @@ namespace star_events.Migrations
                     b.Navigation("Payments");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("star_events.Models.Event", b =>
+                {
+                    b.Navigation("TicketTypes");
                 });
 
             modelBuilder.Entity("star_events.Models.Promotion", b =>

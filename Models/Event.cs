@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace star_events.Models
 {
@@ -7,14 +9,17 @@ namespace star_events.Models
         [Key]
         public int EventID { get; set; }
 
-        //[Required]
-        //public int LocationID { get; set; }
+        [Required]
+        [Display(Name = "Venue")]
+        public int LocationID { get; set; }
 
-        //[Required]
-        //public int CategoryID { get; set; }
+        [Required]
+        [Display(Name = "Category")]
+        public int CategoryID { get; set; }
 
-        //[Required]
-        //public int OrganizerID { get; set; } // Maps to ApplicationUser.ID
+        [Required]
+        [Display(Name = "Organizer")]
+        public string OrganizerID { get; set; } // Maps to ApplicationUser.ID
 
         [Required]
         [StringLength(100)]
@@ -39,11 +44,16 @@ namespace star_events.Models
 
 
         // Navigation properties
-        public Location Location { get; set; } // Existing
-        public Category Category { get; set; } // New: Links to Categories table
-        public ApplicationUser Organizer { get; set; } // New: Links to Users table via OrganizerID
-        public ICollection<TicketType> TicketTypes { get; set; } // Existing
-
+        [ForeignKey("LocationID")]
+        public virtual Location Location { get; set; } // Existing
+        
+        [ForeignKey("CategoryID")]
+        public virtual Category Category { get; set; } // New: Links to Categories table
+        
+        [ForeignKey("OrganizerID")]
+        public virtual ApplicationUser Organizer { get; set; } // New: Links to Users table via OrganizerID
+        
+        // public virtual ICollection<TicketType> TicketTypes { get; set; } // Existing
 
     }
 }

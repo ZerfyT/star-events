@@ -1,0 +1,263 @@
+@model star_events.Models.Event
+
+@{
+    ViewData["Title"] = "Event Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3 mb-0 text-gray-800">
+                    <i class="fas fa-eye me-2"></i>Event Details
+                </h1>
+                <div class="btn-group" role="group">
+                    <a asp-action="Edit" asp-route-id="@Model?.EventID" class="btn btn-warning">
+                        <i class="fas fa-edit me-1"></i>Edit
+                    </a>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i>Back to List
+                    </a>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Event Information</h6>
+                        </div>
+                        <div class="card-body">
+                            @if (!string.IsNullOrEmpty(Model.ImageURL))
+                            {
+                                <div class="text-center mb-4">
+                                    <img src="@Model.ImageURL" alt="@Model.Title" class="img-fluid rounded" style="max-height: 300px;">
+                                </div>
+                            }
+                            
+                            <dl class="row">
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-heading me-1"></i>@Html.DisplayNameFor(model => model.Title)
+                                </dt>
+                                <dd class="col-sm-9">
+                                    <strong class="fs-5">@Html.DisplayFor(model => model.Title)</strong>
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-align-left me-1"></i>@Html.DisplayNameFor(model => model.Description)
+                                </dt>
+                                <dd class="col-sm-9">
+                                    <p class="mb-0">@Html.DisplayFor(model => model.Description)</p>
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-map-marker-alt me-1"></i>Venue
+                                </dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Location != null)
+                                    {
+                                        <span class="badge bg-info fs-6">@Model.Location.Address</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Venue Assigned</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-tags me-1"></i>Category
+                                </dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Category != null)
+                                    {
+                                        <span class="badge bg-secondary fs-6">@Model.Category.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Category Assigned</span>
+                                    }
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-calendar-alt me-1"></i>@Html.DisplayNameFor(model => model.StartDateTime)
+                                </dt>
+                                <dd class="col-sm-9">
+                                    <span class="text-info fs-6">@Model.StartDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-calendar-times me-1"></i>@Html.DisplayNameFor(model => model.EndDateTime)
+                                </dt>
+                                <dd class="col-sm-9">
+                                    <span class="text-info fs-6">@Model.EndDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-toggle-on me-1"></i>Status
+                                </dt>
+                                <dd class="col-sm-9">
+                                    @{
+                                        var now = DateTime.Now;
+                                        var isPast = Model.EndDateTime < now;
+                                        var isUpcoming = Model.StartDateTime > now;
+                                        var isOngoing = Model.StartDateTime <= now && Model.EndDateTime >= now;
+                                        
+                                        string statusClass;
+                                        string statusText;
+                                        
+                                        if (Model.Status == "Cancelled")
+                                        {
+                                            statusClass = "bg-danger";
+                                            statusText = "Cancelled";
+                                        }
+                                        else if (Model.Status == "Draft")
+                                        {
+                                            statusClass = "bg-secondary";
+                                            statusText = "Draft";
+                                        }
+                                        else if (isPast)
+                                        {
+                                            statusClass = "bg-dark";
+                                            statusText = "Past";
+                                        }
+                                        else if (isOngoing)
+                                        {
+                                            statusClass = "bg-success";
+                                            statusText = "Ongoing";
+                                        }
+                                        else if (isUpcoming)
+                                        {
+                                            statusClass = "bg-primary";
+                                            statusText = "Upcoming";
+                                        }
+                                        else
+                                        {
+                                            statusClass = "bg-warning";
+                                            statusText = Model.Status;
+                                        }
+                                    }
+                                    <span class="badge @statusClass fs-6">@statusText</span>
+                                </dd>
+                                
+                                <dt class="col-sm-3">
+                                    <i class="fas fa-user me-1"></i>Organizer
+                                </dt>
+                                <dd class="col-sm-9">
+                                    @if (Model.Organizer != null)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="fas fa-user text-white"></i>
+                                            </div>
+                                            <div>
+                                                <strong>@Model.Organizer.UserName</strong>
+                                                <br>
+                                                <small class="text-muted">@Model.Organizer.Email</small>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Organizer Assigned</span>
+                                    }
+                                </dd>
+                            </dl>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Event Timeline</h6>
+                        </div>
+                        <div class="card-body">
+                            @{
+                                var now = DateTime.Now;
+                                var totalDuration = Model.EndDateTime - Model.StartDateTime;
+                                var timeUntilStart = Model.StartDateTime - now;
+                                var timeUntilEnd = Model.EndDateTime - now;
+                                
+                                var progressPercentage = 0.0;
+                                if (totalDuration.TotalHours > 0)
+                                {
+                                    if (now < Model.StartDateTime)
+                                    {
+                                        progressPercentage = 0;
+                                    }
+                                    else if (now > Model.EndDateTime)
+                                    {
+                                        progressPercentage = 100;
+                                    }
+                                    else
+                                    {
+                                        var elapsed = now - Model.StartDateTime;
+                                        progressPercentage = Math.Min(100, Math.Max(0, (elapsed.TotalHours / totalDuration.TotalHours) * 100));
+                                    }
+                                }
+                            }
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Duration:</span>
+                                    <strong>@totalDuration.Days days, @totalDuration.Hours hours</strong>
+                                </div>
+                                <div class="progress mt-1" style="height: 8px;">
+                                    <div class="progress-bar bg-primary" role="progressbar" style="width: @progressPercentage.ToString("F0")%"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-3">
+                                <div class="d-flex justify-content-between">
+                                    <span>Time Status:</span>
+                                    <strong class="@(timeUntilStart.TotalHours > 0 ? "text-primary" : timeUntilEnd.TotalHours < 0 ? "text-dark" : "text-success")">
+                                        @if (timeUntilStart.TotalHours > 0)
+                                        {
+                                            <text>Starts in @timeUntilStart.Days days</text>
+                                        }
+                                        else if (timeUntilEnd.TotalHours < 0)
+                                        {
+                                            <text>Ended @Math.Abs(timeUntilEnd.Days) days ago</text>
+                                        }
+                                        else
+                                        {
+                                            <text>In Progress</text>
+                                        }
+                                    </strong>
+                                </div>
+                            </div>
+                            
+                            @if (!string.IsNullOrEmpty(Model.ImageURL))
+                            {
+                                <div class="text-center">
+                                    <div class="h6 text-primary">Event Image</div>
+                                    <img src="@Model.ImageURL" alt="@Model.Title" class="img-fluid rounded" style="max-height: 150px;">
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="d-grid gap-2">
+                                <a asp-action="Edit" asp-route-id="@Model?.EventID" class="btn btn-warning">
+                                    <i class="fas fa-edit me-1"></i>Edit Event
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@Model?.EventID" class="btn btn-danger">
+                                    <i class="fas fa-trash me-1"></i>Delete Event
+                                </a>
+                                <a asp-action="Index" class="btn btn-secondary">
+                                    <i class="fas fa-list me-1"></i>View All Events
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
