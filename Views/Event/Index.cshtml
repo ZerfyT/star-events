@@ -5,203 +5,196 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">
-                    <i class="fas fa-calendar-alt me-2"></i>Events
-                </h1>
+<div class="page-header">
+    <h1><i class="bi bi-calendar-event"></i> Events</h1>
+    <p>Manage all events and their details</p>
+</div>
+
+<div class="table-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5><i class="bi bi-list-ul"></i> All Events</h5>
+            <a asp-action="Create" class="btn btn-light">
+                <i class="bi bi-plus-circle"></i> Create New Event
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="bi bi-calendar-event"></i> Event
+                            </th>
+                            <th>
+                                <i class="bi bi-geo-alt"></i> Location
+                            </th>
+                            <th>
+                                <i class="bi bi-tags"></i> Category
+                            </th>
+                            <th>
+                                <i class="bi bi-calendar-plus"></i> Start Date
+                            </th>
+                            <th>
+                                <i class="bi bi-calendar-x"></i> End Date
+                            </th>
+                            <th>
+                                <i class="bi bi-toggle-on"></i> Status
+                            </th>
+                            <th>
+                                <i class="bi bi-person"></i> Organizer
+                            </th>
+                            <th class="text-center">
+                                <i class="bi bi-gear"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        @if (!string.IsNullOrEmpty(item.ImageURL))
+                                        {
+                                            <img src="@item.ImageURL" alt="@item.Title" class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
+                                        }
+                                        else
+                                        {
+                                            <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+                                                <i class="bi bi-image text-muted"></i>
+                                            </div>
+                                        }
+                                        <div>
+                                            <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                            <br>
+                                            <small class="text-muted">@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if (item.Location != null)
+                                    {
+                                        <span class="badge bg-info">@item.Location.Address</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Location</span>
+                                    }
+                                </td>
+                                <td>
+                                    @if (item.Category != null)
+                                    {
+                                        <span class="badge bg-secondary">@item.Category.Name</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Category</span>
+                                    }
+                                </td>
+                                <td>
+                                    <small>@item.StartDateTime.ToString("MMM dd, yyyy")</small>
+                                    <br>
+                                    <small class="text-muted">@item.StartDateTime.ToString("h:mm tt")</small>
+                                </td>
+                                <td>
+                                    <small>@item.EndDateTime.ToString("MMM dd, yyyy")</small>
+                                    <br>
+                                    <small class="text-muted">@item.EndDateTime.ToString("h:mm tt")</small>
+                                </td>
+                                <td>
+                                    @{
+                                        var now = DateTime.Now;
+                                        var isPast = item.EndDateTime < now;
+                                        var isUpcoming = item.StartDateTime > now;
+                                        var isOngoing = item.StartDateTime <= now && item.EndDateTime >= now;
+                                        
+                                        string statusClass;
+                                        string statusText;
+                                        
+                                        if (item.Status == "Cancelled")
+                                        {
+                                            statusClass = "bg-danger";
+                                            statusText = "Cancelled";
+                                        }
+                                        else if (item.Status == "Draft")
+                                        {
+                                            statusClass = "bg-secondary";
+                                            statusText = "Draft";
+                                        }
+                                        else if (isPast)
+                                        {
+                                            statusClass = "bg-dark";
+                                            statusText = "Past";
+                                        }
+                                        else if (isOngoing)
+                                        {
+                                            statusClass = "bg-success";
+                                            statusText = "Ongoing";
+                                        }
+                                        else if (isUpcoming)
+                                        {
+                                            statusClass = "bg-primary";
+                                            statusText = "Upcoming";
+                                        }
+                                        else
+                                        {
+                                            statusClass = "bg-warning";
+                                            statusText = item.Status;
+                                        }
+                                    }
+                                    <span class="badge @statusClass">@statusText</span>
+                                </td>
+                                <td>
+                                    @if (item.Organizer != null)
+                                    {
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                                <i class="bi bi-person text-white" style="font-size: 12px;"></i>
+                                            </div>
+                                            <div>
+                                                <small class="fw-bold">@item.Organizer.UserName</small>
+                                                <br>
+                                                <small class="text-muted">@item.Organizer.Email</small>
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Organizer</span>
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@item.EventID" class="btn btn-outline-info btn-action" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.EventID" class="btn btn-outline-primary btn-action" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.EventID" class="btn btn-outline-danger btn-action" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-calendar-event" style="font-size: 3rem;" class="text-muted mb-3"></i>
+                <h5 class="text-muted">No Events Found</h5>
+                <p class="text-muted">Get started by creating your first event.</p>
                 <a asp-action="Create" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i>Create New Event
+                    <i class="bi bi-plus-circle"></i> Create First Event
                 </a>
             </div>
-
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">All Events</h6>
-                </div>
-                <div class="card-body">
-                    @if (Model.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>
-                                            <i class="fas fa-calendar me-1"></i>Event
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-map-marker-alt me-1"></i>Location
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-tags me-1"></i>Category
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-calendar-alt me-1"></i>Start Date
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-calendar-times me-1"></i>End Date
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-toggle-on me-1"></i>Status
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-user me-1"></i>Organizer
-                                        </th>
-                                        <th class="text-center">
-                                            <i class="fas fa-cogs me-1"></i>Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if (!string.IsNullOrEmpty(item.ImageURL))
-                                                    {
-                                                        <img src="@item.ImageURL" alt="@item.Title" class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                            <i class="fas fa-image text-muted"></i>
-                                                        </div>
-                                                    }
-                                                    <div>
-                                                        <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
-                                                        <br>
-                                                        <small class="text-muted">@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                @if (item.Location != null)
-                                                {
-                                                    <span class="badge bg-info">@item.Location.Address</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">No Location</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                @if (item.Category != null)
-                                                {
-                                                    <span class="badge bg-secondary">@item.Category.Name</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">No Category</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <small>@item.StartDateTime.ToString("MMM dd, yyyy")</small>
-                                                <br>
-                                                <small class="text-muted">@item.StartDateTime.ToString("h:mm tt")</small>
-                                            </td>
-                                            <td>
-                                                <small>@item.EndDateTime.ToString("MMM dd, yyyy")</small>
-                                                <br>
-                                                <small class="text-muted">@item.EndDateTime.ToString("h:mm tt")</small>
-                                            </td>
-                                            <td>
-                                                @{
-                                                    var now = DateTime.Now;
-                                                    var isPast = item.EndDateTime < now;
-                                                    var isUpcoming = item.StartDateTime > now;
-                                                    var isOngoing = item.StartDateTime <= now && item.EndDateTime >= now;
-                                                    
-                                                    string statusClass;
-                                                    string statusText;
-                                                    
-                                                    if (item.Status == "Cancelled")
-                                                    {
-                                                        statusClass = "bg-danger";
-                                                        statusText = "Cancelled";
-                                                    }
-                                                    else if (item.Status == "Draft")
-                                                    {
-                                                        statusClass = "bg-secondary";
-                                                        statusText = "Draft";
-                                                    }
-                                                    else if (isPast)
-                                                    {
-                                                        statusClass = "bg-dark";
-                                                        statusText = "Past";
-                                                    }
-                                                    else if (isOngoing)
-                                                    {
-                                                        statusClass = "bg-success";
-                                                        statusText = "Ongoing";
-                                                    }
-                                                    else if (isUpcoming)
-                                                    {
-                                                        statusClass = "bg-primary";
-                                                        statusText = "Upcoming";
-                                                    }
-                                                    else
-                                                    {
-                                                        statusClass = "bg-warning";
-                                                        statusText = item.Status;
-                                                    }
-                                                }
-                                                <span class="badge @statusClass">@statusText</span>
-                                            </td>
-                                            <td>
-                                                @if (item.Organizer != null)
-                                                {
-                                                    <div class="d-flex align-items-center">
-                                                        <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                            <i class="fas fa-user text-white" style="font-size: 12px;"></i>
-                                                        </div>
-                                                        <div>
-                                                            <small class="fw-bold">@item.Organizer.UserName</small>
-                                                            <br>
-                                                            <small class="text-muted">@item.Organizer.Email</small>
-                                                        </div>
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">No Organizer</span>
-                                                }
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <a asp-action="Details" asp-route-id="@item.EventID" class="btn btn-info btn-sm" title="View Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a asp-action="Edit" asp-route-id="@item.EventID" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a asp-action="Delete" asp-route-id="@item.EventID" class="btn btn-danger btn-sm" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <i class="fas fa-calendar-alt fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Events Found</h5>
-                            <p class="text-muted">Get started by creating your first event.</p>
-                            <a asp-action="Create" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Create First Event
-                            </a>
-                        </div>
-                    }
-                </div>
-            </div>
-        </div>
+        }
     </div>
 </div>
 

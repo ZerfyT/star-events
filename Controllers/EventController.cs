@@ -77,7 +77,7 @@ namespace star_events.Controllers
             
             ViewData["CategoryID"] = new SelectList(_categoryRepository.GetAll(), "CategoryID", "Name", @event.CategoryID);
             ViewData["LocationID"] = new SelectList(_locationRepository.GetAll(), "LocationID", "Address", @event.LocationID);
-            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.OrganizerID);
+            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.Organizer?.Id);
             return View(@event);
         }
 
@@ -96,7 +96,7 @@ namespace star_events.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_categoryRepository.GetAll(), "CategoryID", "Name", @event.CategoryID);
             ViewData["LocationID"] = new SelectList(_locationRepository.GetAll(), "LocationID", "Address", @event.LocationID);
-            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.OrganizerID);
+            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.Organizer?.Id);
             return View(@event);
         }
 
@@ -134,7 +134,7 @@ namespace star_events.Controllers
             }
             ViewData["CategoryID"] = new SelectList(_categoryRepository.GetAll(), "CategoryID", "Name", @event.CategoryID);
             ViewData["LocationID"] = new SelectList(_locationRepository.GetAll(), "LocationID", "Address", @event.LocationID);
-            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.OrganizerID);
+            ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.Organizer?.Id);
             return View(@event);
         }
 

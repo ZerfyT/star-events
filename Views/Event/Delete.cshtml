@@ -5,251 +5,248 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">
-                    <i class="fas fa-trash me-2"></i>Delete Event
-                </h1>
-                <a asp-action="Index" class="btn btn-secondary">
-                    <i class="fas fa-arrow-left me-1"></i>Back to List
-                </a>
-            </div>
+<div class="page-header">
+    <h1><i class="bi bi-trash"></i> Delete Event</h1>
+    <p>Remove event from the system</p>
+</div>
 
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card shadow mb-4 border-danger">
-                        <div class="card-header py-3 bg-danger text-white">
-                            <h6 class="m-0 font-weight-bold">
-                                <i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion
-                            </h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="alert alert-warning" role="alert">
-                                <h5 class="alert-heading">
-                                    <i class="fas fa-exclamation-triangle me-2"></i>Warning!
-                                </h5>
-                                <p class="mb-0">Are you sure you want to delete this event? This action cannot be undone and may affect existing bookings, ticket types, and promotions associated with this event.</p>
+<div class="row">
+    <div class="col-lg-8">
+        <div class="delete-card">
+            <div class="card-header">
+                <h5><i class="bi bi-exclamation-triangle"></i> Confirm Deletion</h5>
+            </div>
+            <div class="card-body text-center">
+                <div class="warning-icon">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <h4>Are you sure you want to delete this event?</h4>
+                <p class="text-muted">This action cannot be undone. Existing bookings, ticket types, and promotions associated with this event may be affected.</p>
+                
+                <div class="details-card mt-4">
+                    <div class="card-header">
+                        <h6><i class="bi bi-calendar-event"></i> Event to be deleted</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-type"></i> @Html.DisplayNameFor(model => model.Title)
                             </div>
-                            
-                            <h5 class="mb-3">Event Information:</h5>
-                            <dl class="row">
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-heading me-1"></i>@Html.DisplayNameFor(model => model.Title)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    <strong class="text-primary">@Html.DisplayFor(model => model.Title)</strong>
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-align-left me-1"></i>@Html.DisplayNameFor(model => model.Description)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    <p class="mb-0">@(Model.Description.Length > 100 ? Model.Description.Substring(0, 100) + "..." : Model.Description)</p>
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-map-marker-alt me-1"></i>Venue
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Location != null)
+                            <div class="detail-value">
+                                <strong class="text-primary">@Html.DisplayFor(model => model.Title)</strong>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-text-paragraph"></i> @Html.DisplayNameFor(model => model.Description)
+                            </div>
+                            <div class="detail-value">
+                                <p class="mb-0">@(Model.Description.Length > 100 ? Model.Description.Substring(0, 100) + "..." : Model.Description)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-geo-alt"></i> Venue
+                            </div>
+                            <div class="detail-value">
+                                @if (Model.Location != null)
+                                {
+                                    <span class="badge bg-info fs-6">@Model.Location.Address</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Venue Assigned</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-tags"></i> Category
+                            </div>
+                            <div class="detail-value">
+                                @if (Model.Category != null)
+                                {
+                                    <span class="badge bg-secondary fs-6">@Model.Category.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Category Assigned</span>
+                                }
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-calendar-plus"></i> @Html.DisplayNameFor(model => model.StartDateTime)
+                            </div>
+                            <div class="detail-value">
+                                <span class="text-info">@Model.StartDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-calendar-x"></i> @Html.DisplayNameFor(model => model.EndDateTime)
+                            </div>
+                            <div class="detail-value">
+                                <span class="text-info">@Model.EndDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-toggle-on"></i> Status
+                            </div>
+                            <div class="detail-value">
+                                @{
+                                    var now = DateTime.Now;
+                                    var isPast = Model.EndDateTime < now;
+                                    var isUpcoming = Model.StartDateTime > now;
+                                    var isOngoing = Model.StartDateTime <= now && Model.EndDateTime >= now;
+                                    
+                                    string statusClass;
+                                    string statusText;
+                                    
+                                    if (Model.Status == "Cancelled")
                                     {
-                                        <span class="badge bg-info fs-6">@Model.Location.Address</span>
+                                        statusClass = "bg-danger";
+                                        statusText = "Cancelled";
+                                    }
+                                    else if (Model.Status == "Draft")
+                                    {
+                                        statusClass = "bg-secondary";
+                                        statusText = "Draft";
+                                    }
+                                    else if (isPast)
+                                    {
+                                        statusClass = "bg-dark";
+                                        statusText = "Past";
+                                    }
+                                    else if (isOngoing)
+                                    {
+                                        statusClass = "bg-success";
+                                        statusText = "Ongoing";
+                                    }
+                                    else if (isUpcoming)
+                                    {
+                                        statusClass = "bg-primary";
+                                        statusText = "Upcoming";
                                     }
                                     else
                                     {
-                                        <span class="text-muted">No Venue Assigned</span>
+                                        statusClass = "bg-warning";
+                                        statusText = Model.Status;
                                     }
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-tags me-1"></i>Category
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Category != null)
-                                    {
-                                        <span class="badge bg-secondary fs-6">@Model.Category.Name</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Category Assigned</span>
-                                    }
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-calendar-alt me-1"></i>@Html.DisplayNameFor(model => model.StartDateTime)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    <span class="text-info">@Model.StartDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-calendar-times me-1"></i>@Html.DisplayNameFor(model => model.EndDateTime)
-                                </dt>
-                                <dd class="col-sm-9">
-                                    <span class="text-info">@Model.EndDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-toggle-on me-1"></i>Status
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @{
-                                        var now = DateTime.Now;
-                                        var isPast = Model.EndDateTime < now;
-                                        var isUpcoming = Model.StartDateTime > now;
-                                        var isOngoing = Model.StartDateTime <= now && Model.EndDateTime >= now;
-                                        
-                                        string statusClass;
-                                        string statusText;
-                                        
-                                        if (Model.Status == "Cancelled")
-                                        {
-                                            statusClass = "bg-danger";
-                                            statusText = "Cancelled";
-                                        }
-                                        else if (Model.Status == "Draft")
-                                        {
-                                            statusClass = "bg-secondary";
-                                            statusText = "Draft";
-                                        }
-                                        else if (isPast)
-                                        {
-                                            statusClass = "bg-dark";
-                                            statusText = "Past";
-                                        }
-                                        else if (isOngoing)
-                                        {
-                                            statusClass = "bg-success";
-                                            statusText = "Ongoing";
-                                        }
-                                        else if (isUpcoming)
-                                        {
-                                            statusClass = "bg-primary";
-                                            statusText = "Upcoming";
-                                        }
-                                        else
-                                        {
-                                            statusClass = "bg-warning";
-                                            statusText = Model.Status;
-                                        }
-                                    }
-                                    <span class="badge @statusClass fs-6">@statusText</span>
-                                </dd>
-                                
-                                <dt class="col-sm-3">
-                                    <i class="fas fa-user me-1"></i>Organizer
-                                </dt>
-                                <dd class="col-sm-9">
-                                    @if (Model.Organizer != null)
-                                    {
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                <i class="fas fa-user text-white" style="font-size: 12px;"></i>
-                                            </div>
-                                            <div>
-                                                <small class="fw-bold">@Model.Organizer.UserName</small>
-                                                <br>
-                                                <small class="text-muted">@Model.Organizer.Email</small>
-                                            </div>
+                                }
+                                <span class="badge @statusClass fs-6">@statusText</span>
+                            </div>
+                        </div>
+                        
+                        <div class="detail-item">
+                            <div class="detail-label">
+                                <i class="bi bi-person"></i> Organizer
+                            </div>
+                            <div class="detail-value">
+                                @if (Model.Organizer != null)
+                                {
+                                    <div class="d-flex align-items-center">
+                                        <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
+                                            <i class="bi bi-person text-white" style="font-size: 12px;"></i>
                                         </div>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Organizer Assigned</span>
-                                    }
-                                </dd>
-                            </dl>
+                                        <div>
+                                            <small class="fw-bold">@Model.Organizer.UserName</small>
+                                            <br>
+                                            <small class="text-muted">@Model.Organizer.Email</small>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Organizer Assigned</span>
+                                }
+                            </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-lg-4">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Impact Analysis</h6>
-                        </div>
-                        <div class="card-body">
-                            @* @{ *@
-                            @*     var now = DateTime.Now; *@
-                            @*     var isPast = Model.EndDateTime < now; *@
-                            @*     var isUpcoming = Model.StartDateTime > now; *@
-                            @*     var isOngoing = Model.StartDateTime <= now && Model.EndDateTime >= now; *@
-                            @* } *@
-                            
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Event Status:</span>
-                                    <strong class="@(isOngoing ? "text-success" : isUpcoming ? "text-primary" : "text-muted")">
-                                        @if (isOngoing)
-                                        {
-                                            <text>Currently Ongoing</text>
-                                        }
-                                        else if (isUpcoming)
-                                        {
-                                            <text>Upcoming Event</text>
-                                        }
-                                        else
-                                        {
-                                            <text>Past Event</text>
-                                        }
-                                    </strong>
-                                </div>
-                                @if (isOngoing || isUpcoming)
-                                {
-                                    <small class="text-warning">⚠️ This event is active and may have associated bookings</small>
-                                }
-                            </div>
-                            
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Time Until Event:</span>
-                                    <strong class="@(Model.StartDateTime - now < TimeSpan.Zero ? "text-danger" : Model.StartDateTime - now < TimeSpan.FromDays(7) ? "text-warning" : "text-success")">
-                                        @if (Model.StartDateTime - now < TimeSpan.Zero)
-                                        {
-                                            <text>Event Started</text>
-                                        }
-                                        else
-                                        {
-                                            <text>@(Model.StartDateTime - now).Days days</text>
-                                        }
-                                    </strong>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center">
-                                <div class="h6 text-primary">Potential Impact</div>
-                                <div class="h5 text-danger">
-                                    @if (isOngoing || isUpcoming)
-                                    {
-                                        <text>High Risk</text>
-                                    }
-                                    else
-                                    {
-                                        <text>Low Risk</text>
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
-                        </div>
-                        <div class="card-body">
-                            <form asp-action="Delete" class="d-grid gap-2">
-                                <input type="hidden" asp-for="EventID" />
-                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this event? This action cannot be undone!')">
-                                    <i class="fas fa-trash me-1"></i>Yes, Delete Event
-                                </button>
-                                <a asp-action="Index" class="btn btn-secondary">
-                                    <i class="fas fa-times me-1"></i>Cancel
-                                </a>
-                            </form>
-                        </div>
-                    </div>
+                <form asp-action="Delete" class="mt-4">
+                    <input type="hidden" asp-for="EventID" />
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this event? This action cannot be undone!')">
+                        <i class="bi bi-trash"></i> Yes, Delete Event
+                    </button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Cancel
+                    </a>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center mb-3">
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-exclamation-triangle"></i>
+                </div>
+                <div class="ms-3">
+                    <h6 class="mb-0">Impact Analysis</h6>
+                </div>
+            </div>
+            
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <span>Event Status:</span>
+                    <strong class="@(isOngoing ? "text-success" : isUpcoming ? "text-primary" : "text-muted")">
+                        @if (isOngoing)
+                        {
+                            <text>Currently Ongoing</text>
+                        }
+                        else if (isUpcoming)
+                        {
+                            <text>Upcoming Event</text>
+                        }
+                        else
+                        {
+                            <text>Past Event</text>
+                        }
+                    </strong>
+                </div>
+                @if (isOngoing || isUpcoming)
+                {
+                    <small class="text-warning">⚠️ This event is active and may have associated bookings</small>
+                }
+            </div>
+            
+            <div class="mb-3">
+                <div class="d-flex justify-content-between">
+                    <span>Time Until Event:</span>
+                    <strong class="@(Model.StartDateTime - now < TimeSpan.Zero ? "text-danger" : Model.StartDateTime - now < TimeSpan.FromDays(7) ? "text-warning" : "text-success")">
+                        @if (Model.StartDateTime - now < TimeSpan.Zero)
+                        {
+                            <text>Event Started</text>
+                        }
+                        else
+                        {
+                            <text>@(Model.StartDateTime - now).Days days</text>
+                        }
+                    </strong>
+                </div>
+            </div>
+            
+            <div class="text-center">
+                <div class="h6 text-primary">Potential Impact</div>
+                <div class="h5 text-danger">
+                    @if (isOngoing || isUpcoming)
+                    {
+                        <text>High Risk</text>
+                    }
+                    else
+                    {
+                        <text>Low Risk</text>
+                    }
                 </div>
             </div>
         </div>
