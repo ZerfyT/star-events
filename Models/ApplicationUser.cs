@@ -18,6 +18,9 @@ namespace star_events.Models
         public string? ContactNo { get; set; }
 
         [PersonalData]
+        public string? NIC { get; set; }
+
+        [PersonalData]
         public string? Address { get; set; }
 
         [PersonalData]

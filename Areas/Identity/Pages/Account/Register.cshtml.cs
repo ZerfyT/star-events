@@ -70,18 +70,27 @@ namespace star_events.Areas.Identity.Pages.Account
 
             [Required]
             [StringLength(20)]
-            [Display(Name = "Contact No")]
-            public string ContactNo { get; set; }
-
-            [Required]
-            [StringLength(500)]
-            [Display(Name = "Address")]
-            public string Address { get; set; }
+            [Display(Name = "Username")]
+            public string Username { get; set; }
 
             [Required]
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+
+            [Required]
+            [Display(Name = "User Role")]
+            public string UserRole { get; set; }
+
+            [Required]
+            [StringLength(15)]
+            [Display(Name = "Contact No")]
+            public string ContactNo { get; set; }
+
+            [Required]
+            [StringLength(20)]
+            [Display(Name = "NIC")]
+            public string NIC { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -93,6 +102,10 @@ namespace star_events.Areas.Identity.Pages.Account
             [Display(Name = "Confirm password")]
             [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
             public string ConfirmPassword { get; set; }
+
+            [Required]
+            [Display(Name = "I agree to the Terms and Conditions")]
+            public bool AgreeToTerms { get; set; }
         }
 
         public async Task OnGetAsync(string returnUrl = null)
@@ -119,8 +132,8 @@ namespace star_events.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.ContactNo = Input.ContactNo;
-                user.Address = Input.Address;
-                user.UserName = Input.Email;
+                user.NIC = Input.NIC;
+                user.UserName = Input.Username;
                 user.Email = Input.Email;
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
@@ -128,21 +141,23 @@ namespace star_events.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password for email: {Email}", Input.Email);
 
-                    // Assign "Customer" role
-                    if (!await _roleManager.RoleExistsAsync("Customer"))
+                    // Assign role based on user selection
+                    string roleName = Input.UserRole == "Event Organizer" ? "Organizer" : "Customer";
+                    
+                    if (!await _roleManager.RoleExistsAsync(roleName))
                     {
-                        var roleResult = await _roleManager.CreateAsync(new IdentityRole("Customer"));
+                        var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
                         if (!roleResult.Succeeded)
                         {
-                            _logger.LogWarning("Failed to create Customer role: {Errors}", string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                            _logger.LogWarning("Failed to create {Role} role: {Errors}", roleName, string.Join(", ", roleResult.Errors.Select(e => e.Description)));
                             ModelState.AddModelError(string.Empty, "Role creation failed. Please contact support.");
                             return Page();
                         }
                     }
-                    var roleAssignmentResult = await _userManager.AddToRoleAsync(user, "Customer");
+                    var roleAssignmentResult = await _userManager.AddToRoleAsync(user, roleName);
                     if (!roleAssignmentResult.Succeeded)
                     {
-                        _logger.LogWarning("Failed to assign Customer role to user: {Errors}", string.Join(", ", roleAssignmentResult.Errors.Select(e => e.Description)));
+                        _logger.LogWarning("Failed to assign {Role} role to user: {Errors}", roleName, string.Join(", ", roleAssignmentResult.Errors.Select(e => e.Description)));
                         ModelState.AddModelError(string.Empty, "Role assignment failed. Please contact support.");
                         return Page();
                     }

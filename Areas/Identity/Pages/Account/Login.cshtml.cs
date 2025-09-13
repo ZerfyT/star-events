@@ -44,8 +44,8 @@ namespace star_events.Areas.Identity.Pages.Account
         public class InputModel
         {
             [Required]
-            [EmailAddress]
-            public string Email { get; set; }
+            [Display(Name = "Username or Email")]
+            public string Username { get; set; }
 
             [Required]
             [DataType(DataType.Password)]
@@ -79,50 +79,50 @@ namespace star_events.Areas.Identity.Pages.Account
 
             if (ModelState.IsValid)
             {
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                // Try to find user by username or email
+                var user = await _userManager.FindByEmailAsync(Input.Username) ?? 
+                          await _userManager.FindByNameAsync(Input.Username);
+
+                if (user == null)
+                {
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your username/email and password.");
+                    return Page();
+                }
+
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, Input.Password, Input.RememberMe, lockoutOnFailure: false);
 
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User logged in with email: {Email} at {Time}", Input.Email, DateTime.Now);
-                    var user = await _userManager.FindByEmailAsync(Input.Email);
-                    if (user != null)
+                    _logger.LogInformation("User logged in with username/email: {Username} at {Time}", Input.Username, DateTime.Now);
+                    var roles = await _userManager.GetRolesAsync(user);
+                    // Role-based redirection
+                    if (roles.Contains("Admin"))
                     {
-                        var roles = await _userManager.GetRolesAsync(user);
-                        // Role-based redirection
-                        if (roles.Contains("Admin"))
-                        {
-                            return LocalRedirect("/Admin/Dashboard");
-                        }
-                        else if (roles.Contains("Organizer"))
-                        {
-                            return LocalRedirect("/Organizer/Events");
-                        }
-                        else // Default to Customer
-                        {
-                            return LocalRedirect(returnUrl);
-                        }
+                        return LocalRedirect("/Admin/Dashboard");
                     }
-                    else
+                    else if (roles.Contains("Organizer"))
                     {
-                        _logger.LogWarning("User not found for email: {Email}", Input.Email);
-                        ModelState.AddModelError(string.Empty, "User not found. Please check your email.");
-                        return Page();
+                        return LocalRedirect("/Organizer/Events");
+                    }
+                    else // Default to Customer
+                    {
+                        return LocalRedirect(returnUrl);
                     }
                 }
                 if (result.RequiresTwoFactor)
                 {
-                    _logger.LogInformation("User requires two-factor authentication for email: {Email}", Input.Email);
+                    _logger.LogInformation("User requires two-factor authentication for username/email: {Username}", Input.Username);
                     return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
                 }
                 if (result.IsLockedOut)
                 {
-                    _logger.LogWarning("User account locked out for email: {Email} at {Time}", Input.Email, DateTime.Now);
+                    _logger.LogWarning("User account locked out for username/email: {Username} at {Time}", Input.Username, DateTime.Now);
                     return RedirectToPage("./Lockout");
                 }
                 else
                 {
-                    _logger.LogWarning("Invalid login attempt for email: {Email} at {Time}. Result: {Result}", Input.Email, DateTime.Now, result.ToString());
-                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your email and password.");
+                    _logger.LogWarning("Invalid login attempt for username/email: {Username} at {Time}. Result: {Result}", Input.Username, DateTime.Now, result.ToString());
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt. Please check your username/email and password.");
                     return Page();
                 }
             }

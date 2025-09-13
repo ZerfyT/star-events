@@ -2,25 +2,77 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
-<ul class="navbar-nav">
 @if (SignInManager.IsSignedIn(User))
 {
-    <li class="nav-item">
-        <a  class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @User.Identity?.Name!</a>
-    </li>
-    <li class="nav-item">
-        <form  class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button  type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
+    var user = await UserManager.GetUserAsync(User);
+    var userDisplayName = user?.FirstName ?? "User";
+    var fullName = $"{user?.FirstName} {user?.LastName}".Trim();
+    if (string.IsNullOrEmpty(fullName)) fullName = User.Identity?.Name ?? "User";
+
+    <div class="user-profile-section">
+        <div class="user-avatar">
+            <!-- Show first letter of FirstName -->
+            <span class="avatar-initial">@userDisplayName.Substring(0, 1).ToUpper()</span>
+        </div>
+
+        <div class="user-dropdown">
+            <button class="user-dropdown-btn" id="userDropdownBtn">
+                <!-- Show first name instead of username -->
+                <span class="username">@userDisplayName</span>
+                <i class='bx bx-chevron-down'></i>
+            </button>
+
+            <div class="user-dropdown-menu" id="userDropdownMenu">
+                <div class="dropdown-header">
+                    <div class="user-info">
+                        <div class="avatar-large">
+                            <span class="avatar-initial-large">@userDisplayName.Substring(0, 1).ToUpper()</span>
+                        </div>
+                        <div class="user-details">
+                            <span class="user-name">@fullName</span>
+                            <span class="user-email">@User.Identity?.Name</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-items">
+                    <a href="#" class="dropdown-item">
+                        <i class='bx bx-user'></i>
+                        <span>My Profile</span>
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class='bx bx-receipt'></i>
+                        <span>My Tickets</span>
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class='bx bx-calendar-event'></i>
+                        <span>My Events</span>
+                    </a>
+                    <a href="#" class="dropdown-item">
+                        <i class='bx bx-cog'></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-items">
+                    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })" method="post" class="logout-form">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="dropdown-item logout-item">
+                            <i class='bx bx-log-out'></i>
+                            <span>Sign Out</span>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 }
 else
 {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
+    <div class="actions">
+        <a class="btn login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+        <a class="btn register" asp-area="Identity" asp-page="/Account/Register">Register</a>
+    </div>
 }
-</ul>

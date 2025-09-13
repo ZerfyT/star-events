@@ -1,141 +1,228 @@
-﻿@page
-@model star_events.Areas.Identity.Pages.Account.RegisterModel
+﻿@model star_events.Areas.Identity.Pages.Account.RegisterModel
 @{
-    ViewData["Title"] = "Register";
+    ViewData["Title"] = "Register - TixWave";
+    Layout = "_AuthLayout";
+    ViewData["OverlayTitle"] = "Join TixWave Today";
+    ViewData["OverlaySubtitle"] = "Experience the future of event booking with exclusive access to premium events.";
 }
 
-<h1>@ViewData["Title"]</h1>
-
-<div class="row">
-    <div class="col-md-4">
-        <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" novalidate>
-            <h2 class="h4 mb-3">Create a new account</h2>
-            <hr class="mb-4" />
-
-            <!-- Success or Error Messages -->
-            <div id="feedbackMessage" role="alert" class="mb-3">
-                @if (!string.IsNullOrEmpty(TempData["Message"] as string))
-                {
-                    <div class="alert alert-success" role="alert">
-                        @TempData["Message"]
-                    </div>
-                }
-                else if (ViewData.ModelState[""]?.Errors.Any() ?? false)
-                {
-                    <div class="alert alert-danger" role="alert">
-                        @foreach (var error in ViewData.ModelState[""].Errors)
-                        {
-                            <p>@error.ErrorMessage</p>
-                        }
-                    </div>
-                }
-            </div>
-
-            <!-- First Name Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.FirstName" class="form-control" autocomplete="given-name" aria-required="true"
-                       aria-describedby="firstNameHelp" placeholder="First Name" />
-                <label asp-for="Input.FirstName" class="form-label">First Name</label>
-                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
-                <small id="firstNameHelp" class="form-text text-muted">Enter your first name.</small>
-            </div>
-
-            <!-- Last Name Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.LastName" class="form-control" autocomplete="family-name" aria-required="true"
-                       aria-describedby="lastNameHelp" placeholder="Last Name" />
-                <label asp-for="Input.LastName" class="form-label">Last Name</label>
-                <span asp-validation-for="Input.LastName" class="text-danger"></span>
-                <small id="lastNameHelp" class="form-text text-muted">Enter your last name.</small>
-            </div>
-
-            <!-- Contact No Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ContactNo" class="form-control" autocomplete="tel" aria-required="true"
-                       aria-describedby="contactNoHelp" placeholder="Contact No" />
-                <label asp-for="Input.ContactNo" class="form-label">Contact No</label>
-                <span asp-validation-for="Input.ContactNo" class="text-danger"></span>
-                <small id="contactNoHelp" class="form-text text-muted">Enter your contact number.</small>
-            </div>
-
-            <!-- Address Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Address" class="form-control" autocomplete="street-address" aria-required="true"
-                       aria-describedby="addressHelp" placeholder="Address" />
-                <label asp-for="Input.Address" class="form-label">Address</label>
-                <span asp-validation-for="Input.Address" class="text-danger"></span>
-                <small id="addressHelp" class="form-text text-muted">Enter your address.</small>
-            </div>
-
-            <!-- Email Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Email" class="form-control" autocomplete="username" aria-required="true"
-                       aria-describedby="emailHelp" placeholder="name@example.com" />
-                <label asp-for="Input.Email" class="form-label">Email</label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
-                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
-            </div>
-
-            <!-- Password Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.Password" class="form-control" autocomplete="new-password" aria-required="true"
-                       aria-describedby="passwordHelp" placeholder="password" />
-                <label asp-for="Input.Password" class="form-label">Password</label>
-                <span asp-validation-for="Input.Password" class="text-danger"></span>
-                <small id="passwordHelp" class="form-text text-muted">Must be at least 6 characters.</small>
-            </div>
-
-            <!-- Confirm Password Field -->
-            <div class="form-floating mb-3">
-                <input asp-for="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true"
-                       aria-describedby="confirmPasswordHelp" placeholder="password" />
-                <label asp-for="Input.ConfirmPassword" class="form-label">Confirm Password</label>
-                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
-                <small id="confirmPasswordHelp" class="form-text text-muted">Please re-enter your password.</small>
-            </div>
-
-            <!-- Submit Button -->
-            <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
-        </form>
-    </div>
-
-    <div class="col-md-6 col-md-offset-2">
-        <section>
-            <h3 class="h5 mb-3">Use another service to register</h3>
-            <hr class="mb-4" />
-            @{
-                if ((Model.ExternalLogins?.Count ?? 0) == 0)
-                {
-                    <div class="alert alert-info" role="alert">
-                        <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715" target="_blank" rel="noopener">
-                                article
-                                about setting up this ASP.NET application to support logging in via external services
-                            </a>.
-                        </p>
-                    </div>
-                }
-                else
-                {
-                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
-                        <div>
-                            <p>
-                                @foreach (var provider in Model.ExternalLogins!)
-                                {
-                                    <button type="submit" class="btn btn-outline-primary me-2 mb-2" name="provider" value="@provider.Name"
-                                            title="Log in using your @provider.DisplayName account" aria-label="Register with @provider.DisplayName">
-                                        @provider.DisplayName
-                                    </button>
-                                }
-                            </p>
-                        </div>
-                    </form>
-                }
-            }
-        </section>
-    </div>
+<!-- Form Header -->
+<div class="form-header">
+    <h1 class="form-title">Welcome to TixWave</h1>
+    <p class="form-subtitle">Fast, easy, and secure ticket booking at your fingertips.</p>
 </div>
 
-@section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<!-- Display Server Messages -->
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        <i class='bx bx-error-circle'></i>
+        Please correct the following errors:
+        <ul class="mb-0 mt-2">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+            {
+                <li>@error.ErrorMessage</li>
+            }
+        </ul>
+    </div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        <i class='bx bx-error-circle'></i>
+        @TempData["ErrorMessage"]
+    </div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        <i class='bx bx-check-circle'></i>
+        @TempData["SuccessMessage"]
+    </div>
+}
+
+<!-- Register Form -->
+<form method="post">
+    @Html.AntiForgeryToken()
+
+    <!-- Name Fields Row -->
+    <div class="form-row">
+        <!-- First Name -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.FirstName, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-user input-icon'></i>
+                @Html.TextBoxFor(m => m.Input.FirstName, new { 
+                    @class = "form-control", 
+                    @placeholder = "First Name",
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.FirstName, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- Last Name -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.LastName, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-user input-icon'></i>
+                @Html.TextBoxFor(m => m.Input.LastName, new { 
+                    @class = "form-control", 
+                    @placeholder = "Last Name",
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.LastName, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Username Field -->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Input.Username, new { @class = "form-label" })
+        <div class="position-relative">
+            <i class='bx bx-at input-icon'></i>
+            @Html.TextBoxFor(m => m.Input.Username, new { 
+                @class = "form-control", 
+                @placeholder = "Choose a unique username",
+                @required = "required"
+            })
+        </div>
+        @Html.ValidationMessageFor(m => m.Input.Username, "", new { @class = "text-danger" })
+    </div>
+
+    <!-- Email & User Role Row -->
+    <div class="form-row">
+        <!-- Email -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.Email, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-envelope input-icon'></i>
+                @Html.TextBoxFor(m => m.Input.Email, new { 
+                    @class = "form-control", 
+                    @type = "email",
+                    @placeholder = "Enter your email address",
+                    @autocomplete = "email",
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.Email, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- User Role -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.UserRole, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-user-circle input-icon'></i>
+                @Html.DropDownListFor(m => m.Input.UserRole, new SelectList(new List<object> {
+                    new { Value = "", Text = "Select User Type" },
+                    new { Value = "Client", Text = "Client" },
+                    new { Value = "Event Organizer", Text = "Event Organizer" }
+                }, "Value", "Text"), new { 
+                    @class = "form-control", 
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.UserRole, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Contact & NIC Row -->
+    <div class="form-row">
+        <!-- Contact Number -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.ContactNo, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-phone input-icon'></i>
+                @Html.TextBoxFor(m => m.Input.ContactNo, new { 
+                    @class = "form-control", 
+                    @placeholder = "0771234567",
+                    @maxlength = "10",
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.ContactNo, "", new { @class = "text-danger" })
+        </div>
+
+        <!-- NIC -->
+        <div class="form-group half">
+            @Html.LabelFor(m => m.Input.NIC, new { @class = "form-label" })
+            <div class="position-relative">
+                <i class='bx bx-id-card input-icon'></i>
+                @Html.TextBoxFor(m => m.Input.NIC, new { 
+                    @class = "form-control", 
+                    @placeholder = "123456789V or 199912345678",
+                    @required = "required"
+                })
+            </div>
+            @Html.ValidationMessageFor(m => m.Input.NIC, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <!-- Password Field -->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Input.Password, new { @class = "form-label" })
+        <div class="position-relative">
+            <i class='bx bx-lock-alt input-icon'></i>
+            @Html.PasswordFor(m => m.Input.Password, new { 
+                @class = "form-control", 
+                @placeholder = "Create a strong password",
+                @autocomplete = "new-password",
+                @required = "required"
+            })
+            <button type="button" class="password-toggle" title="Show password">
+                <i class='bx bx-hide'></i>
+            </button>
+        </div>
+        @Html.ValidationMessageFor(m => m.Input.Password, "", new { @class = "text-danger" })
+    </div>
+
+    <!-- Confirm Password Field -->
+    <div class="form-group">
+        @Html.LabelFor(m => m.Input.ConfirmPassword, new { @class = "form-label" })
+        <div class="position-relative">
+            <i class='bx bx-lock input-icon'></i>
+            @Html.PasswordFor(m => m.Input.ConfirmPassword, new { 
+                @class = "form-control", 
+                @placeholder = "Confirm your password",
+                @autocomplete = "new-password",
+                @required = "required"
+            })
+            <button type="button" class="password-toggle" title="Show password">
+                <i class='bx bx-hide'></i>
+            </button>
+        </div>
+        @Html.ValidationMessageFor(m => m.Input.ConfirmPassword, "", new { @class = "text-danger" })
+    </div>
+
+    <!-- Terms and Conditions -->
+    <div class="form-check">
+        @Html.CheckBoxFor(m => m.Input.AgreeToTerms, new { @class = "form-check-input", @required = "required" })
+        @Html.LabelFor(m => m.Input.AgreeToTerms, new { @class = "form-check-label" })
+        @Html.ValidationMessageFor(m => m.Input.AgreeToTerms, "", new { @class = "text-danger" })
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit" class="submit-btn">
+        <i class='bx bx-user-plus'></i>
+        Create Account
+    </button>
+</form>
+
+<!-- Form Links -->
+<div class="form-links">
+    <span>Already have an account?</span>
+    <a href="@Url.Page("/Account/Login")">Sign In</a>
+</div>
+
+@section OverlayFeatures {
+    <li>
+        <i class='bx bx-check'></i>
+        <span>Loyalty points & rewards</span>
+    </li>
+    <li>
+        <i class='bx bx-check'></i>
+        <span>Early bird discounts</span>
+    </li>
 }

@@ -59,76 +59,7 @@
                     }
 
                     <div class="actions">
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            var userDisplayName = ViewBag.CurrentClientFName as string ?? "User";
-                            var fullName = ViewBag.CurrentClientName as string ?? User.Identity.Name;
-
-                            <div class="user-profile-section">
-                                <div class="user-avatar">
-                                    <!-- Show first letter of FName -->
-                                    <span class="avatar-initial">@userDisplayName.Substring(0, 1).ToUpper()</span>
-                                </div>
-
-                                <div class="user-dropdown">
-                                    <button class="user-dropdown-btn" id="userDropdownBtn">
-                                        <!-- Show first name instead of username -->
-                                        <span class="username">@userDisplayName</span>
-                                        <i class='bx bx-chevron-down'></i>
-                                    </button>
-
-                                    <div class="user-dropdown-menu" id="userDropdownMenu">
-                                        <div class="dropdown-header">
-                                            <div class="user-info">
-                                                <div class="avatar-large">
-                                                    <span class="avatar-initial-large">@userDisplayName.Substring(0, 1).ToUpper()</span>
-                                                </div>
-                                                <div class="user-details">
-                                                    <span class="user-name">@fullName</span>
-                                                    <span class="user-email">@User.Identity.Name</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="dropdown-divider"></div>
-                                        <div class="dropdown-items">
-                                            <a href="#" class="dropdown-item">
-                                                <i class='bx bx-user'></i>
-                                                <span>My Profile</span>
-                                            </a>
-                                            <a href="#" class="dropdown-item">
-                                                <i class='bx bx-receipt'></i>
-                                                <span>My Tickets</span>
-                                            </a>
-                                            <a href="#" class="dropdown-item">
-                                                <i class='bx bx-calendar-event'></i>
-                                                <span>My Events</span>
-                                            </a>
-                                            <a href="#" class="dropdown-item">
-                                                <i class='bx bx-cog'></i>
-                                                <span>Settings</span>
-                                            </a>
-                                        </div>
-
-                                        <div class="dropdown-divider"></div>
-                                        <div class="dropdown-items">
-                                            <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
-                                                @Html.AntiForgeryToken()
-                                                <button type="submit" class="dropdown-item logout-item">
-                                                    <i class='bx bx-log-out'></i>
-                                                    <span>Sign Out</span>
-                                                </button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                        else
-                        {
-                            <a class="btn login" asp-controller="Account" asp-action="Login">Login</a>
-                            <a class="btn register" asp-controller="Account" asp-action="Register">Register</a>
-                        }
+                        @await Html.PartialAsync("_LoginPartial")
                     </div>
                 </div>
             </div>
