@@ -1,0 +1,254 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-speedometer2 me-3"></i>Dashboard Overview</h1>
+            <p>Welcome to Star Events Admin Panel - Monitor your event management system</p>
+        </div>
+        <div>
+            <span class="badge bg-success fs-6">
+                <i class="bi bi-circle-fill me-1"></i>
+                System Online
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Key Metrics Row -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-primary">
+                    <i class="bi bi-people"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-primary">1,234</p>
+                    <p class="stats-label">Total Users</p>
+                    <small class="text-success">
+                        <i class="bi bi-arrow-up"></i> +12% this month
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">89</p>
+                    <p class="stats-label">Active Events</p>
+                    <small class="text-success">
+                        <i class="bi bi-arrow-up"></i> +8% this week
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-warning">5,678</p>
+                    <p class="stats-label">Total Bookings</p>
+                    <small class="text-success">
+                        <i class="bi bi-arrow-up"></i> +23% this month
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-info">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-info">$45,678</p>
+                    <p class="stats-label">Revenue</p>
+                    <small class="text-success">
+                        <i class="bi bi-arrow-up"></i> +15% this month
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions and Recent Activity -->
+<div class="row mb-4">
+    <div class="col-xl-6 col-lg-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-lightning me-2"></i>Quick Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="row g-3">
+                    <div class="col-6">
+                        <a asp-controller="User" asp-action="Create" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <i class="bi bi-person-plus display-6 mb-2"></i>
+                            <span>Add User</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Event" asp-action="Create" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <i class="bi bi-calendar-plus display-6 mb-2"></i>
+                            <span>Create Event</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Category" asp-action="Create" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <i class="bi bi-tags display-6 mb-2"></i>
+                            <span>Add Category</span>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a asp-controller="Location" asp-action="Create" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <i class="bi bi-geo-alt display-6 mb-2"></i>
+                            <span>Add Location</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6 col-lg-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-clock-history me-2"></i>Recent Activity</h5>
+            </div>
+            <div class="card-body">
+                <div class="activity-list">
+                    <div class="activity-item d-flex align-items-center mb-3">
+                        <div class="activity-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                            <i class="bi bi-person-plus"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">New user registered</div>
+                            <small class="text-muted">John Doe registered 2 hours ago</small>
+                        </div>
+                        <small class="text-muted">2h ago</small>
+                    </div>
+                    <div class="activity-item d-flex align-items-center mb-3">
+                        <div class="activity-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                            <i class="bi bi-calendar-plus"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">New event created</div>
+                            <small class="text-muted">Summer Music Festival added</small>
+                        </div>
+                        <small class="text-muted">4h ago</small>
+                    </div>
+                    <div class="activity-item d-flex align-items-center mb-3">
+                        <div class="activity-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                            <i class="bi bi-ticket-perforated"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">Booking completed</div>
+                            <small class="text-muted">5 tickets sold for Tech Conference</small>
+                        </div>
+                        <small class="text-muted">6h ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Status -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-shield-check me-2"></i>System Status</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-server text-success me-2"></i>
+                                <span>Database</span>
+                            </div>
+                            <span class="badge bg-success">Online</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-cloud text-success me-2"></i>
+                                <span>API Services</span>
+                            </div>
+                            <span class="badge bg-success">Online</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-envelope text-success me-2"></i>
+                                <span>Email Service</span>
+                            </div>
+                            <span class="badge bg-success">Online</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <i class="bi bi-credit-card text-success me-2"></i>
+                                <span>Payment Gateway</span>
+                            </div>
+                            <span class="badge bg-success">Online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Add some interactivity to the dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate stats cards on load
+            const statsCards = document.querySelectorAll('.stats-card');
+            statsCards.forEach((card, index) => {
+                setTimeout(() => {
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateY(20px)';
+                    card.style.transition = 'all 0.5s ease';
+                    
+                    setTimeout(() => {
+                        card.style.opacity = '1';
+                        card.style.transform = 'translateY(0)';
+                    }, 100);
+                }, index * 100);
+            });
+
+            // Add hover effects to quick action buttons
+            const quickActions = document.querySelectorAll('.btn-outline-primary, .btn-outline-success, .btn-outline-info, .btn-outline-warning');
+            quickActions.forEach(btn => {
+                btn.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                    this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
+                });
+                
+                btn.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = 'none';
+                });
+            });
+        });
+    </script>
+}

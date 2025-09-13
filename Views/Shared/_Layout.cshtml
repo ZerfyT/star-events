@@ -1,49 +1,246 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - star_events</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="TixWave - Online Event Ticketing Platform">
+    <title>@ViewData["Title"]</title>
+
+    <!-- Favicon -->
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+
+    <!-- CSS Reset / Optional Frameworks -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!--Box-icons-->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/home.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.4/sweetalert2.all.min.js"></script>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">star_events</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
+    <!-- Anti-forgery token for AJAX requests -->
+    @Html.AntiForgeryToken()
+
+    <!-- Header -->
+    <header class="site-header" id="site-header">
+        <div class="container">
+            <div class="header-content">
+                <!-- Brand Section -->
+                <div class="header-inner">
+                    <i class='bx bx-movie-play'></i>
+                    <span class="brand-name">TIXWAVE</span>
+                </div>
+
+                <!-- Navigation Pills - Thinner -->
+                <nav class="nav-pills d-none d-md-flex">
+                    <a class="nav-link active" href="#" data-page="home">Home</a>
+                    <a class="nav-link" href="#" data-page="events">Events</a>
+                    <a class="nav-link" href="#" data-page="trending">Trending Now</a>
+                    <a class="nav-link" href="#" data-page="bookings">My Booking History</a>
+                </nav>
+
+                <!-- Right Side - Add Button + Actions -->
+                <div class="header-right">
+                    <!-- Add Event Button - Show only when authenticated -->
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <div class="addevent">
+                            <a class="btn add" asp-controller="Home" asp-action="AddEvent" style="display: flex !important;">
+                                <i class='bx bx-plus' style="display: block !important;"></i>
+                            </a>
+                        </div>
+                    }
+
+                    <div class="actions">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            var userDisplayName = ViewBag.CurrentClientFName as string ?? "User";
+                            var fullName = ViewBag.CurrentClientName as string ?? User.Identity.Name;
+
+                            <div class="user-profile-section">
+                                <div class="user-avatar">
+                                    <!-- Show first letter of FName -->
+                                    <span class="avatar-initial">@userDisplayName.Substring(0, 1).ToUpper()</span>
+                                </div>
+
+                                <div class="user-dropdown">
+                                    <button class="user-dropdown-btn" id="userDropdownBtn">
+                                        <!-- Show first name instead of username -->
+                                        <span class="username">@userDisplayName</span>
+                                        <i class='bx bx-chevron-down'></i>
+                                    </button>
+
+                                    <div class="user-dropdown-menu" id="userDropdownMenu">
+                                        <div class="dropdown-header">
+                                            <div class="user-info">
+                                                <div class="avatar-large">
+                                                    <span class="avatar-initial-large">@userDisplayName.Substring(0, 1).ToUpper()</span>
+                                                </div>
+                                                <div class="user-details">
+                                                    <span class="user-name">@fullName</span>
+                                                    <span class="user-email">@User.Identity.Name</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="dropdown-divider"></div>
+                                        <div class="dropdown-items">
+                                            <a href="#" class="dropdown-item">
+                                                <i class='bx bx-user'></i>
+                                                <span>My Profile</span>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class='bx bx-receipt'></i>
+                                                <span>My Tickets</span>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class='bx bx-calendar-event'></i>
+                                                <span>My Events</span>
+                                            </a>
+                                            <a href="#" class="dropdown-item">
+                                                <i class='bx bx-cog'></i>
+                                                <span>Settings</span>
+                                            </a>
+                                        </div>
+
+                                        <div class="dropdown-divider"></div>
+                                        <div class="dropdown-items">
+                                            <form asp-controller="Account" asp-action="Logout" method="post" class="logout-form">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="dropdown-item logout-item">
+                                                    <i class='bx bx-log-out'></i>
+                                                    <span>Sign Out</span>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn login" asp-controller="Account" asp-action="Login">Login</a>
+                            <a class="btn register" asp-controller="Account" asp-action="Register">Register</a>
+                        }
+                    </div>
                 </div>
             </div>
-        </nav>
+        </div>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - star_events - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    <!-- Main Content -->
+    <main>
+        @RenderBody()
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container-fluid px-4">
+            <div class="footer-content">
+                <!-- Brand Section -->
+                <div class="footer-brand">
+                    <div class="footer-logos">
+                        <img src="~/images/donga.png" alt="BWT Alpine Logo" class="footer-logo bwt-logo">
+                        <span class="brand-name">TIXWAVE</span>
+                    </div>
+                    <div class="footer-brand-text">
+                        <div class="footer-title">TixWave</div>
+                        <p class="footer-tagline">Your Gateway to Unforgettable Events</p>
+                    </div>
+                </div>
+
+                <!-- Links Section -->
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h5>Events</h5>
+                        <a href="#">Browse Events</a>
+                        <a href="#">Create Event</a>
+                        <a href="#">Event Categories</a>
+                        <a href="#">Popular Events</a>
+                    </div>
+                    <div class="footer-section">
+                        <h5>Services</h5>
+                        <a href="#">Ticket Booking</a>
+                        <a href="#">Event Management</a>
+                        <a href="#">Group Bookings</a>
+                        <a href="#">VIP Packages</a>
+                    </div>
+                    <div class="footer-section">
+                        <h5>Support</h5>
+                        <a href="#">Help Center</a>
+                        <a href="#">Contact Us</a>
+                        <a href="#">Refund Policy</a>
+                        <a href="#">Terms & Conditions</a>
+                    </div>
+                    <div class="footer-section">
+                        <h5>Company</h5>
+                        <a href="#">About Us</a>
+                        <a href="#">Careers</a>
+                        <a href="#">Press</a>
+                        <a href="#">Privacy Policy</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- App Download Section -->
+            <div class="app-download-section">
+                <div class="download-content">
+                    <h6>Get the TixWave App</h6>
+                    <p>Book tickets on the go with our mobile app</p>
+                    <div class="download-buttons">
+                        <a href="#" class="download-btn">
+                            <img src="~/images/d1e49ca07e951432c376d21f1d9c5d50.png" alt="Download from Microsoft Store" class="store-badge">
+                            <div class="download-text">
+                                <span class="download-label">Download on the</span>
+                                <span class="store-name">Microsoft Store</span>
+                            </div>
+                        </a>
+                        <a href="#" class="download-btn">
+                            <img src="~/images/pngwing.com.png" alt="Get it on Google Play" class="store-badge">
+                            <div class="download-text">
+                                <span class="download-label">Get it on</span>
+                                <span class="store-name">Google Play</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bottom Section -->
+            <div class="footer-bottom">
+                <div class="footer-copyright">
+                    <p>&copy; 2025 TixWave. All rights reserved. | Powered by BWT Alpine Technology</p>
+                </div>
+                <div class="footer-social">
+                    <a href="#" class="social-link" aria-label="Facebook">
+                        <i class="bx bxl-facebook"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Twitter">
+                        <i class="bx bxl-twitter"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="LinkedIn">
+                        <i class="bx bxl-linkedin"></i>
+                    </a>
+                    <a href="#" class="social-link" aria-label="Instagram">
+                        <i class="bx bxl-instagram"></i>
+                    </a>
+                </div>
+            </div>
         </div>
     </footer>
+
+    <!-- JS Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

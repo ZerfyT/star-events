@@ -23,6 +23,6 @@ namespace star_events.Models
         public int Capacity { get; set; }
 
         // Navigation properties
-        // public ICollection<Event> Events { get; set; } // 1:N with Events
+        public virtual ICollection<Event> Events { get; set; } = new List<Event>(); // 1:N with Events
     }
 }
