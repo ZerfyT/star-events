@@ -324,7 +324,6 @@ namespace star_events.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("OrganizerID")
-                        .IsRequired()
                         .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("StartDateTime")
@@ -587,7 +586,7 @@ namespace star_events.Migrations
                         .IsRequired();
 
                     b.HasOne("star_events.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Promotion");
@@ -598,22 +597,20 @@ namespace star_events.Migrations
             modelBuilder.Entity("star_events.Models.Event", b =>
                 {
                     b.HasOne("star_events.Models.Category", "Category")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("star_events.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("Events")
                         .HasForeignKey("LocationID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("star_events.Models.ApplicationUser", "Organizer")
-                        .WithMany()
-                        .HasForeignKey("OrganizerID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("OrganizedEvents")
+                        .HasForeignKey("OrganizerID");
 
                     b.Navigation("Category");
 
@@ -672,11 +669,28 @@ namespace star_events.Migrations
                     b.Navigation("Event");
                 });
 
+            modelBuilder.Entity("star_events.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Bookings");
+
+                    b.Navigation("OrganizedEvents");
+                });
+
             modelBuilder.Entity("star_events.Models.Booking", b =>
                 {
                     b.Navigation("Payments");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("star_events.Models.Category", b =>
+                {
+                    b.Navigation("Events");
+                });
+
+            modelBuilder.Entity("star_events.Models.Location", b =>
+                {
+                    b.Navigation("Events");
                 });
 
             modelBuilder.Entity("star_events.Models.TicketType", b =>

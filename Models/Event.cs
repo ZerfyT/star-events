@@ -18,7 +18,7 @@ namespace star_events.Models
         public int CategoryID { get; set; }
 
         [Display(Name = "Organizer")]
-        public string? OrganizerId { get; set; } // Maps to ApplicationUser.Id
+        public string? OrganizerID { get; set; } // Maps to ApplicationUser.Id
 
         [Required]
         [StringLength(100)]
@@ -55,10 +55,10 @@ namespace star_events.Models
         // public virtual ICollection<TicketType> TicketTypes { get; set; } // Existing
 
         [NotMapped]
-        public string Event_Type => Category?.Name ?? "Unknown";
+        public string EventType => Category?.Name ?? "Unknown";
 
         [NotMapped]
-        public string Organizer_Name => Organizer?.FirstName + " " + Organizer?.LastName ?? "Unknown Organizer";
+        public string OrganizerName => Organizer?.FirstName + " " + Organizer?.LastName ?? "Unknown Organizer";
 
         [NotMapped]
         public string Venue => Location?.Name ?? "Unknown Venue";

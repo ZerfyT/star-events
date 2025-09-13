@@ -180,7 +180,7 @@ public class DbInitializer
                     "A magical evening featuring the nation's top classical and contemporary artists. Experience a fusion of sounds that will captivate your soul.",
                 StartDateTime = DateTime.Now.AddDays(45).Date.AddHours(19), // 7 PM
                 EndDateTime = DateTime.Now.AddDays(45).Date.AddHours(22), // 10 PM
-                OrganizerId = organizer.Id,
+                OrganizerID = organizer.Id,
                 LocationID = nelumPokuna.LocationID,
                 CategoryID = concertCategory.CategoryID,
                 ImageURL = "https://placehold.co/1024x768/334155/FFFFFF?text=Symphony+of+Strings",
@@ -193,7 +193,7 @@ public class DbInitializer
                     "Showcasing the best of local and international drama. A week-long festival of captivating performances, workshops, and artist talks.",
                 StartDateTime = DateTime.Now.AddDays(70).Date.AddHours(18), // 6 PM
                 EndDateTime = DateTime.Now.AddDays(70).Date.AddHours(21), // 9 PM
-                OrganizerId = organizer.Id,
+                OrganizerID = organizer.Id,
                 LocationID = lionelWendt.LocationID,
                 CategoryID = theatreCategory.CategoryID,
                 ImageURL = "https://placehold.co/1024x768/78350F/FFFFFF?text=Theatre+Festival",

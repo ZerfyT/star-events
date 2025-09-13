@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace star_events.Migrations
 {
     /// <inheritdoc />
-    public partial class fixmigrationerrors : Migration
+    public partial class updatemigrationsv1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -112,27 +112,6 @@ namespace star_events.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.LocationID);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "Promotions",
-                columns: table => new
-                {
-                    PromotionID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    PromoCode = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DiscountType = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    DiscountValue = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Promotions", x => x.PromotionID);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -269,6 +248,10 @@ namespace star_events.Migrations
                 {
                     EventID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    LocationID = table.Column<int>(type: "int", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: false),
+                    OrganizerID = table.Column<string>(type: "varchar(255)", nullable: true)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     Title = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: false)
@@ -278,18 +261,14 @@ namespace star_events.Migrations
                     ImageURL = table.Column<string>(type: "varchar(255)", maxLength: 255, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Status = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    LocationID = table.Column<int>(type: "int", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: false),
-                    OrganizerId = table.Column<string>(type: "varchar(255)", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Events", x => x.EventID);
                     table.ForeignKey(
-                        name: "FK_Events_AspNetUsers_OrganizerId",
-                        column: x => x.OrganizerId,
+                        name: "FK_Events_AspNetUsers_OrganizerID",
+                        column: x => x.OrganizerID,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -303,6 +282,58 @@ namespace star_events.Migrations
                         column: x => x.LocationID,
                         principalTable: "Locations",
                         principalColumn: "LocationID",
+                        onDelete: ReferentialAction.Cascade);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "Promotions",
+                columns: table => new
+                {
+                    PromotionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EventID = table.Column<int>(type: "int", nullable: true),
+                    PromoCode = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiscountType = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DiscountValue = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsActive = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Promotions", x => x.PromotionID);
+                    table.ForeignKey(
+                        name: "FK_Promotions_Events_EventID",
+                        column: x => x.EventID,
+                        principalTable: "Events",
+                        principalColumn: "EventID");
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "TicketTypes",
+                columns: table => new
+                {
+                    TicketTypeID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    EventID = table.Column<int>(type: "int", nullable: false),
+                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
+                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
+                    AvailableQuantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TicketTypes", x => x.TicketTypeID);
+                    table.ForeignKey(
+                        name: "FK_TicketTypes_Events_EventID",
+                        column: x => x.EventID,
+                        principalTable: "Events",
+                        principalColumn: "EventID",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -334,31 +365,6 @@ namespace star_events.Migrations
                         column: x => x.PromotionID,
                         principalTable: "Promotions",
                         principalColumn: "PromotionID",
-                        onDelete: ReferentialAction.Cascade);
-                })
-                .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateTable(
-                name: "TicketTypes",
-                columns: table => new
-                {
-                    TicketTypeID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
-                        .Annotation("MySql:CharSet", "utf8mb4"),
-                    Price = table.Column<decimal>(type: "decimal(65,30)", nullable: false),
-                    TotalQuantity = table.Column<int>(type: "int", nullable: false),
-                    AvailableQuantity = table.Column<int>(type: "int", nullable: false),
-                    EventID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_TicketTypes", x => x.TicketTypeID);
-                    table.ForeignKey(
-                        name: "FK_TicketTypes_Events_EventID",
-                        column: x => x.EventID,
-                        principalTable: "Events",
-                        principalColumn: "EventID",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
@@ -480,14 +486,19 @@ namespace star_events.Migrations
                 column: "LocationID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Events_OrganizerId",
+                name: "IX_Events_OrganizerID",
                 table: "Events",
-                column: "OrganizerId");
+                column: "OrganizerID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_BookingID",
                 table: "Payments",
                 column: "BookingID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Promotions_EventID",
+                table: "Promotions",
+                column: "EventID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Tickets_BookingID",
