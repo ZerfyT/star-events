@@ -45,13 +45,13 @@ namespace star_events.Models
 
         // Navigation properties
         [ForeignKey("LocationID")]
-        public virtual Location Location { get; set; } // Existing
+        public virtual Location? Location { get; set; } // Existing
         
         [ForeignKey("CategoryID")]
-        public virtual Category Category { get; set; } // New: Links to Categories table
+        public virtual Category? Category { get; set; } // New: Links to Categories table
         
         [ForeignKey("OrganizerID")]
-        public virtual ApplicationUser Organizer { get; set; } // New: Links to Users table via OrganizerID
+        public virtual ApplicationUser? Organizer { get; set; } // New: Links to Users table via OrganizerID
         
         // public virtual ICollection<TicketType> TicketTypes { get; set; } // Existing
 

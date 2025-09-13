@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using star_events.Models;
 using star_events.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace star_events.Controllers
 {
@@ -62,12 +63,18 @@ namespace star_events.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,ImageURL,Status")] Event @event)
         {
+            // Console.WriteLine($"Model State: {ModelState.IsValid}");
+            // foreach (var error in ModelState.SelectMany(state => state.Value.Errors))
+            // {
+            //     Console.WriteLine($"    Error: {error.ErrorMessage}");
+            // }
             if (ModelState.IsValid)
             {
                 _eventRepository.Insert(@event);
                 _eventRepository.Save();
                 return RedirectToAction(nameof(Index));
             }
+            
             ViewData["CategoryID"] = new SelectList(_categoryRepository.GetAll(), "CategoryID", "Name", @event.CategoryID);
             ViewData["LocationID"] = new SelectList(_locationRepository.GetAll(), "LocationID", "Address", @event.LocationID);
             ViewData["OrganizerID"] = new SelectList(_userManager.Users, "Id", "UserName", @event.OrganizerID);

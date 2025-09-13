@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace star_events.Models
 {
@@ -7,8 +8,8 @@ namespace star_events.Models
         [Key]
         public int PromotionID { get; set; }
         
-        [Required]
-        public int EventID { get; set; }
+        // [Required]
+        public int? EventID { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -31,7 +32,9 @@ namespace star_events.Models
         public bool IsActive { get; set; }
 
         // Navigation properties
-        public Event Event { get; set; }
-        public ICollection<Booking> Bookings { get; set; } // One-to-many
+        [ForeignKey("EventID")]
+        public virtual Event? Event { get; set; }
+        
+        // public virtual ICollection<Booking> Bookings { get; set; } // One-to-many
     }
 }

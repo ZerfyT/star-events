@@ -18,7 +18,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 // Add Identity services with custom User and Role types
 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         {
-            options.SignIn.RequireConfirmedAccount = true;
+            options.SignIn.RequireConfirmedAccount = false;
             options.Password.RequireDigit = false;
             options.Password.RequireUppercase = false;
             options.Password.RequireNonAlphanumeric = false;
@@ -39,8 +39,9 @@ builder.Services.AddScoped<ITicketTypeRepository, TicketTypeRepository>();
 builder.Services.AddScoped<IPromotionRepository, PromotionRepository>();
 builder.Services.AddScoped<IEventRepository, EventRepository>();
 
-builder.Services.AddRazorPages();
+builder.Services.AddScoped<DbInitializer>();
 
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 
@@ -49,7 +50,8 @@ using (var scope = app.Services.CreateScope())
     var services = scope.ServiceProvider;
     try
     {
-        DbInitializer.Initialize(services);
+        var initializer = services.GetRequiredService<DbInitializer>();
+        initializer.Initialize();
     }
     catch (Exception ex)
     {
@@ -57,7 +59,6 @@ using (var scope = app.Services.CreateScope())
         logger.LogError(ex, "An error occurred while seeding the database.");
     }
 }
-
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
