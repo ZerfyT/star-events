@@ -1,4 +1,5 @@
-﻿@model star_events.Areas.Identity.Pages.Account.LoginModel
+﻿@page
+@model star_events.Areas.Identity.Pages.Account.LoginModel
 @{
     ViewData["Title"] = "Login - TixWave";
     Layout = "_AuthLayout";
@@ -46,7 +47,7 @@
 }
 
 <!-- Login Form -->
-<form method="post">
+<form id="account" method="post" asp-route-returnUrl="@Model.ReturnUrl">
     @Html.AntiForgeryToken()
 
     <!-- Username Field -->
@@ -88,7 +89,7 @@
             @Html.CheckBoxFor(m => m.Input.RememberMe, new { @class = "form-check-input" })
             @Html.LabelFor(m => m.Input.RememberMe, new { @class = "form-check-label" })
         </div>
-        <a href="@Url.Page("/Account/ForgotPassword")" class="text-decoration-none">
+        <a id="forgot-password" asp-page="./ForgotPassword" class="text-decoration-none">
             Forgot Password?
         </a>
     </div>
@@ -102,7 +103,7 @@
 
 <div class="form-links">
     <span>Don't have an account?</span>
-    <a href="@Url.Page("/Account/Register")">Create Account</a>
+    <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Create Account</a>
 </div>
 
 @section OverlayFeatures {

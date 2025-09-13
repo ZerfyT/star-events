@@ -78,19 +78,19 @@ namespace star_events.Areas.Identity.Pages.Account
             [Display(Name = "Email")]
             public string Email { get; set; }
 
-            [Required]
-            [Display(Name = "User Role")]
-            public string UserRole { get; set; }
+            // [Required]
+            // [Display(Name = "User Role")]
+            // public string UserRole { get; set; }
 
             [Required]
             [StringLength(15)]
             [Display(Name = "Contact No")]
             public string ContactNo { get; set; }
 
-            [Required]
-            [StringLength(20)]
-            [Display(Name = "NIC")]
-            public string NIC { get; set; }
+            // [Required]
+            // [StringLength(20)]
+            // [Display(Name = "NIC")]
+            // public string NIC { get; set; }
 
             [Required]
             [StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
@@ -132,7 +132,7 @@ namespace star_events.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.ContactNo = Input.ContactNo;
-                user.NIC = Input.NIC;
+                // user.NIC = Input.NIC;
                 user.UserName = Input.Username;
                 user.Email = Input.Email;
                 var result = await _userManager.CreateAsync(user, Input.Password);
@@ -142,22 +142,22 @@ namespace star_events.Areas.Identity.Pages.Account
                     _logger.LogInformation("User created a new account with password for email: {Email}", Input.Email);
 
                     // Assign role based on user selection
-                    string roleName = Input.UserRole == "Event Organizer" ? "Organizer" : "Customer";
+                    // string roleName = Input.UserRole == "Event Organizer" ? "Organizer" : "Customer";
                     
-                    if (!await _roleManager.RoleExistsAsync(roleName))
-                    {
-                        var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
-                        if (!roleResult.Succeeded)
-                        {
-                            _logger.LogWarning("Failed to create {Role} role: {Errors}", roleName, string.Join(", ", roleResult.Errors.Select(e => e.Description)));
-                            ModelState.AddModelError(string.Empty, "Role creation failed. Please contact support.");
-                            return Page();
-                        }
-                    }
-                    var roleAssignmentResult = await _userManager.AddToRoleAsync(user, roleName);
+                    // if (!await _roleManager.RoleExistsAsync(roleName))
+                    // {
+                    //     var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName));
+                    //     if (!roleResult.Succeeded)
+                    //     {
+                    //         _logger.LogWarning("Failed to create {Role} role: {Errors}", roleName, string.Join(", ", roleResult.Errors.Select(e => e.Description)));
+                    //         ModelState.AddModelError(string.Empty, "Role creation failed. Please contact support.");
+                    //         return Page();
+                    //     }
+                    // }
+                    var roleAssignmentResult = await _userManager.AddToRoleAsync(user, "Customer");
                     if (!roleAssignmentResult.Succeeded)
                     {
-                        _logger.LogWarning("Failed to assign {Role} role to user: {Errors}", roleName, string.Join(", ", roleAssignmentResult.Errors.Select(e => e.Description)));
+                        _logger.LogWarning("Failed to assign {Role} role to user: {Errors}", "Customer", string.Join(", ", roleAssignmentResult.Errors.Select(e => e.Description)));
                         ModelState.AddModelError(string.Empty, "Role assignment failed. Please contact support.");
                         return Page();
                     }
