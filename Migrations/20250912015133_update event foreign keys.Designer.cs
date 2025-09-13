@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using star_events.Data;
 
@@ -11,9 +12,11 @@ using star_events.Data;
 namespace star_events.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250912015133_update event foreign keys")]
+    partial class updateeventforeignkeys
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -440,7 +443,7 @@ namespace star_events.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int?>("EventID")
+                    b.Property<int>("EventID")
                         .HasColumnType("int");
 
                     b.Property<bool>("IsActive")
@@ -581,7 +584,7 @@ namespace star_events.Migrations
             modelBuilder.Entity("star_events.Models.Booking", b =>
                 {
                     b.HasOne("star_events.Models.Promotion", "Promotion")
-                        .WithMany()
+                        .WithMany("Bookings")
                         .HasForeignKey("PromotionID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -637,7 +640,9 @@ namespace star_events.Migrations
                 {
                     b.HasOne("star_events.Models.Event", "Event")
                         .WithMany()
-                        .HasForeignKey("EventID");
+                        .HasForeignKey("EventID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Event");
                 });
@@ -677,6 +682,11 @@ namespace star_events.Migrations
                     b.Navigation("Payments");
 
                     b.Navigation("Tickets");
+                });
+
+            modelBuilder.Entity("star_events.Models.Promotion", b =>
+                {
+                    b.Navigation("Bookings");
                 });
 
             modelBuilder.Entity("star_events.Models.TicketType", b =>

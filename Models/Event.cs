@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace star_events.Models
@@ -43,19 +44,15 @@ namespace star_events.Models
 
         // Navigation properties
         [ForeignKey("LocationID")]
-        public virtual Location Location { get; set; }
+        public virtual Location? Location { get; set; } // Existing
         
         [ForeignKey("CategoryID")]
-        public virtual Category Category { get; set; }
+        public virtual Category? Category { get; set; } // New: Links to Categories table
         
-        [ForeignKey("OrganizerId")]
-        public virtual ApplicationUser? Organizer { get; set; }
+        [ForeignKey("OrganizerID")]
+        public virtual ApplicationUser? Organizer { get; set; } // New: Links to Users table via OrganizerID
         
-        public virtual ICollection<TicketType> TicketTypes { get; set; } = new List<TicketType>();
-
-        // Computed properties for view compatibility
-        [NotMapped]
-        public string Event_Name => Title;
+        // public virtual ICollection<TicketType> TicketTypes { get; set; } // Existing
 
         [NotMapped]
         public string Event_Type => Category?.Name ?? "Unknown";

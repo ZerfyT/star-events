@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using star_events.Models;
 using star_events.Repository.Interfaces;
 using star_events.Data;
@@ -11,13 +12,22 @@ namespace star_events.Repository.Services
         {
         }
 
-        public new IEnumerable<Event> GetAll()
+        public override IEnumerable<Event> GetAll()
         {
             return _context.Events
                 .Include(e => e.Category)
                 .Include(e => e.Location)
                 .Include(e => e.Organizer)
                 .ToList();
+        }
+
+        public override Event GetById(object id)
+        {
+            return _context.Events
+                .Include(e => e.Category)
+                .Include(e => e.Location)
+                .Include(e => e.Organizer)
+                .FirstOrDefault(e => e.EventID == (int)id);
         }
 
         public IEnumerable<Event> GetActiveEvents()
@@ -36,7 +46,7 @@ namespace star_events.Repository.Services
                 .Include(e => e.Category)
                 .Include(e => e.Location)
                 .Include(e => e.Organizer)
-                .Where(e => e.OrganizerId == organizerId)
+                .Where(e => e.Organizer.Id == organizerId)
                 .ToList();
         }
 

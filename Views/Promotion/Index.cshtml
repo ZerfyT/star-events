@@ -1,0 +1,170 @@
+@model IEnumerable<star_events.Models.Promotion>
+
+@{
+    ViewData["Title"] = "Promotions";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <h1><i class="bi bi-percent"></i> Promotions</h1>
+    <p>Manage promotional codes and discounts for events</p>
+</div>
+
+<div class="table-card">
+    <div class="card-header">
+        <div class="d-flex justify-content-between align-items-center">
+            <h5><i class="bi bi-list-ul"></i> All Promotions</h5>
+            <a asp-action="Create" class="btn btn-light">
+                <i class="bi bi-plus-circle"></i> Create New Promotion
+            </a>
+        </div>
+    </div>
+    <div class="card-body p-0">
+        @if (Model.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-hover mb-0" id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <i class="bi bi-tag"></i> Promo Code
+                            </th>
+                            <th>
+                                <i class="bi bi-calendar-event"></i> Event
+                            </th>
+                            <th>
+                                <i class="bi bi-percent"></i> Discount Type
+                            </th>
+                            <th>
+                                <i class="bi bi-currency-dollar"></i> Discount Value
+                            </th>
+                            <th>
+                                <i class="bi bi-calendar-plus"></i> Start Date
+                            </th>
+                            <th>
+                                <i class="bi bi-calendar-x"></i> End Date
+                            </th>
+                            <th>
+                                <i class="bi bi-toggle-on"></i> Status
+                            </th>
+                            <th class="text-center">
+                                <i class="bi bi-gear"></i> Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <strong class="text-primary">@Html.DisplayFor(modelItem => item.PromoCode)</strong>
+                                </td>
+                                <td>
+                                    @if (item.Event != null)
+                                    {
+                                        <span class="badge bg-info">@item.Event.Title</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">No Event</span>
+                                    }
+                                </td>
+                                <td>
+                                    @{
+                                        var discountTypeClass = item.DiscountType == "Percentage" ? "bg-success" : "bg-warning";
+                                    }
+                                    <span class="badge @discountTypeClass">@Html.DisplayFor(modelItem => item.DiscountType)</span>
+                                </td>
+                                <td>
+                                    @if (item.DiscountType == "Percentage")
+                                    {
+                                        <span class="text-success fw-bold">@Html.DisplayFor(modelItem => item.DiscountValue)%</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-success fw-bold">$@Html.DisplayFor(modelItem => item.DiscountValue)</span>
+                                    }
+                                </td>
+                                <td>
+                                    <small>@item.StartDate.ToString("MMM dd, yyyy")</small>
+                                </td>
+                                <td>
+                                    <small>@item.EndDate.ToString("MMM dd, yyyy")</small>
+                                </td>
+                                <td>
+                                    @{
+                                        var now = DateTime.Now;
+                                        var isExpired = item.EndDate < now;
+                                        var isNotStarted = item.StartDate > now;
+                                        var isActive = item.IsActive && !isExpired && !isNotStarted;
+                                        
+                                        string statusClass;
+                                        string statusText;
+                                        
+                                        if (!item.IsActive)
+                                        {
+                                            statusClass = "bg-secondary";
+                                            statusText = "Inactive";
+                                        }
+                                        else if (isExpired)
+                                        {
+                                            statusClass = "bg-danger";
+                                            statusText = "Expired";
+                                        }
+                                        else if (isNotStarted)
+                                        {
+                                            statusClass = "bg-warning";
+                                            statusText = "Not Started";
+                                        }
+                                        else
+                                        {
+                                            statusClass = "bg-success";
+                                            statusText = "Active";
+                                        }
+                                    }
+                                    <span class="badge @statusClass">@statusText</span>
+                                </td>
+                                <td class="text-center">
+                                    <a asp-action="Details" asp-route-id="@item.PromotionID" class="btn btn-outline-info btn-action" title="View Details">
+                                        <i class="bi bi-eye"></i>
+                                    </a>
+                                    <a asp-action="Edit" asp-route-id="@item.PromotionID" class="btn btn-outline-primary btn-action" title="Edit">
+                                        <i class="bi bi-pencil"></i>
+                                    </a>
+                                    <a asp-action="Delete" asp-route-id="@item.PromotionID" class="btn btn-outline-danger btn-action" title="Delete">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-percent" style="font-size: 3rem;" class="text-muted mb-3"></i>
+                <h5 class="text-muted">No Promotions Found</h5>
+                <p class="text-muted">Get started by creating your first promotion.</p>
+                <a asp-action="Create" class="btn btn-primary">
+                    <i class="bi bi-plus-circle"></i> Create First Promotion
+                </a>
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                "pageLength": 10,
+                "order": [[ 4, "desc" ]], // Sort by Start Date descending
+                "columnDefs": [
+                    { "orderable": false, "targets": 7 }
+                ]
+            });
+        });
+    </script>
+}
