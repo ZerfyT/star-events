@@ -96,13 +96,9 @@ namespace star_events.Areas.Identity.Pages.Account
                     _logger.LogInformation("User logged in with username/email: {Username} at {Time}", Input.Username, DateTime.Now);
                     var roles = await _userManager.GetRolesAsync(user);
                     // Role-based redirection
-                    if (roles.Contains("Admin"))
+                    if (roles.Contains("Admin") || roles.Contains("EventOrganizer"))
                     {
-                        return LocalRedirect("/Admin/Dashboard");
-                    }
-                    else if (roles.Contains("Organizer"))
-                    {
-                        return LocalRedirect("/Organizer/Events");
+                        return LocalRedirect("/Admin");
                     }
                     else // Default to Customer
                     {
