@@ -4,6 +4,7 @@ using star_events.Models;
 using star_events.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.IO;
 
 namespace star_events.Controllers
 {
@@ -61,7 +62,7 @@ namespace star_events.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,ImageURL,Status")] Event @event)
+        public IActionResult Create([Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,Status")] Event @event, IFormFile[] uploadedImages)
         {
             // Console.WriteLine($"Model State: {ModelState.IsValid}");
             // foreach (var error in ModelState.SelectMany(state => state.Value.Errors))
@@ -70,6 +71,38 @@ namespace star_events.Controllers
             // }
             if (ModelState.IsValid)
             {
+                var allImagePaths = new List<string>();
+
+                // Handle file uploads
+                if (uploadedImages != null && uploadedImages.Length > 0)
+                {
+                    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "events");
+                    if (!Directory.Exists(uploadPath))
+                    {
+                        Directory.CreateDirectory(uploadPath);
+                    }
+
+                    for (int i = 0; i < Math.Min(uploadedImages.Length, 10); i++)
+                    {
+                        if (uploadedImages[i] != null && uploadedImages[i].Length > 0)
+                        {
+                            var fileName = $"{Guid.NewGuid()}_{uploadedImages[i].FileName}";
+                            var filePath = Path.Combine(uploadPath, fileName);
+                            
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                uploadedImages[i].CopyTo(stream);
+                            }
+                            
+                            var relativePath = $"/uploads/events/{fileName}";
+                            allImagePaths.Add(relativePath);
+                        }
+                    }
+                }
+
+                // Store all image paths as JSON array
+                @event.AllImagePaths = allImagePaths;
+
                 _eventRepository.Insert(@event);
                 _eventRepository.Save();
                 return RedirectToAction(nameof(Index));
@@ -105,17 +138,88 @@ namespace star_events.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,ImageURL,Status")] Event @event)
+        public IActionResult Edit(int id, [Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,Status")] Event @event, IFormFile[] uploadedImages, string deletedImageIndexes)
         {
             if (id != @event.EventID)
             {
                 return NotFound();
             }
+            
+            // var existingEvent = _eventRepository.GetById(id);
 
             if (ModelState.IsValid)
             {
                 try
                 {
+                    var currentImagePaths = @event.AllImagePaths ?? [];
+
+                    // Handle deleted images
+                    if (!string.IsNullOrEmpty(deletedImageIndexes))
+                    {
+                        var deletedIndexes = deletedImageIndexes.Split(',')
+                            .Where(x => int.TryParse(x, out _))
+                            .Select(int.Parse)
+                            .OrderByDescending(x => x) // Delete from end to maintain indexes
+                            .ToList();
+
+                        foreach (var index in deletedIndexes)
+                        {
+                            if (index >= 0 && index < currentImagePaths.Count)
+                            {
+                                // Delete physical file if it's an uploaded file
+                                var imagePath = currentImagePaths[index];
+                                if (!imagePath.StartsWith("http") && !string.IsNullOrEmpty(imagePath))
+                                {
+                                    var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath.TrimStart('/'));
+                                    if (System.IO.File.Exists(fullPath))
+                                    {
+                                        try
+                                        {
+                                            System.IO.File.Delete(fullPath);
+                                        }
+                                        catch
+                                        {
+                                            // Log error but continue - file might be in use
+                                        }
+                                    }
+                                }
+                                
+                                currentImagePaths.RemoveAt(index);
+                            }
+                        }
+                    }
+
+                    // Handle new file uploads
+                    if (uploadedImages != null && uploadedImages.Length > 0)
+                    {
+                        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads", "events");
+                        if (!Directory.Exists(uploadPath))
+                        {
+                            Directory.CreateDirectory(uploadPath);
+                        }
+
+                        for (int i = 0; i < Math.Min(uploadedImages.Length, 10); i++)
+                        {
+                            if (uploadedImages[i] != null && uploadedImages[i].Length > 0)
+                            {
+                                var fileName = $"{Guid.NewGuid()}_{uploadedImages[i].FileName}";
+                                var filePath = Path.Combine(uploadPath, fileName);
+                                
+                                using (var stream = new FileStream(filePath, FileMode.Create))
+                                {
+                                    uploadedImages[i].CopyTo(stream);
+                                }
+                                
+                                var relativePath = $"/uploads/events/{fileName}";
+                                currentImagePaths.Add(relativePath);
+                            }
+                        }
+                    }
+
+
+                    // Store all image paths as JSON array
+                    @event.AllImagePaths = currentImagePaths;
+
                     _eventRepository.Update(@event);
                     _eventRepository.Save();
                 }

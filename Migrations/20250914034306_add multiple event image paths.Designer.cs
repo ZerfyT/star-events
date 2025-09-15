@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using star_events.Data;
 
@@ -11,9 +12,11 @@ using star_events.Data;
 namespace star_events.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250914034306_add multiple event image paths")]
+    partial class addmultipleeventimagepaths
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -315,8 +318,25 @@ namespace star_events.Migrations
                     b.Property<DateTime>("EndDateTime")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<string>("ImagePaths")
+                    b.Property<string>("ImagePath1")
                         .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath2")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath3")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath4")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImagePath5")
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("varchar(255)");
 
                     b.Property<int>("LocationID")
                         .HasColumnType("int");

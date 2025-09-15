@@ -183,7 +183,7 @@ public class DbInitializer
                 OrganizerID = organizer.Id,
                 LocationID = nelumPokuna.LocationID,
                 CategoryID = concertCategory.CategoryID,
-                ImageURL = "https://placehold.co/1024x768/334155/FFFFFF?text=Symphony+of+Strings",
+                ImagePaths = "https://placehold.co/1024x768/334155/FFFFFF?text=Symphony+of+Strings",
                 Status = "Upcoming"
             },
             new Event
@@ -196,7 +196,7 @@ public class DbInitializer
                 OrganizerID = organizer.Id,
                 LocationID = lionelWendt.LocationID,
                 CategoryID = theatreCategory.CategoryID,
-                ImageURL = "https://placehold.co/1024x768/78350F/FFFFFF?text=Theatre+Festival",
+                ImagePaths = "https://placehold.co/1024x768/78350F/FFFFFF?text=Theatre+Festival",
                 Status = "Upcoming"
             }
         };

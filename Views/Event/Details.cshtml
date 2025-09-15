@@ -17,10 +17,32 @@
                 <h5><i class="bi bi-calendar-event"></i> Event Information</h5>
             </div>
             <div class="card-body">
-                @if (!string.IsNullOrEmpty(Model.ImageURL))
+                @if (Model.AllImagePaths.Any())
                 {
-                    <div class="text-center mb-4">
-                        <img src="@Model.ImageURL" alt="@Model.Title" class="img-fluid rounded" style="max-height: 300px;">
+                    <div class="mb-4">
+                        <h6 class="text-primary mb-3"><i class="bi bi-images"></i> Event Images</h6>
+                        <div class="row">
+                            @foreach (var imagePath in Model.AllImagePaths)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card">
+                                        <img src="@imagePath" alt="@Model.Title" class="card-img-top" style="height: 200px; object-fit: cover;" data-bs-toggle="modal" data-bs-target="#imageModal" onclick="showImageModal('@imagePath', '@Model.Title')">
+                                        <div class="card-body p-2">
+                                            <small class="text-muted">
+                                                @if (imagePath.StartsWith("http"))
+                                                {
+                                                    <i class="bi bi-link-45deg"></i> <span>External URL</span>
+                                                }
+                                                else
+                                                {
+                                                    <i class="bi bi-cloud-check"></i> <span>Uploaded File</span>
+                                                }
+                                            </small>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
                     </div>
                 }
                 
@@ -242,13 +264,29 @@
                 </div>
             </div>
             
-            @if (!string.IsNullOrEmpty(Model.ImageURL))
-            {
-                <div class="text-center">
-                    <div class="h6 text-primary">Event Image</div>
-                    <img src="@Model.ImageURL" alt="@Model.Title" class="img-fluid rounded" style="max-height: 150px;">
-                </div>
-            }
         </div>
     </div>
 </div>
+
+<!-- Image Modal -->
+<div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="imageModalLabel">Event Image</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-center">
+                <img id="modalImage" src="" alt="" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showImageModal(imagePath, title) {
+        document.getElementById('modalImage').src = imagePath;
+        document.getElementById('modalImage').alt = title;
+        document.getElementById('imageModalLabel').textContent = title;
+    }
+</script>

@@ -109,7 +109,7 @@
 
                                     <!-- Event Image -->
                                     <div class="event-image">
-                                        <img src="@eventItem.PosterPath1" alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
+                                        <img src="@eventItem.ImagePaths" alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
                                         <div class="event-status @(eventItem.Status.ToLower())">
                                             @eventItem.Status
                                         </div>

@@ -34,9 +34,8 @@ namespace star_events.Models
         [Required]
         public DateTime EndDateTime { get; set; }
 
-        [Required]
-        [StringLength(255)]
-        public string ImageURL { get; set; }
+        // JSON array to store all image paths (URLs and uploaded files)
+        public string? ImagePaths { get; set; }
 
         [Required]
         [StringLength(20)]
@@ -72,10 +71,33 @@ namespace star_events.Models
         [NotMapped]
         public DateTime EndDate => EndDateTime;
 
-        [NotMapped]
-        public string PosterPath1 => ImageURL;
 
         [NotMapped]
         public int Allocated_Duration => (int)(EndDateTime - StartDateTime).TotalMinutes;
+
+        [NotMapped]
+        public List<string> AllImagePaths
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(ImagePaths))
+                    return new List<string>();
+                
+                try
+                {
+                    return System.Text.Json.JsonSerializer.Deserialize<List<string>>(ImagePaths) ?? new List<string>();
+                }
+                catch
+                {
+                    return new List<string>();
+                }
+            }
+            set
+            {
+                ImagePaths = value != null && value.Any() 
+                    ? System.Text.Json.JsonSerializer.Serialize(value) 
+                    : null;
+            }
+        }
     }
 }
