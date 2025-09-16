@@ -138,7 +138,7 @@ namespace star_events.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,Status")] Event @event, IFormFile[] uploadedImages, string deletedImageIndexes)
+        public IActionResult Edit(int id, [Bind("EventID,LocationID,CategoryID,OrganizerID,Title,Description,StartDateTime,EndDateTime,Status,ImagePaths")] Event @event, IFormFile[] uploadedImages, string? deletedImageIndexes)
         {
             if (id != @event.EventID)
             {
@@ -146,12 +146,17 @@ namespace star_events.Controllers
             }
             
             // var existingEvent = _eventRepository.GetById(id);
+            
+            foreach (var error in ModelState.SelectMany(state => state.Value.Errors))
+            {
+                Console.WriteLine($"    Error: {error.ErrorMessage}");
+            }
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var currentImagePaths = @event.AllImagePaths ?? [];
+                    var currentImagePaths = @event.AllImagePaths;
 
                     // Handle deleted images
                     if (!string.IsNullOrEmpty(deletedImageIndexes))

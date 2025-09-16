@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace star_events.Models
 {
@@ -7,20 +8,29 @@ namespace star_events.Models
         [Key]
         public int TicketID { get; set; }
 
-        //[Required]
-        //public int BookingID { get; set; }  //FK to Bookings
+        [Required]
+        [ForeignKey("Booking")]
+        public int BookingID { get; set; }
 
-        //[Required]
-        //public int TicketTypeID { get; set; }   //FK to Tickets
+        [Required]
+        [ForeignKey("TicketType")]
+        public int TicketTypeID { get; set; }
 
         [StringLength(255)]
-        public string QRCodeValue { get; set; }
+        [Display(Name = "QR Code")]
+        public string? QRCodeValue { get; set; }
 
+        [Display(Name = "Is Scanned")]
         public bool IsScanned { get; set; } = false; // Default to false
 
+        [Display(Name = "Scanned At")]
         public DateTime? ScannedAt { get; set; } // Nullable
 
-        public Booking Booking { get; set; } // Navigation property
-        public TicketType TicketType { get; set; } // Navigation property
+        // Navigation properties
+        [ForeignKey("BookingID")]
+        public virtual Booking Booking { get; set; }
+        
+        [ForeignKey("TicketTypeID")]
+        public virtual TicketType TicketType { get; set; }
     }
 }

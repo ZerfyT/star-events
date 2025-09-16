@@ -35,6 +35,6 @@ namespace star_events.Models
         [ForeignKey("EventID")]
         public virtual Event? Event { get; set; }
         
-        // public virtual ICollection<Booking> Bookings { get; set; } // One-to-many
+        public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>(); // One-to-many
     }
 }
