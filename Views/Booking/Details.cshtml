@@ -1,0 +1,200 @@
+@model star_events.Controllers.BookingDetailsViewModel
+
+@{
+    ViewData["Title"] = "Booking Details";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-ticket-perforated me-3"></i>Booking Details</h1>
+            <p>View detailed information about booking #@Model.Booking.BookingID</p>
+        </div>
+        <div>
+            <span class="badge bg-success fs-6">
+                <i class="bi bi-shield-check me-1"></i>
+                @(Model.IsAdmin ? "Administrator" : "Event Organizer")
+            </span>
+        </div>
+    </div>
+</div>
+
+<!-- Booking Summary Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-primary">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-primary">@Model.Booking.Tickets.Count</p>
+                    <p class="stats-label">Total Tickets</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-currency-dollar"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">$@Model.Booking.TotalAmount.ToString("N2")</p>
+                    <p class="stats-label">Total Amount</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-warning">@Model.Booking.Payments.Count</p>
+                    <p class="stats-label">Payments</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon @(Model.Booking.Status == "Confirmed" ? "bg-success" : Model.Booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number @(Model.Booking.Status == "Confirmed" ? "text-success" : Model.Booking.Status == "Pending" ? "text-warning" : "text-danger")">@Model.Booking.Status</p>
+                    <p class="stats-label">Status</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Booking Information</h5>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-3">
+                        Booking ID
+                    </dt>
+                    <dd class="col-sm-9">
+                        <span class="badge bg-primary">#@Model.Booking.BookingID</span>
+                    </dd>
+                    
+                    <dt class="col-sm-3">
+                        Booking Date
+                    </dt>
+                    <dd class="col-sm-9">
+                        <i class="bi bi-calendar-event"></i> @Model.Booking.BookingDateTime.ToString("MMM dd, yyyy 'at' HH:mm")
+                    </dd>
+                    
+                    <dt class="col-sm-3">
+                        Customer
+                    </dt>
+                    <dd class="col-sm-9">
+                        <div>
+                            <i class="bi bi-person"></i> @(Model.Booking.User?.UserName ?? "N/A")
+                            @if (Model.Booking.User != null)
+                            {
+                                <small class="text-muted d-block">@Model.Booking.User.Email</small>
+                                <small class="text-muted d-block">ID: @Model.Booking.User.Id</small>
+                            }
+                        </div>
+                    </dd>
+                    
+                    <dt class="col-sm-3">
+                        Promotion
+                    </dt>
+                    <dd class="col-sm-9">
+                        @if (Model.Booking.Promotion != null)
+                        {
+                            <span class="badge bg-info">@Model.Booking.Promotion.DiscountType</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Promotion Applied</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+
+        <!-- Tickets Information -->
+        @if (Model.Booking.Tickets.Any())
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Tickets (@Model.Booking.Tickets.Count)</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="border-0">Ticket ID</th>
+                                    <th class="border-0">Event</th>
+                                    <th class="border-0">Ticket Type</th>
+                                    <th class="border-0">Price</th>
+                                    <th class="border-0">Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var ticket in Model.Booking.Tickets)
+                                {
+                                    <tr>
+                                        <td>
+                                            <span class="fw-semibold">#@ticket.TicketID</span>
+                                        </td>
+                                        <td>
+                                            <div class="fw-semibold">@(ticket.TicketType?.Event?.Title ?? "N/A")</div>
+                                            <small class="text-muted">@(ticket.TicketType?.Event?.StartDateTime.ToString("MMM dd, yyyy") ?? "")</small>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-secondary">@(ticket.TicketType?.Name ?? "N/A")</span>
+                                        </td>
+                                        <td>
+                                            <span class="fw-bold text-success">$@ticket.TicketType?.Price.ToString("N2")</span>
+                                        </td>
+                                        <td>
+                                            <span class="badge @(ticket.IsScanned ? "bg-success" : "bg-warning")">
+                                                @(ticket.IsScanned ? "Scanned" : "Active")
+                                            </span>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title mb-0">Quick Actions</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-arrow-left"></i> Back to Bookings
+                    </a>
+                    <a asp-controller="Payment" asp-action="Index" class="btn btn-outline-primary">
+                        <i class="bi bi-credit-card"></i> View Payments
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

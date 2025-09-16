@@ -1,0 +1,339 @@
+@model star_events.Controllers.BookingsReportViewModel
+
+@{
+    ViewData["Title"] = "Bookings Report";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-ticket-perforated me-3"></i>Bookings Report</h1>
+            <p>Monitor booking trends, cancellations, and customer behavior</p>
+        </div>
+        <div>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <form method="get" class="row align-items-end">
+                    <div class="col-md-3">
+                        <label class="form-label">Start Date</label>
+                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">End Date</label>
+                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-funnel me-1"></i>Apply Filters
+                        </button>
+                    </div>
+                    <div class="col-md-3 text-end">
+                        <button type="button" class="btn btn-success" onclick="exportReport('bookings')">
+                            <i class="bi bi-download me-1"></i>Export CSV
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Summary Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-primary">
+                    <i class="bi bi-ticket-perforated"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-primary">@Model.TotalBookings</p>
+                    <p class="stats-label">Total Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-check-circle"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">@Model.CompletedBookings</p>
+                    <p class="stats-label">Completed Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-warning">@Model.PendingBookings</p>
+                    <p class="stats-label">Pending Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-danger">
+                    <i class="bi bi-x-circle"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-danger">@Model.CancelledBookings</p>
+                    <p class="stats-label">Cancelled Bookings</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Revenue and Status Breakdown -->
+<div class="row mb-4">
+    <div class="col-xl-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-currency-dollar me-2"></i>Booking Value Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="value-summary">
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-currency-dollar me-2"></i>Total Booking Value</span>
+                        <span class="fw-bold text-success">$@Model.TotalBookingValue.ToString("N2")</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-graph-up me-2"></i>Average Booking Value</span>
+                        <span class="fw-semibold">$@(Model.TotalBookings > 0 ? (Model.TotalBookingValue / Model.TotalBookings).ToString("N2") : "0.00")</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-percent me-2"></i>Completion Rate</span>
+                        <span class="fw-semibold">@(Model.TotalBookings > 0 ? (Model.CompletedBookings * 100.0 / Model.TotalBookings).ToString("F1") : "0.0")%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-pie-chart me-2"></i>Booking Status Distribution</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.TotalBookings > 0)
+                {
+                    <div class="status-breakdown">
+                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="status-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-check-circle"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Completed</div>
+                                    <small class="text-muted">Successfully processed</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">@Model.CompletedBookings</div>
+                                <small class="text-muted">@((Model.CompletedBookings * 100.0 / Model.TotalBookings).ToString("F1"))%</small>
+                            </div>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="status-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-clock"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Pending</div>
+                                    <small class="text-muted">Awaiting confirmation</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">@Model.PendingBookings</div>
+                                <small class="text-muted">@((Model.PendingBookings * 100.0 / Model.TotalBookings).ToString("F1"))%</small>
+                            </div>
+                        </div>
+                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                            <div class="d-flex align-items-center">
+                                <div class="status-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-x-circle"></i>
+                                </div>
+                                <div>
+                                    <div class="fw-semibold">Cancelled</div>
+                                    <small class="text-muted">Cancelled by customer/admin</small>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <div class="fw-bold">@Model.CancelledBookings</div>
+                                <small class="text-muted">@((Model.CancelledBookings * 100.0 / Model.TotalBookings).ToString("F1"))%</small>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted text-center">No bookings data available</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Date Range Summary -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-calendar me-2"></i>Date Range Summary</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                            <span><i class="bi bi-calendar-event me-2"></i>Report Period</span>
+                            <span class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                            <span><i class="bi bi-clock me-2"></i>Days Covered</span>
+                            <span class="fw-semibold">@((Model.EndDate - Model.StartDate).Days + 1) days</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                            <span><i class="bi bi-graph-up me-2"></i>Bookings per Day</span>
+                            <span class="fw-semibold">@((Model.TotalBookings / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                            <span><i class="bi bi-currency-dollar me-2"></i>Daily Average Revenue</span>
+                            <span class="fw-semibold">$@((Model.TotalBookingValue / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("N2"))</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Bookings Table -->
+<div class="row">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-table me-2"></i>Booking Details</h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead>
+                            <tr>
+                                <th class="border-0">Booking ID</th>
+                                <th class="border-0">Total Amount</th>
+                                <th class="border-0">Status</th>
+                                <th class="border-0">Booking Date</th>
+                                <th class="border-0">Customer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var booking in Model.Bookings)
+                            {
+                                <tr>
+                                    <td>
+                                        <span class="fw-semibold">#@booking.BookingID</span>
+                                    </td>
+                                    <td>
+                                        <span class="fw-bold text-success">$@booking.TotalAmount.ToString("N2")</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                            @booking.Status
+                                        </span>
+                                    </td>
+                                    <td>@booking.BookingDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        <span class="text-muted">@(booking.User?.Email ?? "N/A")</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function exportReport(type) {
+            const startDate = document.querySelector('input[name="startDate"]').value;
+            const endDate = document.querySelector('input[name="endDate"]').value;
+            
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '@Url.Action("Export", "Reports")';
+            
+            const typeInput = document.createElement('input');
+            typeInput.type = 'hidden';
+            typeInput.name = 'reportType';
+            typeInput.value = type;
+            form.appendChild(typeInput);
+            
+            const formatInput = document.createElement('input');
+            formatInput.type = 'hidden';
+            formatInput.name = 'format';
+            formatInput.value = 'csv';
+            form.appendChild(formatInput);
+            
+            if (startDate) {
+                const startInput = document.createElement('input');
+                startInput.type = 'hidden';
+                startInput.name = 'startDate';
+                startInput.value = startDate;
+                form.appendChild(startInput);
+            }
+            
+            if (endDate) {
+                const endInput = document.createElement('input');
+                endInput.type = 'hidden';
+                endInput.name = 'endDate';
+                endInput.value = endDate;
+                form.appendChild(endInput);
+            }
+            
+            document.body.appendChild(form);
+            form.submit();
+            document.body.removeChild(form);
+        }
+
+        // Add status icon styling
+        const style = document.createElement('style');
+        style.textContent = `
+            .status-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+}
