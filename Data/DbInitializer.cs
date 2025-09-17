@@ -29,6 +29,9 @@ public class DbInitializer
         SeedVenues();
         SeedPromotions();
         SeedEvents();
+        SeedBookings();
+        SeedPayments();
+        SeedTickets();
     }
 
     private void SeedRoles()
@@ -212,17 +215,17 @@ public class DbInitializer
             {
                 new TicketType
                 {
-                    EventID = symphonyEvent.EventID, Name = "VIP Box", Price = 7500, TotalQuantity = 100,
+                    EventID = symphonyEvent.EventID, Name = "VIP Box", Price = 20, TotalQuantity = 100,
                     AvailableQuantity = 100
                 },
                 new TicketType
                 {
-                    EventID = symphonyEvent.EventID, Name = "Balcony", Price = 4000, TotalQuantity = 400,
+                    EventID = symphonyEvent.EventID, Name = "Balcony", Price = 13, TotalQuantity = 400,
                     AvailableQuantity = 400
                 },
                 new TicketType
                 {
-                    EventID = symphonyEvent.EventID, Name = "Orchestra Stalls", Price = 2500, TotalQuantity = 788,
+                    EventID = symphonyEvent.EventID, Name = "Orchestra Stalls", Price = (decimal)8.99, TotalQuantity = 788,
                     AvailableQuantity = 788
                 }
             };
@@ -236,18 +239,179 @@ public class DbInitializer
             {
                 new TicketType
                 {
-                    EventID = theatreEvent.EventID, Name = "Premium Seating", Price = 3500, TotalQuantity = 200,
+                    EventID = theatreEvent.EventID, Name = "Premium Seating", Price = 11, TotalQuantity = 200,
                     AvailableQuantity = 200
                 },
                 new TicketType
                 {
-                    EventID = theatreEvent.EventID, Name = "General Admission", Price = 1500, TotalQuantity = 422,
+                    EventID = theatreEvent.EventID, Name = "General Admission", Price = 4, TotalQuantity = 422,
                     AvailableQuantity = 422
                 }
             };
             _context.TicketTypes.AddRange(theatreTickets);
         }
 
+        _context.SaveChanges();
+    }
+
+    private void SeedBookings()
+    {
+        if (_context.Bookings.Any()) return;
+
+        // Get dependencies
+        var adminUser = _userManager.FindByEmailAsync("admin@starevents.lk").Result;
+        var organizerUser = _userManager.FindByEmailAsync("organizer@starevents.lk").Result;
+        var earlyBirdPromo = _context.Promotions.FirstOrDefault(p => p.PromoCode == "EARLYBIRD15");
+        var save500Promo = _context.Promotions.FirstOrDefault(p => p.PromoCode == "SAVE500");
+
+        // Create a sample customer user for bookings
+        var customerUser = new ApplicationUser
+        {
+            UserName = "customer02@starevents.lk",
+            Email = "customer02@starevents.lk",
+            FirstName = "John",
+            LastName = "Doe",
+            EmailConfirmed = true
+        };
+
+        var customerResult = _userManager.CreateAsync(customerUser, "Customer@123").Result;
+        if (customerResult.Succeeded)
+            _userManager.AddToRoleAsync(customerUser, "Customer").Wait();
+
+        // Ensure dependencies exist
+        if (adminUser == null || organizerUser == null || customerUser == null) return;
+
+        var bookings = new[]
+        {
+            new Booking
+            {
+                UserID = customerUser.Id,
+                PromotionID = earlyBirdPromo?.PromotionID,
+                BookingDateTime = DateTime.Now.AddDays(-5),
+                TotalAmount = 17, // VIP Box (20) with 15% discount = 17
+                Status = "Confirmed"
+            },
+            new Booking
+            {
+                UserID = customerUser.Id,
+                PromotionID = save500Promo?.PromotionID,
+                BookingDateTime = DateTime.Now.AddDays(-3),
+                TotalAmount = 6, // Premium Seating (11) with 4 discount = 7, but using 6 for realistic amount
+                Status = "Confirmed"
+            },
+            new Booking
+            {
+                UserID = adminUser.Id,
+                PromotionID = null,
+                BookingDateTime = DateTime.Now.AddDays(-1),
+                TotalAmount = 13, // Balcony ticket
+                Status = "Pending"
+            }
+        };
+
+        _context.Bookings.AddRange(bookings);
+        _context.SaveChanges();
+    }
+
+    private void SeedPayments()
+    {
+        if (_context.Payments.Any()) return;
+
+        // Get the bookings we just created
+        var bookings = _context.Bookings.ToList();
+        if (!bookings.Any()) return;
+
+        var payments = new[]
+        {
+            new Payment
+            {
+                BookingID = bookings[0].BookingID,
+                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
+                AmountPaid = 17,
+                PaymentMethod = "Credit Card",
+                PaymentStatus = "Completed",
+                PaymentDateTime = bookings[0].BookingDateTime.AddMinutes(5)
+            },
+            new Payment
+            {
+                BookingID = bookings[1].BookingID,
+                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
+                AmountPaid = 6,
+                PaymentMethod = "Debit Card",
+                PaymentStatus = "Completed",
+                PaymentDateTime = bookings[1].BookingDateTime.AddMinutes(3)
+            },
+            new Payment
+            {
+                BookingID = bookings[2].BookingID,
+                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
+                AmountPaid = 13,
+                PaymentMethod = "Bank Transfer",
+                PaymentStatus = "Pending",
+                PaymentDateTime = bookings[2].BookingDateTime.AddMinutes(10)
+            }
+        };
+
+        _context.Payments.AddRange(payments);
+        _context.SaveChanges();
+    }
+
+    private void SeedTickets()
+    {
+        if (_context.Tickets.Any()) return;
+
+        // Get the bookings and ticket types
+        var bookings = _context.Bookings.ToList();
+        var ticketTypes = _context.TicketTypes.ToList();
+        
+        if (!bookings.Any() || !ticketTypes.Any()) return;
+
+        var tickets = new List<Ticket>();
+
+        // Create tickets for each booking
+        foreach (var booking in bookings)
+        {
+            // Find appropriate ticket type based on booking amount
+            TicketType? selectedTicketType = null;
+            
+            if (booking.TotalAmount >= 15) // VIP Box (20)
+            {
+                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "VIP Box");
+            }
+            else if (booking.TotalAmount >= 10) // Premium or Balcony
+            {
+                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "Premium Seating") ??
+                                   ticketTypes.FirstOrDefault(tt => tt.Name == "Balcony");
+            }
+            else // General or Orchestra
+            {
+                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "General Admission") ??
+                                   ticketTypes.FirstOrDefault(tt => tt.Name == "Orchestra Stalls");
+            }
+
+            if (selectedTicketType != null)
+            {
+                // Create 1-3 tickets per booking
+                var ticketCount = booking.TotalAmount >= 15 ? 1 : 
+                                 booking.TotalAmount >= 10 ? 2 : 3;
+
+                for (int i = 0; i < ticketCount; i++)
+                {
+                    var ticket = new Ticket
+                    {
+                        BookingID = booking.BookingID,
+                        TicketTypeID = selectedTicketType.TicketTypeID,
+                        QRCodeValue = "QR_" + Guid.NewGuid().ToString("N")[..12].ToUpper(),
+                        IsScanned = booking.Status == "Confirmed" && i == 0, // First ticket scanned for confirmed bookings
+                        ScannedAt = booking.Status == "Confirmed" && i == 0 ? 
+                                   booking.BookingDateTime.AddDays(1) : null
+                    };
+                    tickets.Add(ticket);
+                }
+            }
+        }
+
+        _context.Tickets.AddRange(tickets);
         _context.SaveChanges();
     }
 }
