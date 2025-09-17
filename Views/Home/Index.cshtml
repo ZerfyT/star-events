@@ -1,3 +1,4 @@
+@using System.Net
 @model IEnumerable<star_events.Models.Event>
 @{
     ViewData["Title"] = "TixWave - Your Ticket to Every Experience";
@@ -109,7 +110,7 @@
 
                                     <!-- Event Image -->
                                     <div class="event-image">
-                                        <img src="@eventItem.ImagePaths" alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
+                                        <img src="@(eventItem.AllImagePaths.FirstOrDefault() ?? $"https://placehold.co/600x400/EEE/31343C?text={WebUtility.UrlEncode(eventItem.Title)}")" alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
                                         <div class="event-status @(eventItem.Status.ToLower())">
                                             @eventItem.Status
                                         </div>

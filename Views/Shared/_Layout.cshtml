@@ -46,20 +46,11 @@
                     <a class="nav-link active" href="#" data-page="home">Home</a>
                     <a class="nav-link" href="#" data-page="events">Events</a>
                     <a class="nav-link" href="#" data-page="trending">Trending Now</a>
-                    <a class="nav-link" href="#" data-page="bookings">My Booking History</a>
+                    <a class="nav-link" href="#" data-page="bookings">My Bookings</a>
                 </nav>
 
                 <!-- Right Side - Add Button + Actions -->
                 <div class="header-right">
-                    <!-- Add Event Button - Show only when authenticated -->
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <div class="addevent">
-                            <a class="btn add" asp-controller="Home" asp-action="AddEvent" style="display: flex !important;">
-                                <i class='bx bx-plus' style="display: block !important;"></i>
-                            </a>
-                        </div>
-                    }
 
                     <div class="actions">
                         @await Html.PartialAsync("_LoginPartial")
@@ -80,10 +71,10 @@
             <div class="footer-content">
                 <!-- Brand Section -->
                 <div class="footer-brand">
-                    <div class="footer-logos">
-                        <img src="~/images/donga.png" alt="BWT Alpine Logo" class="footer-logo bwt-logo">
-                        <span class="brand-name">TIXWAVE</span>
-                    </div>
+                    @* <div class="footer-logos"> *@
+                    @*     <img src="~/images/donga.png" alt="BWT Alpine Logo" class="footer-logo bwt-logo"> *@
+                    @*     <span class="brand-name">TIXWAVE</span> *@
+                    @* </div> *@
                     <div class="footer-brand-text">
                         <div class="footer-title">TixWave</div>
                         <p class="footer-tagline">Your Gateway to Unforgettable Events</p>
@@ -93,64 +84,54 @@
                 <!-- Links Section -->
                 <div class="footer-links">
                     <div class="footer-section">
-                        <h5>Events</h5>
-                        <a href="#">Browse Events</a>
-                        <a href="#">Create Event</a>
-                        <a href="#">Event Categories</a>
-                        <a href="#">Popular Events</a>
-                    </div>
-                    <div class="footer-section">
                         <h5>Services</h5>
+                        <a href="#">Browse Events</a>
+                        <a href="#">Popular Events</a>
                         <a href="#">Ticket Booking</a>
-                        <a href="#">Event Management</a>
-                        <a href="#">Group Bookings</a>
                         <a href="#">VIP Packages</a>
                     </div>
                     <div class="footer-section">
                         <h5>Support</h5>
                         <a href="#">Help Center</a>
                         <a href="#">Contact Us</a>
-                        <a href="#">Refund Policy</a>
-                        <a href="#">Terms & Conditions</a>
                     </div>
                     <div class="footer-section">
                         <h5>Company</h5>
                         <a href="#">About Us</a>
-                        <a href="#">Careers</a>
-                        <a href="#">Press</a>
                         <a href="#">Privacy Policy</a>
+                        <a href="#">Terms & Conditions</a>
                     </div>
                 </div>
             </div>
 
             <!-- App Download Section -->
-            <div class="app-download-section">
-                <div class="download-content">
-                    <h6>Get the TixWave App</h6>
-                    <p>Book tickets on the go with our mobile app</p>
-                    <div class="download-buttons">
-                        <a href="#" class="download-btn">
-                            <img src="~/images/d1e49ca07e951432c376d21f1d9c5d50.png" alt="Download from Microsoft Store" class="store-badge">
-                            <div class="download-text">
-                                <span class="download-label">Download on the</span>
-                                <span class="store-name">Microsoft Store</span>
-                            </div>
-                        </a>
-                        <a href="#" class="download-btn">
-                            <img src="~/images/pngwing.com.png" alt="Get it on Google Play" class="store-badge">
-                            <div class="download-text">
-                                <span class="download-label">Get it on</span>
-                                <span class="store-name">Google Play</span>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+            @* <div class="app-download-section"> *@
+            @*     <div class="download-content"> *@
+            @*         <h6>Get the TixWave App</h6> *@
+            @*         <p>Book tickets on the go with our mobile app</p> *@
+            @*         <div class="download-buttons"> *@
+            @*             <a href="#" class="download-btn"> *@
+            @*                 <img src="~/images/d1e49ca07e951432c376d21f1d9c5d50.png" alt="Download from Microsoft Store" class="store-badge"> *@
+            @*                 <div class="download-text"> *@
+            @*                     <span class="download-label">Download on the</span> *@
+            @*                     <span class="store-name">Microsoft Store</span> *@
+            @*                 </div> *@
+            @*             </a> *@
+            @*             <a href="#" class="download-btn"> *@
+            @*                 <img src="~/images/pngwing.com.png" alt="Get it on Google Play" class="store-badge"> *@
+            @*                 <div class="download-text"> *@
+            @*                     <span class="download-label">Get it on</span> *@
+            @*                     <span class="store-name">Google Play</span> *@
+            @*                 </div> *@
+            @*             </a> *@
+            @*         </div> *@
+            @*     </div> *@
+            @* </div> *@
 
             <!-- Bottom Section -->
-            <div class="footer-bottom">
+            <div class="footer-bottom align-items-center">
                 <div class="footer-copyright">
-                    <p>&copy; 2025 TixWave. All rights reserved. | Powered by BWT Alpine Technology</p>
+                    <p>&copy; 2025 TixWave. All rights reserved. | Powered by StarEvents Pvt Ltd</p>
                 </div>
                 <div class="footer-social">
                     <a href="#" class="social-link" aria-label="Facebook">
