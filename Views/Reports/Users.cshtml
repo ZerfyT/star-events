@@ -48,9 +48,14 @@
                         </button>
                     </div>
                     <div class="col-md-3 text-end">
-                        <button type="button" class="btn btn-success" onclick="exportReport('users')">
-                            <i class="bi bi-download me-1"></i>Export CSV
-                        </button>
+                        <div class="btn-group" role="group">
+                            <button type="button" class="btn btn-success" onclick="exportReport('users', 'csv')">
+                                <i class="bi bi-file-earmark-spreadsheet me-1"></i>Export CSV
+                            </button>
+                            <button type="button" class="btn btn-danger" onclick="exportReport('users', 'pdf')">
+                                <i class="bi bi-file-earmark-pdf me-1"></i>Export PDF
+                            </button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -261,7 +266,7 @@
 
 @section Scripts {
     <script>
-        function exportReport(type) {
+        function exportReport(type, format) {
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
             const role = document.querySelector('select[name="role"]').value;
@@ -279,7 +284,7 @@
             const formatInput = document.createElement('input');
             formatInput.type = 'hidden';
             formatInput.name = 'format';
-            formatInput.value = 'csv';
+            formatInput.value = format;
             form.appendChild(formatInput);
             
             if (startDate) {

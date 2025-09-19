@@ -51,6 +51,8 @@ namespace star_events.Models
         [ForeignKey("OrganizerID")]
         public virtual ApplicationUser? Organizer { get; set; } // New: Links to Users table via OrganizerID
         
+        public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+        
         // public virtual ICollection<TicketType> TicketTypes { get; set; } // Existing
 
         [NotMapped]

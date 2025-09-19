@@ -12,6 +12,9 @@ namespace star_events.Models
         [Required]
         public string UserID { get; set; }
         
+        [Required]
+        public int EventID { get; set; }
+        
         public int? PromotionID { get; set; }
 
         [Required]
@@ -32,6 +35,9 @@ namespace star_events.Models
         // Navigation properties
         [ForeignKey("UserID")]
         public virtual ApplicationUser User { get; set; }
+        
+        [ForeignKey("EventID")]
+        public virtual Event Event { get; set; }
         
         [ForeignKey("PromotionID")]
         public virtual Promotion? Promotion { get; set; }

@@ -567,6 +567,7 @@ public class DbInitializer
                 var booking = new Booking
                 {
                     UserID = customer.Id,
+                    EventID = evt.EventID,
                     PromotionID = selectedPromo?.PromotionID,
                     BookingDateTime = evt.StartDateTime.AddDays(-random.Next(1, 30)), // Booked 1-30 days before event
                     TotalAmount = finalAmount,
@@ -613,6 +614,7 @@ public class DbInitializer
                 var booking = new Booking
                 {
                     UserID = customer.Id,
+                    EventID = evt.EventID,
                     PromotionID = selectedPromo?.PromotionID,
                     BookingDateTime = DateTime.Now.AddDays(-random.Next(1, 10)), // Booked recently
                     TotalAmount = finalAmount,
@@ -659,6 +661,7 @@ public class DbInitializer
                 var booking = new Booking
                 {
                     UserID = customer.Id,
+                    EventID = evt.EventID,
                     PromotionID = selectedPromo?.PromotionID,
                     BookingDateTime = DateTime.Now.AddDays(-random.Next(1, 5)),
                     TotalAmount = finalAmount,
@@ -731,17 +734,16 @@ public class DbInitializer
         // Create tickets for each booking
         foreach (var booking in bookings)
         {
-            // Find appropriate ticket type based on booking amount and event
-            var eventTicketTypes = ticketTypes.Where(tt =>
-                tt.EventID == _context.Events.FirstOrDefault(e =>
-                    e.OrganizerID == _context.Users.FirstOrDefault(u => u.Id == booking.UserID)!.Id)?.EventID).ToList();
-
+            // Find ticket type based on booking amount
+            var eventTicketTypes = ticketTypes.Where(tt => tt.Price <= booking.TotalAmount * 1.5m).ToList();
+            
             if (!eventTicketTypes.Any())
-                eventTicketTypes = ticketTypes.Where(tt => tt.Price <= booking.TotalAmount).ToList();
+            {
+                eventTicketTypes = ticketTypes.ToList();
+            }
 
             if (!eventTicketTypes.Any()) continue;
 
-            // Select a ticket type based on booking amount
             TicketType? selectedTicketType = null;
 
             if (booking.TotalAmount >= 20) // High-end tickets
@@ -765,23 +767,18 @@ public class DbInitializer
                 var isScanned = false;
                 DateTime? scannedAt = null;
 
-                // Determine if ticket should be scanned based on event status and booking status
-                var eventForBooking = _context.Events.FirstOrDefault(e =>
-                    e.OrganizerID == _context.Users.FirstOrDefault(u => u.Id == booking.UserID)!.Id);
+                var eventForTicket = _context.Events.FirstOrDefault(e => e.EventID == selectedTicketType.EventID);
 
-                if (eventForBooking != null)
+                if (eventForTicket != null)
                 {
-                    if (eventForBooking.Status == "Completed" && booking.Status == "Confirmed")
+                    if (eventForTicket.Status == "Completed" && booking.Status == "Confirmed")
                     {
-                        // For completed events with confirmed bookings, some tickets are scanned
                         isScanned = random.NextDouble() < 0.8; // 80% chance of being scanned
                         if (isScanned)
-                            scannedAt = eventForBooking.StartDateTime.AddHours(random.Next(-2,
-                                2)); // Scanned around event time
+                            scannedAt = eventForTicket.StartDateTime.AddHours(random.Next(-2, 2)); // Scanned around event time
                     }
-                    else if (eventForBooking.Status == "Active" && booking.Status == "Confirmed")
+                    else if (eventForTicket.Status == "Active" && booking.Status == "Confirmed")
                     {
-                        // For active events, some tickets might be scanned early
                         isScanned = random.NextDouble() < 0.3; // 30% chance of being scanned early
                         if (isScanned)
                             scannedAt = DateTime.Now.AddHours(-random.Next(1, 24)); // Scanned within last 24 hours
