@@ -5,9 +5,11 @@ using star_events.Repository.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.IO;
+using Microsoft.AspNetCore.Authorization;
 
 namespace star_events.Controllers
 {
+    [Authorize(Roles = "Admin,EventOrganizer")]
     public class EventController : Controller
     {
         private readonly IEventRepository _eventRepository;

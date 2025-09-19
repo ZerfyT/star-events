@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace star_events.Controllers;
 
-[Authorize(Roles = "Admin")]
+[Authorize(Roles = "Admin,EventOrganizer")]
 public class AdminController : Controller
 {
     private readonly ILogger<HomeController> _logger;

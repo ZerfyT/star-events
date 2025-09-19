@@ -1,15 +1,15 @@
-@model star_events.Controllers.EventsReportViewModel
+@model star_events.Controllers.TicketSalesReportViewModel
 
 @{
-    ViewData["Title"] = "Events Report";
+    ViewData["Title"] = "Ticket Sales Report";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="page-header">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1><i class="bi bi-calendar-event me-3"></i>Events Report</h1>
-            <p>Analyze event performance, attendance, and status</p>
+            <h1><i class="bi bi-ticket-perforated me-3"></i>Ticket Sales Report</h1>
+            <p>Track ticket sales, scanning status, and attendance for your events</p>
         </div>
         <div>
             <a asp-action="Index" class="btn btn-light">
@@ -51,7 +51,7 @@
                         </button>
                     </div>
                     <div class="col-md-3 text-end">
-                        <button type="button" class="btn btn-success" onclick="exportReport('events')">
+                        <button type="button" class="btn btn-success" onclick="exportReport('ticketsales')">
                             <i class="bi bi-download me-1"></i>Export CSV
                         </button>
                     </div>
@@ -67,11 +67,11 @@
         <div class="stats-card">
             <div class="d-flex align-items-center">
                 <div class="stats-icon bg-primary">
-                    <i class="bi bi-calendar-event"></i>
+                    <i class="bi bi-ticket-perforated"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-primary">@Model.TotalEvents</p>
-                    <p class="stats-label">Total Events</p>
+                    <p class="stats-number text-primary">@Model.TotalTicketsSold</p>
+                    <p class="stats-label">Total Tickets Sold</p>
                 </div>
             </div>
         </div>
@@ -80,11 +80,11 @@
         <div class="stats-card">
             <div class="d-flex align-items-center">
                 <div class="stats-icon bg-success">
-                    <i class="bi bi-check-circle"></i>
+                    <i class="bi bi-currency-dollar"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-success">@Model.ActiveEvents</p>
-                    <p class="stats-label">Active Events</p>
+                    <p class="stats-number text-success">$@Model.TotalRevenue.ToString("N2")</p>
+                    <p class="stats-label">Total Revenue</p>
                 </div>
             </div>
         </div>
@@ -93,11 +93,11 @@
         <div class="stats-card">
             <div class="d-flex align-items-center">
                 <div class="stats-icon bg-info">
-                    <i class="bi bi-calendar-check"></i>
+                    <i class="bi bi-check-circle"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-info">@Model.CompletedEvents</p>
-                    <p class="stats-label">Completed Events</p>
+                    <p class="stats-number text-info">@Model.ScannedTickets</p>
+                    <p class="stats-label">Scanned Tickets</p>
                 </div>
             </div>
         </div>
@@ -105,79 +105,64 @@
     <div class="col-xl-3 col-md-6 mb-4">
         <div class="stats-card">
             <div class="d-flex align-items-center">
-                <div class="stats-icon bg-danger">
-                    <i class="bi bi-x-circle"></i>
+                <div class="stats-icon bg-warning">
+                    <i class="bi bi-clock"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-danger">@Model.CancelledEvents</p>
-                    <p class="stats-label">Cancelled Events</p>
+                    <p class="stats-number text-warning">@Model.UnscannedTickets</p>
+                    <p class="stats-label">Unscanned Tickets</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Event Status Breakdown -->
+<!-- Ticket Status and Revenue Breakdown -->
 <div class="row mb-4">
     <div class="col-xl-6">
         <div class="table-card">
             <div class="card-header">
-                <h5><i class="bi bi-pie-chart me-2"></i>Event Status Distribution</h5>
+                <h5><i class="bi bi-pie-chart me-2"></i>Ticket Status Distribution</h5>
             </div>
             <div class="card-body">
-                @if (Model.TotalEvents > 0)
+                @if (Model.TotalTicketsSold > 0)
                 {
                     <div class="status-breakdown">
                         <div class="status-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div class="status-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-check-circle"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">Active Events</div>
-                                    <small class="text-muted">Currently running</small>
+                                    <div class="fw-semibold">Scanned Tickets</div>
+                                    <small class="text-muted">Tickets used at events</small>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold">@Model.ActiveEvents</div>
-                                <small class="text-muted">@((Model.ActiveEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <div class="fw-bold">@Model.ScannedTickets</div>
+                                <small class="text-muted">@((Model.ScannedTickets * 100.0 / Model.TotalTicketsSold).ToString("F1"))%</small>
                             </div>
                         </div>
                         <div class="status-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    <i class="bi bi-calendar-check"></i>
+                                <div class="status-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-clock"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">Completed Events</div>
-                                    <small class="text-muted">Finished successfully</small>
+                                    <div class="fw-semibold">Unscanned Tickets</div>
+                                    <small class="text-muted">Tickets not yet used</small>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold">@Model.CompletedEvents</div>
-                                <small class="text-muted">@((Model.CompletedEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
-                            </div>
-                        </div>
-                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
-                            <div class="d-flex align-items-center">
-                                <div class="status-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    <i class="bi bi-x-circle"></i>
-                                </div>
-                                <div>
-                                    <div class="fw-semibold">Cancelled Events</div>
-                                    <small class="text-muted">Cancelled or postponed</small>
-                                </div>
-                            </div>
-                            <div class="text-end">
-                                <div class="fw-bold">@Model.CancelledEvents</div>
-                                <small class="text-muted">@((Model.CancelledEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <div class="fw-bold">@Model.UnscannedTickets</div>
+                                <small class="text-muted">@((Model.UnscannedTickets * 100.0 / Model.TotalTicketsSold).ToString("F1"))%</small>
                             </div>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <p class="text-muted text-center">No events data available</p>
+                    <p class="text-muted text-center">No ticket data available</p>
                 }
             </div>
         </div>
@@ -198,8 +183,12 @@
                         <span class="fw-semibold">@((Model.EndDate - Model.StartDate).Days + 1) days</span>
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                        <span><i class="bi bi-graph-up me-2"></i>Events per Day</span>
-                        <span class="fw-semibold">@((Model.TotalEvents / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                        <span><i class="bi bi-graph-up me-2"></i>Tickets per Day</span>
+                        <span class="fw-semibold">@((Model.TotalTicketsSold / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                    </div>
+                    <div class="summary-item d-flex justify-content-between align-items-center mb-3">
+                        <span><i class="bi bi-currency-dollar me-2"></i>Daily Average Revenue</span>
+                        <span class="fw-semibold">$@((Model.TotalRevenue / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("N2"))</span>
                     </div>
                 </div>
             </div>
@@ -207,45 +196,58 @@
     </div>
 </div>
 
-<!-- Events Table -->
+<!-- Tickets Table -->
 <div class="row">
     <div class="col-12">
         <div class="table-card">
             <div class="card-header">
-                <h5><i class="bi bi-table me-2"></i>Event Details</h5>
+                <h5><i class="bi bi-table me-2"></i>Ticket Details</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th class="border-0">Event ID</th>
-                                <th class="border-0">Title</th>
-                                <th class="border-0">Start Date</th>
-                                <th class="border-0">End Date</th>
+                                <th class="border-0">Ticket ID</th>
+                                <th class="border-0">Ticket Type</th>
+                                <th class="border-0">Price</th>
+                                <th class="border-0">Event</th>
+                                <th class="border-0">Booking Date</th>
                                 <th class="border-0">Status</th>
-                                <th class="border-0">Description</th>
+                                <th class="border-0">Customer</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var evt in Model.Events)
+                            @foreach (var ticket in Model.Tickets)
                             {
                                 <tr>
                                     <td>
-                                        <span class="fw-semibold">#@evt.EventID</span>
+                                        <span class="fw-semibold">#@ticket.TicketID</span>
                                     </td>
                                     <td>
-                                        <span class="fw-bold">@evt.Title</span>
-                                    </td>
-                                    <td>@evt.StartDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>@evt.EndDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>
-                                        <span class="badge @(evt.Status == "Active" ? "bg-success" : evt.Status == "Completed" ? "bg-info" : "bg-danger")">
-                                            @evt.Status
-                                        </span>
+                                        <span class="fw-bold">@ticket.TicketType.Name</span>
                                     </td>
                                     <td>
-                                        <small class="text-muted">@(evt.Description?.Length > 50 ? evt.Description.Substring(0, 50) + "..." : evt.Description)</small>
+                                        <span class="fw-bold text-success">$@ticket.TicketType.Price.ToString("N2")</span>
+                                    </td>
+                                    <td>@ticket.TicketType.Event.Title</td>
+                                    <td>@ticket.Booking.BookingDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>
+                                        @if (ticket.IsScanned)
+                                        {
+                                            <span class="badge bg-success">
+                                                <i class="bi bi-check-circle me-1"></i>Scanned
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-warning">
+                                                <i class="bi bi-clock me-1"></i>Unscanned
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span class="text-muted">@(ticket.Booking.User?.Email ?? "N/A")</span>
                                     </td>
                                 </tr>
                             }

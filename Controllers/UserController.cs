@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using star_events.Models;
@@ -7,6 +8,7 @@ using star_events.Services;
 
 namespace star_events.Controllers;
 
+[Authorize(Roles = "Admin")]
 public class UserController : Controller
 {
     private readonly IUserRepository _userRepository;

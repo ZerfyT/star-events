@@ -2,9 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using star_events.Models;
 using star_events.Repository.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace star_events.Controllers
 {
+    [Authorize(Roles = "Admin,EventOrganizer")]
     public class TicketTypeController : Controller
     {
         private readonly ITicketTypeRepository _ticketTypeRepository;
@@ -54,12 +56,13 @@ namespace star_events.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("TicketTypeID,EventID,Name,Price,TotalQuantity,AvailableQuantity")] TicketType ticketType)
         {
-            if (ModelState.IsValid)
-            {
-                _ticketTypeRepository.Insert(ticketType);
-                _ticketTypeRepository.Save();
-                return RedirectToAction(nameof(Index));
-            }
+        if (ModelState.IsValid)
+        {
+            _ticketTypeRepository.Insert(ticketType);
+            _ticketTypeRepository.Save();
+            TempData["SuccessMessage"] = $"Ticket type '{ticketType.Name}' created successfully!";
+            return RedirectToAction(nameof(Index));
+        }
             ViewBag.Events = new SelectList(_eventRepository.GetAll(), "EventID", "Title", ticketType.EventID);
             return View(ticketType);
         }
@@ -99,6 +102,7 @@ namespace star_events.Controllers
                 {
                     _ticketTypeRepository.Update(ticketType);
                     _ticketTypeRepository.Save();
+                    TempData["SuccessMessage"] = $"Ticket type '{ticketType.Name}' updated successfully!";
                 }
                 catch (Exception)
                 {
@@ -139,14 +143,19 @@ namespace star_events.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var ticketType = _ticketTypeRepository.GetById(id);
-            if (ticketType != null)
-            {
-                _ticketTypeRepository.Delete(id);
-                _ticketTypeRepository.Save();
-            }
+        var ticketType = _ticketTypeRepository.GetById(id);
+        if (ticketType != null)
+        {
+            _ticketTypeRepository.Delete(id);
+            _ticketTypeRepository.Save();
+            TempData["SuccessMessage"] = $"Ticket type '{ticketType.Name}' deleted successfully!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Ticket type not found or already deleted.";
+        }
 
-            return RedirectToAction(nameof(Index));
+        return RedirectToAction(nameof(Index));
         }
 
         private bool TicketTypeExists(int id)

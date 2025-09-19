@@ -1,115 +1,124 @@
-@model IEnumerable<star_events.Models.TicketType>
+@model IEnumerable<TicketType>
 
 @{
     ViewData["Title"] = "Ticket Types";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">
-                    <i class="fas fa-ticket-alt me-2"></i>Ticket Types
-                </h1>
-                <a asp-action="Create" class="btn btn-primary">
-                    <i class="fas fa-plus me-1"></i>Create New Ticket Type
-                </a>
-            </div>
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-ticket-perforated me-3"></i>Ticket Types</h1>
+            <p>Manage ticket types for your events</p>
+        </div>
+        <div>
+            <a asp-action="Create" class="btn btn-primary">
+                <i class="bi bi-plus-circle me-2"></i>Create New Ticket Type
+            </a>
+        </div>
+    </div>
+</div>
 
-            <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">All Ticket Types</h6>
-                </div>
-                <div class="card-body">
-                    @if (Model.Any())
-                    {
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>
-                                            <i class="fas fa-tag me-1"></i>@Html.DisplayNameFor(model => model.Name)
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-calendar me-1"></i>Event
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-dollar-sign me-1"></i>@Html.DisplayNameFor(model => model.Price)
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-boxes me-1"></i>Total Quantity
-                                        </th>
-                                        <th>
-                                            <i class="fas fa-check-circle me-1"></i>Available
-                                        </th>
-                                        <th class="text-center">
-                                            <i class="fas fa-cogs me-1"></i>Actions
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
-                                            </td>
-                                            <td>
-                                                @if (item.Event != null)
-                                                {
-                                                    <span class="badge bg-info">@item.Event.Title</span>
-                                                }
-                                                else
-                                                {
-                                                    <span class="text-muted">No Event</span>
-                                                }
-                                            </td>
-                                            <td>
-                                                <span class="text-success font-weight-bold">$@Html.DisplayFor(modelItem => item.Price)</span>
-                                            </td>
-                                            <td>
-                                                <span class="badge bg-secondary">@Html.DisplayFor(modelItem => item.TotalQuantity)</span>
-                                            </td>
-                                            <td>
-                                                @{
-                                                    var availablePercentage = item.TotalQuantity > 0 ? (double)item.AvailableQuantity / item.TotalQuantity * 100 : 0;
-                                                    var badgeClass = availablePercentage > 50 ? "bg-success" : availablePercentage > 25 ? "bg-warning" : "bg-danger";
-                                                }
-                                                <span class="badge @badgeClass">@Html.DisplayFor(modelItem => item.AvailableQuantity)</span>
-                                                <small class="text-muted">(@availablePercentage.ToString("F0")%)</small>
-                                            </td>
-                                            <td class="text-center">
-                                                <div class="btn-group" role="group">
-                                                    <a asp-action="Details" asp-route-id="@item.TicketTypeID" class="btn btn-info btn-sm" title="View Details">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
-                                                    <a asp-action="Edit" asp-route-id="@item.TicketTypeID" class="btn btn-warning btn-sm" title="Edit">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
-                                                    <a asp-action="Delete" asp-route-id="@item.TicketTypeID" class="btn btn-danger btn-sm" title="Delete">
-                                                        <i class="fas fa-trash"></i>
-                                                    </a>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    }
-                    else
-                    {
-                        <div class="text-center py-5">
-                            <i class="fas fa-ticket-alt fa-3x text-muted mb-3"></i>
-                            <h5 class="text-muted">No Ticket Types Found</h5>
-                            <p class="text-muted">Get started by creating your first ticket type.</p>
-                            <a asp-action="Create" class="btn btn-primary">
-                                <i class="fas fa-plus me-1"></i>Create First Ticket Type
-                            </a>
-                        </div>
-                    }
-                </div>
+<div class="row">
+    <div class="col-12">
+        <div class="table-card">
+            <div class="card-header">
+                <h5><i class="bi bi-list-ul me-2"></i>All Ticket Types</h5>
+            </div>
+            <div class="card-body">
+                @if (Model.Any())
+                {
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>
+                                    <i class="bi bi-tag me-1"></i>@Html.DisplayNameFor(model => model.Name)
+                                </th>
+                                <th>
+                                    <i class="bi bi-calendar-event me-1"></i>Event
+                                </th>
+                                <th>
+                                    <i class="bi bi-currency-dollar me-1"></i>@Html.DisplayNameFor(model => model.Price)
+                                </th>
+                                <th>
+                                    <i class="bi bi-boxes me-1"></i>Total Quantity
+                                </th>
+                                <th>
+                                    <i class="bi bi-check-circle me-1"></i>Available
+                                </th>
+                                <th class="text-center">
+                                    <i class="bi bi-gear me-1"></i>Actions
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                                    </td>
+                                    <td>
+                                        @if (item.Event != null)
+                                        {
+                                            <span class="badge bg-info">@item.Event.Title</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">No Event</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="text-success font-weight-bold">$@Html.DisplayFor(modelItem => item.Price)</span>
+                                    </td>
+                                    <td>
+                                        <span
+                                            class="badge bg-secondary">@Html.DisplayFor(modelItem => item.TotalQuantity)</span>
+                                    </td>
+                                    <td>
+                                        @{
+                                            var availablePercentage = item.TotalQuantity > 0 ? (double)item.AvailableQuantity / item.TotalQuantity * 100 : 0;
+                                            var badgeClass = availablePercentage > 50 ? "bg-success" : availablePercentage > 25 ? "bg-warning" : "bg-danger";
+                                        }
+                                        <span
+                                            class="badge @badgeClass">@Html.DisplayFor(modelItem => item.AvailableQuantity)</span>
+                                        <small class="text-muted">(@availablePercentage.ToString("F0")%)</small>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Details" asp-route-id="@item.TicketTypeID"
+                                               class="btn btn-info btn-action" title="View Details">
+                                                <i class="bi bi-eye"></i>
+                                            </a>
+                                            <a asp-action="Edit" asp-route-id="@item.TicketTypeID"
+                                               class="btn btn-warning btn-action" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@item.TicketTypeID"
+                                               class="btn btn-danger btn-action" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+                else
+                {
+                    <div class="text-center py-5">
+                        <i class="bi bi-ticket-perforated" style="font-size: 4rem; color: #6c757d;"></i>
+                        <h5 class="text-muted mt-3">No Ticket Types Found</h5>
+                        <p class="text-muted">Get started by creating your first ticket type.</p>
+                        <a asp-action="Create" class="btn btn-primary">
+                            <i class="bi bi-plus-circle me-2"></i>Create First Ticket Type
+                        </a>
+                    </div>
+                }
             </div>
         </div>
     </div>
@@ -117,12 +126,12 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#dataTable').DataTable({
                 "pageLength": 10,
-                "order": [[ 0, "asc" ]],
+                "order": [[0, "asc"]],
                 "columnDefs": [
-                    { "orderable": false, "targets": 5 }
+                    {"orderable": false, "targets": 5}
                 ]
             });
         });

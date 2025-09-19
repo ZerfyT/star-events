@@ -25,15 +25,27 @@
         <div class="card">
             <div class="card-body">
                 <form method="get" class="row align-items-end">
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label">Start Date</label>
                         <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <label class="form-label">End Date</label>
                         <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
                     </div>
                     <div class="col-md-3">
+                        <label class="form-label">Event</label>
+                        <select name="eventId" class="form-select">
+                            <option value="">All Events</option>
+                            @foreach (var evt in Model.AvailableEvents)
+                            {
+                                <option value="@evt.EventID" selected="@(Model.SelectedEventId == evt.EventID)">
+                                    @evt.Title
+                                </option>
+                            }
+                        </select>
+                    </div>
+                    <div class="col-md-2">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-funnel me-1"></i>Apply Filters
                         </button>
@@ -212,6 +224,7 @@
         function exportReport(type) {
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
+            const eventId = document.querySelector('select[name="eventId"]').value;
             
             const form = document.createElement('form');
             form.method = 'POST';
@@ -243,6 +256,14 @@
                 endInput.name = 'endDate';
                 endInput.value = endDate;
                 form.appendChild(endInput);
+            }
+            
+            if (eventId) {
+                const eventInput = document.createElement('input');
+                eventInput.type = 'hidden';
+                eventInput.name = 'eventId';
+                eventInput.value = eventId;
+                form.appendChild(eventInput);
             }
             
             document.body.appendChild(form);

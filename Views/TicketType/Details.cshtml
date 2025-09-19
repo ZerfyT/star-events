@@ -1,142 +1,149 @@
-@model star_events.Models.TicketType
+@model TicketType
 
 @{
     ViewData["Title"] = "Ticket Type Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <div class="d-flex justify-content-between align-items-center mb-4">
-                <h1 class="h3 mb-0 text-gray-800">
-                    <i class="fas fa-eye me-2"></i>Ticket Type Details
-                </h1>
-                <div class="btn-group" role="group">
-                    <a asp-action="Edit" asp-route-id="@Model?.TicketTypeID" class="btn btn-warning">
-                        <i class="fas fa-edit me-1"></i>Edit
-                    </a>
-                    <a asp-action="Index" class="btn btn-secondary">
-                        <i class="fas fa-arrow-left me-1"></i>Back to List
-                    </a>
+<div class="page-header">
+    <div class="d-flex justify-content-between align-items-center">
+        <div>
+            <h1><i class="bi bi-eye me-3"></i>Ticket Type Details</h1>
+            <p>View ticket type information and statistics</p>
+        </div>
+        <div>
+            <a asp-action="Edit" asp-route-id="@Model?.TicketTypeID" class="btn btn-warning me-2">
+                <i class="bi bi-pencil me-2"></i>Edit
+            </a>
+            <a asp-action="Index" class="btn btn-light">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="details-card">
+            <div class="card-header">
+                <h5><i class="bi bi-ticket-perforated me-2"></i>Ticket Type Information</h5>
+            </div>
+            <div class="card-body">
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-tag me-1"></i>@Html.DisplayNameFor(model => model.Name)
+                    </div>
+                    <div class="detail-value">
+                        <strong>@Html.DisplayFor(model => model.Name)</strong>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-calendar-event me-1"></i>Event
+                    </div>
+                    <div class="detail-value">
+                        @if (Model.Event != null)
+                        {
+                            <span class="badge bg-info">@Model.Event.Title</span>
+                        }
+                        else
+                        {
+                            <span class="text-muted">No Event Assigned</span>
+                        }
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-currency-dollar me-1"></i>@Html.DisplayNameFor(model => model.Price)
+                    </div>
+                    <div class="detail-value">
+                        <span class="text-success font-weight-bold">$@Html.DisplayFor(model => model.Price)</span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-boxes me-1"></i>@Html.DisplayNameFor(model => model.TotalQuantity)
+                    </div>
+                    <div class="detail-value">
+                        <span class="badge bg-secondary">@Html.DisplayFor(model => model.TotalQuantity)</span>
+                    </div>
+                </div>
+
+                <div class="detail-item">
+                    <div class="detail-label">
+                        <i class="bi bi-check-circle me-1"></i>@Html.DisplayNameFor(model => model.AvailableQuantity)
+                    </div>
+                    <div class="detail-value">
+                        @{
+                            var availablePercentage = Model.TotalQuantity > 0 ? (double)Model.AvailableQuantity / Model.TotalQuantity * 100 : 0;
+                            var badgeClass = availablePercentage > 50 ? "bg-success" : availablePercentage > 25 ? "bg-warning" : "bg-danger";
+                        }
+                        <span class="badge @badgeClass">@Html.DisplayFor(model => model.AvailableQuantity)</span>
+                        <small class="text-muted">(@availablePercentage.ToString("F0")% available)</small>
+                    </div>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <div class="row">
-                <div class="col-lg-8">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Ticket Type Information</h6>
-                        </div>
-                        <div class="card-body">
-                            <dl class="row">
-                                <dt class="col-sm-4">
-                                    <i class="fas fa-tag me-1"></i>@Html.DisplayNameFor(model => model.Name)
-                                </dt>
-                                <dd class="col-sm-8">
-                                    <strong>@Html.DisplayFor(model => model.Name)</strong>
-                                </dd>
-                                
-                                <dt class="col-sm-4">
-                                    <i class="fas fa-calendar me-1"></i>Event
-                                </dt>
-                                <dd class="col-sm-8">
-                                    @if (Model.Event != null)
-                                    {
-                                        <span class="badge bg-info fs-6">@Model.Event.Title</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Event Assigned</span>
-                                    }
-                                </dd>
-                                
-                                <dt class="col-sm-4">
-                                    <i class="fas fa-dollar-sign me-1"></i>@Html.DisplayNameFor(model => model.Price)
-                                </dt>
-                                <dd class="col-sm-8">
-                                    <span class="text-success font-weight-bold fs-5">$@Html.DisplayFor(model => model.Price)</span>
-                                </dd>
-                                
-                                <dt class="col-sm-4">
-                                    <i class="fas fa-boxes me-1"></i>@Html.DisplayNameFor(model => model.TotalQuantity)
-                                </dt>
-                                <dd class="col-sm-8">
-                                    <span class="badge bg-secondary fs-6">@Html.DisplayFor(model => model.TotalQuantity)</span>
-                                </dd>
-                                
-                                <dt class="col-sm-4">
-                                    <i class="fas fa-check-circle me-1"></i>@Html.DisplayNameFor(model => model.AvailableQuantity)
-                                </dt>
-                                <dd class="col-sm-8">
-                                    @{
-                                        var availablePercentage = Model.TotalQuantity > 0 ? (double)Model.AvailableQuantity / Model.TotalQuantity * 100 : 0;
-                                        var badgeClass = availablePercentage > 50 ? "bg-success" : availablePercentage > 25 ? "bg-warning" : "bg-danger";
-                                    }
-                                    <span class="badge @badgeClass fs-6">@Html.DisplayFor(model => model.AvailableQuantity)</span>
-                                    <small class="text-muted">(@availablePercentage.ToString("F0")% available)</small>
-                                </dd>
-                            </dl>
-                        </div>
+    <div class="col-lg-4">
+        <div class="stats-card">
+            <div class="card-header">
+                <h5><i class="bi bi-graph-up me-2"></i>Quick Stats</h5>
+            </div>
+            <div class="card-body">
+                @{
+                    var soldQuantity = Model.TotalQuantity - Model.AvailableQuantity;
+                    var soldPercentage = Model.TotalQuantity > 0 ? (double)soldQuantity / Model.TotalQuantity * 100 : 0;
+                }
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Tickets Sold:</span>
+                        <strong>@soldQuantity</strong>
+                    </div>
+                    <div class="progress mt-1" style="height: 8px;">
+                        <div class="progress-bar bg-success" role="progressbar"
+                             style="width: @soldPercentage.ToString("F0")%"></div>
                     </div>
                 </div>
-                
-                <div class="col-lg-4">
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Quick Stats</h6>
-                        </div>
-                        <div class="card-body">
-                            @{
-                                var soldQuantity = Model.TotalQuantity - Model.AvailableQuantity;
-                                var soldPercentage = Model.TotalQuantity > 0 ? (double)soldQuantity / Model.TotalQuantity * 100 : 0;
-                            }
-                            
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Tickets Sold:</span>
-                                    <strong>@soldQuantity</strong>
-                                </div>
-                                <div class="progress mt-1" style="height: 8px;">
-                                    <div class="progress-bar bg-success" role="progressbar" style="width: @soldPercentage.ToString("F0")%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="mb-3">
-                                <div class="d-flex justify-content-between">
-                                    <span>Available:</span>
-                                    <strong>@Model.AvailableQuantity</strong>
-                                </div>
-                                <div class="progress mt-1" style="height: 8px;">
-                                    <div class="progress-bar bg-info" role="progressbar" style="width: @availablePercentage.ToString("F0")%"></div>
-                                </div>
-                            </div>
-                            
-                            <div class="text-center">
-                                <div class="h5 text-primary">Total Revenue Potential</div>
-                                <div class="h4 text-success">$@((Model.TotalQuantity * Model.Price).ToString("F2"))</div>
-                            </div>
-                        </div>
+
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between">
+                        <span>Available:</span>
+                        <strong>@Model.AvailableQuantity</strong>
                     </div>
-                    
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Actions</h6>
-                        </div>
-                        <div class="card-body">
-                            <div class="d-grid gap-2">
-                                <a asp-action="Edit" asp-route-id="@Model?.TicketTypeID" class="btn btn-warning">
-                                    <i class="fas fa-edit me-1"></i>Edit Ticket Type
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@Model?.TicketTypeID" class="btn btn-danger">
-                                    <i class="fas fa-trash me-1"></i>Delete Ticket Type
-                                </a>
-                                <a asp-action="Index" class="btn btn-secondary">
-                                    <i class="fas fa-list me-1"></i>View All Ticket Types
-                                </a>
-                            </div>
-                        </div>
+                    <div class="progress mt-1" style="height: 8px;">
+                        <div class="progress-bar bg-info" role="progressbar"
+                             style="width: @availablePercentage.ToString("F0")%"></div>
                     </div>
+                </div>
+
+                <div class="text-center">
+                    <div class="h5 text-primary">Total Revenue Potential</div>
+                    <div class="h4 text-success">$@((Model.TotalQuantity * Model.Price).ToString("F2"))</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-card">
+            <div class="card-header">
+                <h5><i class="bi bi-gear me-2"></i>Actions</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a asp-action="Edit" asp-route-id="@Model?.TicketTypeID" class="btn btn-warning">
+                        <i class="bi bi-pencil me-2"></i>Edit Ticket Type
+                    </a>
+                    <a asp-action="Delete" asp-route-id="@Model?.TicketTypeID" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete Ticket Type
+                    </a>
+                    <a asp-action="Index" class="btn btn-outline-secondary">
+                        <i class="bi bi-list me-2"></i>View All Ticket Types
+                    </a>
                 </div>
             </div>
         </div>

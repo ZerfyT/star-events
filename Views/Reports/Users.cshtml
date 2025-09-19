@@ -1,15 +1,15 @@
-@model star_events.Controllers.EventsReportViewModel
+@model star_events.Controllers.UsersReportViewModel
 
 @{
-    ViewData["Title"] = "Events Report";
+    ViewData["Title"] = "Users Report";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="page-header">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1><i class="bi bi-calendar-event me-3"></i>Events Report</h1>
-            <p>Analyze event performance, attendance, and status</p>
+            <h1><i class="bi bi-people me-3"></i>Users Report</h1>
+            <p>Analyze user registrations, roles, and activity across the platform</p>
         </div>
         <div>
             <a asp-action="Index" class="btn btn-light">
@@ -34,15 +34,12 @@
                         <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Event</label>
-                        <select name="eventId" class="form-select">
-                            <option value="">All Events</option>
-                            @foreach (var evt in Model.AvailableEvents)
-                            {
-                                <option value="@evt.EventID" selected="@(Model.SelectedEventId == evt.EventID)">
-                                    @evt.Title
-                                </option>
-                            }
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="">All Roles</option>
+                            <option value="Admin" selected="@(Model.SelectedRole == "Admin")">Admin</option>
+                            <option value="EventOrganizer" selected="@(Model.SelectedRole == "EventOrganizer")">Event Organizer</option>
+                            <option value="Customer" selected="@(Model.SelectedRole == "Customer")">Customer</option>
                         </select>
                     </div>
                     <div class="col-md-2">
@@ -51,7 +48,7 @@
                         </button>
                     </div>
                     <div class="col-md-3 text-end">
-                        <button type="button" class="btn btn-success" onclick="exportReport('events')">
+                        <button type="button" class="btn btn-success" onclick="exportReport('users')">
                             <i class="bi bi-download me-1"></i>Export CSV
                         </button>
                     </div>
@@ -67,37 +64,11 @@
         <div class="stats-card">
             <div class="d-flex align-items-center">
                 <div class="stats-icon bg-primary">
-                    <i class="bi bi-calendar-event"></i>
+                    <i class="bi bi-people"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-primary">@Model.TotalEvents</p>
-                    <p class="stats-label">Total Events</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stats-card">
-            <div class="d-flex align-items-center">
-                <div class="stats-icon bg-success">
-                    <i class="bi bi-check-circle"></i>
-                </div>
-                <div class="ms-3">
-                    <p class="stats-number text-success">@Model.ActiveEvents</p>
-                    <p class="stats-label">Active Events</p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-xl-3 col-md-6 mb-4">
-        <div class="stats-card">
-            <div class="d-flex align-items-center">
-                <div class="stats-icon bg-info">
-                    <i class="bi bi-calendar-check"></i>
-                </div>
-                <div class="ms-3">
-                    <p class="stats-number text-info">@Model.CompletedEvents</p>
-                    <p class="stats-label">Completed Events</p>
+                    <p class="stats-number text-primary">@Model.TotalUsers</p>
+                    <p class="stats-label">Total Users</p>
                 </div>
             </div>
         </div>
@@ -106,78 +77,104 @@
         <div class="stats-card">
             <div class="d-flex align-items-center">
                 <div class="stats-icon bg-danger">
-                    <i class="bi bi-x-circle"></i>
+                    <i class="bi bi-shield-check"></i>
                 </div>
                 <div class="ms-3">
-                    <p class="stats-number text-danger">@Model.CancelledEvents</p>
-                    <p class="stats-label">Cancelled Events</p>
+                    <p class="stats-number text-danger">@Model.AdminUsers</p>
+                    <p class="stats-label">Admin Users</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-success">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-success">@Model.EventOrganizerUsers</p>
+                    <p class="stats-label">Event Organizers</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="stats-card">
+            <div class="d-flex align-items-center">
+                <div class="stats-icon bg-info">
+                    <i class="bi bi-person"></i>
+                </div>
+                <div class="ms-3">
+                    <p class="stats-number text-info">@Model.CustomerUsers</p>
+                    <p class="stats-label">Customers</p>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<!-- Event Status Breakdown -->
+<!-- Role Distribution -->
 <div class="row mb-4">
     <div class="col-xl-6">
         <div class="table-card">
             <div class="card-header">
-                <h5><i class="bi bi-pie-chart me-2"></i>Event Status Distribution</h5>
+                <h5><i class="bi bi-pie-chart me-2"></i>Role Distribution</h5>
             </div>
             <div class="card-body">
-                @if (Model.TotalEvents > 0)
+                @if (Model.TotalUsers > 0)
                 {
-                    <div class="status-breakdown">
-                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                    <div class="role-breakdown">
+                        <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    <i class="bi bi-check-circle"></i>
+                                <div class="role-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-shield-check"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">Active Events</div>
-                                    <small class="text-muted">Currently running</small>
+                                    <div class="fw-semibold">Admin Users</div>
+                                    <small class="text-muted">System administrators</small>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold">@Model.ActiveEvents</div>
-                                <small class="text-muted">@((Model.ActiveEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <div class="fw-bold">@Model.AdminUsers</div>
+                                <small class="text-muted">@((Model.AdminUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
-                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                        <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    <i class="bi bi-calendar-check"></i>
+                                <div class="role-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-calendar-event"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">Completed Events</div>
-                                    <small class="text-muted">Finished successfully</small>
+                                    <div class="fw-semibold">Event Organizers</div>
+                                    <small class="text-muted">Event creators and managers</small>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold">@Model.CompletedEvents</div>
-                                <small class="text-muted">@((Model.CompletedEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <div class="fw-bold">@Model.EventOrganizerUsers</div>
+                                <small class="text-muted">@((Model.EventOrganizerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
-                        <div class="status-item d-flex justify-content-between align-items-center mb-3">
+                        <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                    <i class="bi bi-x-circle"></i>
+                                <div class="role-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                    <i class="bi bi-person"></i>
                                 </div>
                                 <div>
-                                    <div class="fw-semibold">Cancelled Events</div>
-                                    <small class="text-muted">Cancelled or postponed</small>
+                                    <div class="fw-semibold">Customers</div>
+                                    <small class="text-muted">Event attendees and bookers</small>
                                 </div>
                             </div>
                             <div class="text-end">
-                                <div class="fw-bold">@Model.CancelledEvents</div>
-                                <small class="text-muted">@((Model.CancelledEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <div class="fw-bold">@Model.CustomerUsers</div>
+                                <small class="text-muted">@((Model.CustomerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <p class="text-muted text-center">No events data available</p>
+                    <p class="text-muted text-center">No users data available</p>
                 }
             </div>
         </div>
@@ -198,8 +195,8 @@
                         <span class="fw-semibold">@((Model.EndDate - Model.StartDate).Days + 1) days</span>
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
-                        <span><i class="bi bi-graph-up me-2"></i>Events per Day</span>
-                        <span class="fw-semibold">@((Model.TotalEvents / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                        <span><i class="bi bi-graph-up me-2"></i>Users per Day</span>
+                        <span class="fw-semibold">@((Model.TotalUsers / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
                     </div>
                 </div>
             </div>
@@ -207,45 +204,50 @@
     </div>
 </div>
 
-<!-- Events Table -->
+<!-- Users Table -->
 <div class="row">
     <div class="col-12">
         <div class="table-card">
             <div class="card-header">
-                <h5><i class="bi bi-table me-2"></i>Event Details</h5>
+                <h5><i class="bi bi-table me-2"></i>User Details</h5>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
                             <tr>
-                                <th class="border-0">Event ID</th>
-                                <th class="border-0">Title</th>
-                                <th class="border-0">Start Date</th>
-                                <th class="border-0">End Date</th>
+                                <th class="border-0">User ID</th>
+                                <th class="border-0">Email</th>
+                                <th class="border-0">Name</th>
+                                <th class="border-0">Roles</th>
                                 <th class="border-0">Status</th>
-                                <th class="border-0">Description</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var evt in Model.Events)
+                            @foreach (var user in Model.Users)
                             {
                                 <tr>
                                     <td>
-                                        <span class="fw-semibold">#@evt.EventID</span>
+                                        <span class="fw-semibold">@user.Id.Substring(0, 8)...</span>
                                     </td>
                                     <td>
-                                        <span class="fw-bold">@evt.Title</span>
+                                        <span class="fw-bold">@user.Email</span>
                                     </td>
-                                    <td>@evt.StartDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>@evt.EndDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                    <td>@user.FirstName @user.LastName</td>
                                     <td>
-                                        <span class="badge @(evt.Status == "Active" ? "bg-success" : evt.Status == "Completed" ? "bg-info" : "bg-danger")">
-                                            @evt.Status
-                                        </span>
+                                        @{
+                                            var userRoles = ViewBag.UserRoles as Dictionary<string, List<string>>;
+                                            var roles = userRoles?.GetValueOrDefault(user.Id, new List<string>()) ?? new List<string>();
+                                        }
+                                        @foreach (var role in roles)
+                                        {
+                                            <span class="badge @(role == "Admin" ? "bg-danger" : role == "EventOrganizer" ? "bg-success" : "bg-info") me-1">
+                                                @role
+                                            </span>
+                                        }
                                     </td>
                                     <td>
-                                        <small class="text-muted">@(evt.Description?.Length > 50 ? evt.Description.Substring(0, 50) + "..." : evt.Description)</small>
+                                        <span class="badge bg-success">Active</span>
                                     </td>
                                 </tr>
                             }
@@ -262,7 +264,7 @@
         function exportReport(type) {
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
-            const eventId = document.querySelector('select[name="eventId"]').value;
+            const role = document.querySelector('select[name="role"]').value;
             
             const form = document.createElement('form');
             form.method = 'POST';
@@ -296,12 +298,12 @@
                 form.appendChild(endInput);
             }
             
-            if (eventId) {
-                const eventInput = document.createElement('input');
-                eventInput.type = 'hidden';
-                eventInput.name = 'eventId';
-                eventInput.value = eventId;
-                form.appendChild(eventInput);
+            if (role) {
+                const roleInput = document.createElement('input');
+                roleInput.type = 'hidden';
+                roleInput.name = 'role';
+                roleInput.value = role;
+                form.appendChild(roleInput);
             }
             
             document.body.appendChild(form);
@@ -309,10 +311,10 @@
             document.body.removeChild(form);
         }
 
-        // Add status icon styling
+        // Add role icon styling
         const style = document.createElement('style');
         style.textContent = `
-            .status-icon {
+            .role-icon {
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;

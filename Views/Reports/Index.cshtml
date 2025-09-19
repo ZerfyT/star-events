@@ -85,48 +85,98 @@
             </div>
             <div class="card-body">
                 <div class="row g-4">
-                    <div class="col-lg-4 col-md-6">
-                        <div class="report-card h-100">
-                            <div class="report-icon bg-primary">
-                                <i class="bi bi-currency-dollar"></i>
-                            </div>
-                            <div class="report-content">
-                                <h6>Revenue Reports</h6>
-                                <p class="text-muted">Track income, payment methods, and financial performance</p>
-                                <a asp-action="Revenue" class="btn btn-outline-primary btn-sm">
-                                    <i class="bi bi-eye me-1"></i>View Report
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="report-card h-100">
-                            <div class="report-icon bg-success">
-                                <i class="bi bi-calendar-event"></i>
-                            </div>
-                            <div class="report-content">
-                                <h6>Events Reports</h6>
-                                <p class="text-muted">Analyze event performance, attendance, and status</p>
-                                <a asp-action="Events" class="btn btn-outline-success btn-sm">
-                                    <i class="bi bi-eye me-1"></i>View Report
-                                </a>
+                    @if (Model.IsAdmin)
+                    {
+                        <!-- Admin Reports -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-primary">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Overall Sales Reports</h6>
+                                    <p class="text-muted">Track total income, payment methods, and financial performance across all events</p>
+                                    <a asp-action="Revenue" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-lg-4 col-md-6">
-                        <div class="report-card h-100">
-                            <div class="report-icon bg-warning">
-                                <i class="bi bi-ticket-perforated"></i>
-                            </div>
-                            <div class="report-content">
-                                <h6>Bookings Reports</h6>
-                                <p class="text-muted">Monitor booking trends, cancellations, and customer behavior</p>
-                                <a asp-action="Bookings" class="btn btn-outline-warning btn-sm">
-                                    <i class="bi bi-eye me-1"></i>View Report
-                                </a>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-info">
+                                    <i class="bi bi-people"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Users Reports</h6>
+                                    <p class="text-muted">Analyze user registrations, roles, and activity across the platform</p>
+                                    <a asp-action="Users" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-success">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Events Reports</h6>
+                                    <p class="text-muted">Analyze all events performance, attendance, and status across the platform</p>
+                                    <a asp-action="Events" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    else if (Model.IsEventOrganizer)
+                    {
+                        <!-- Event Organizer Reports -->
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-primary">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Ticket Sales Reports</h6>
+                                    <p class="text-muted">Track ticket sales, scanning status, and attendance for your events</p>
+                                    <a asp-action="TicketSales" class="btn btn-outline-primary btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-success">
+                                    <i class="bi bi-currency-dollar"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Revenue Reports</h6>
+                                    <p class="text-muted">Track income, payment methods, and financial performance for your events</p>
+                                    <a asp-action="Revenue" class="btn btn-outline-success btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4 col-md-6">
+                            <div class="report-card h-100">
+                                <div class="report-icon bg-info">
+                                    <i class="bi bi-calendar-event"></i>
+                                </div>
+                                <div class="report-content">
+                                    <h6>Events Reports</h6>
+                                    <p class="text-muted">Analyze your events performance, attendance, and status</p>
+                                    <a asp-action="Events" class="btn btn-outline-info btn-sm">
+                                        <i class="bi bi-eye me-1"></i>View Report
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
             </div>
         </div>
