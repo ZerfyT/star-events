@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using star_events.Models;
 using star_events.Models.ViewModels;
 using star_events.Repository.Interfaces;
+using star_events.Services;
 
 namespace star_events.Controllers;
 
@@ -10,11 +11,22 @@ public class UserController : Controller
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
+    private readonly IPasswordService _passwordService;
+    private readonly IEmailService _emailService;
+    private readonly ILogger<UserController> _logger;
 
-    public UserController(IUserRepository userRepository, IRoleRepository roleRepository)
+    public UserController(
+        IUserRepository userRepository, 
+        IRoleRepository roleRepository,
+        IPasswordService passwordService,
+        IEmailService emailService,
+        ILogger<UserController> logger)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
+        _passwordService = passwordService;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     // GET: ApplicationUser
@@ -66,17 +78,18 @@ public class UserController : Controller
     {
         if (!ModelState.IsValid)
         {
-            foreach (var modelStateEntry in ModelState)
-            {
-                var key = modelStateEntry.Key;
-                var errors = modelStateEntry.Value.Errors;
-                
-                foreach (var error in errors)
-                {
-                    Console.WriteLine($"Validation Error for '{key}': {error.ErrorMessage}");
-                }
-            }
+            // Repopulate roles for the view
+            var roles = _roleRepository.GetAll();
+            model.AllRoles = roles.Select(r => new SelectListItem() { Text = r.Name, Value = r.Name }).ToList();
+            
+            // Show validation errors
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            TempData["ErrorMessage"] = "Please fix the following errors: " + string.Join(", ", errors);
+            return View(model);
         }
+
+        // Generate a random password
+        var generatedPassword = _passwordService.GenerateRandomPassword();
 
         var user = new ApplicationUser
         {
@@ -84,10 +97,10 @@ public class UserController : Controller
             Email = model.Email,
             FirstName = model.FirstName,
             LastName = model.LastName,
-            ContactNo =  model.ContactNo,
+            ContactNo = model.ContactNo,
         };
         
-        var result = _userRepository.Create(user, model.Password);
+        var result = _userRepository.Create(user, generatedPassword);
 
         if (!result.Succeeded)
         {
@@ -95,14 +108,31 @@ public class UserController : Controller
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            Console.WriteLine(result);
+            
+            // Repopulate roles for the view
+            var roles = _roleRepository.GetAll();
+            model.AllRoles = roles.Select(r => new SelectListItem() { Text = r.Name, Value = r.Name }).ToList();
             return View(model);
         }
         
-        if (model.SelectedRoles != null && model.SelectedRoles.Any())
+        // Add role if selected
+        if (!string.IsNullOrEmpty(model.SelectedRole))
         {
-            _userRepository.AddToRoles(user, model.SelectedRoles);
+            _userRepository.AddToRoles(user, new[] { model.SelectedRole });
         }
+
+        // Send email with credentials
+        try
+        {
+            await _emailService.SendUserCredentialsAsync(user.Email, user.FirstName, user.LastName, generatedPassword);
+            TempData["SuccessMessage"] = $"User '{user.FirstName} {user.LastName}' created successfully! Login credentials have been sent to {user.Email}";
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to send email to user {Email}", user.Email);
+            TempData["WarningMessage"] = $"User '{user.FirstName} {user.LastName}' created successfully, but failed to send email. Please provide the password manually: {generatedPassword}";
+        }
+        
         return RedirectToAction(nameof(Index));
     }
 
@@ -113,7 +143,24 @@ public class UserController : Controller
 
         var applicationUser = _userRepository.GetById(id);
         if (applicationUser == null) return NotFound();
-        return View(applicationUser);
+
+        // Get user roles
+        var userRoles = _userRepository.GetRoles(applicationUser);
+        var allRoles = _roleRepository.GetAll();
+
+        var model = new ManageUserRolesViewModel
+        {
+            UserId = applicationUser.Id,
+            UserName = applicationUser.UserName!,
+            Roles = allRoles.Select(role => new UserRoleViewModel
+            {
+                RoleName = role.Name!,
+                IsSelected = userRoles.Contains(role.Name!)
+            }).ToList()
+        };
+
+        ViewBag.User = applicationUser;
+        return View(model);
     }
 
     // POST: ApplicationUser/Edit/5
@@ -121,17 +168,105 @@ public class UserController : Controller
     // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Edit(int id, [Bind("Name,Description")] ApplicationUser applicationUser)
+    public async Task<IActionResult> Edit(string id, ApplicationUser applicationUser)
     {
-        // if (id != applicationUser.Id) return NotFound();
+        if (id != applicationUser.Id) return NotFound();
 
         if (ModelState.IsValid)
         {
             _userRepository.Update(applicationUser);
+            TempData["SuccessMessage"] = $"User '{applicationUser.FirstName} {applicationUser.LastName}' updated successfully!";
             return RedirectToAction(nameof(Index));
         }
 
-        return View(applicationUser);
+        // Repopulate the model for the view
+        var userRoles = _userRepository.GetRoles(applicationUser);
+        var allRoles = _roleRepository.GetAll();
+
+        var model = new ManageUserRolesViewModel
+        {
+            UserId = applicationUser.Id,
+            UserName = applicationUser.UserName!,
+            Roles = allRoles.Select(role => new UserRoleViewModel
+            {
+                RoleName = role.Name!,
+                IsSelected = userRoles.Contains(role.Name!)
+            }).ToList()
+        };
+
+        ViewBag.User = applicationUser;
+        
+        // Show validation errors
+        var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+        TempData["ErrorMessage"] = "Please fix the following errors: " + string.Join(", ", errors);
+        return View(model);
+    }
+
+    // POST: ApplicationUser/ManageRoles
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ManageRoles(string userId, string selectedRole)
+    {
+        var user = _userRepository.GetById(userId);
+        if (user == null) return NotFound();
+
+        var currentRoles = _userRepository.GetRoles(user);
+        var result = _userRepository.RemoveFromRoles(user, currentRoles);
+
+        if (!result.Succeeded)
+        {
+            ModelState.AddModelError("", "Cannot remove user's existing roles");
+            
+            // Repopulate the model for the view
+            var userRoles = _userRepository.GetRoles(user);
+            var allRoles = _roleRepository.GetAll();
+
+            var model = new ManageUserRolesViewModel
+            {
+                UserId = user.Id,
+                UserName = user.UserName!,
+                Roles = allRoles.Select(role => new UserRoleViewModel
+                {
+                    RoleName = role.Name!,
+                    IsSelected = userRoles.Contains(role.Name!)
+                }).ToList()
+            };
+
+            ViewBag.User = user;
+            return View("Edit", model);
+        }
+
+        // Add the selected role if one was chosen
+        if (!string.IsNullOrEmpty(selectedRole))
+        {
+            result = _userRepository.AddToRoles(user, new[] { selectedRole });
+
+            if (!result.Succeeded)
+            {
+                ModelState.AddModelError("", "Cannot add selected role to user");
+                
+                // Repopulate the model for the view
+                var userRoles = _userRepository.GetRoles(user);
+                var allRoles = _roleRepository.GetAll();
+
+                var model = new ManageUserRolesViewModel
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName!,
+                    Roles = allRoles.Select(role => new UserRoleViewModel
+                    {
+                        RoleName = role.Name!,
+                        IsSelected = userRoles.Contains(role.Name!)
+                    }).ToList()
+                };
+
+                ViewBag.User = user;
+                return View("Edit", model);
+            }
+        }
+
+        TempData["SuccessMessage"] = $"User role updated successfully! User now has the '{selectedRole}' role.";
+        return RedirectToAction(nameof(Index));
     }
 
     // GET: ApplicationUser/Delete/5
@@ -154,7 +289,19 @@ public class UserController : Controller
         var applicationUser = _userRepository.GetById(id);
         if (applicationUser != null)
         {
-            _userRepository.Delete(applicationUser);
+            var result = _userRepository.Delete(applicationUser);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = $"User '{applicationUser.FirstName} {applicationUser.LastName}' deleted successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = $"Failed to delete user '{applicationUser.FirstName} {applicationUser.LastName}'. Please try again.";
+            }
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "User not found or already deleted.";
         }
         
         return RedirectToAction(nameof(Index));

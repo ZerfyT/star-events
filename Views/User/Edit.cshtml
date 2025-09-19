@@ -1,8 +1,9 @@
-@model star_events.Models.ApplicationUser
+@model star_events.Models.ViewModels.ManageUserRolesViewModel
 
 @{
     ViewData["Title"] = "Edit User";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    var user = ViewBag.User as star_events.Models.ApplicationUser;
 }
 
 <div class="page-header">
@@ -26,61 +27,56 @@
                 <h5><i class="bi bi-person-fill-gear me-2"></i>Edit User Information</h5>
             </div>
             <div class="card-body">
+                <!-- User Information Form -->
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="UserId" />
                     
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="FirstName" class="form-label">
+                                <label class="form-label">
                                     <i class="bi bi-person me-1"></i>First Name
                                 </label>
-                                <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
-                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                                <input name="FirstName" value="@user?.FirstName" class="form-control" placeholder="Enter first name" />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label asp-for="LastName" class="form-label">
+                                <label class="form-label">
                                     <i class="bi bi-person me-1"></i>Last Name
                                 </label>
-                                <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
-                                <span asp-validation-for="LastName" class="text-danger"></span>
+                                <input name="LastName" value="@user?.LastName" class="form-control" placeholder="Enter last name" />
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Email" class="form-label">
+                        <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>Email Address
                         </label>
-                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter email address" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <input name="Email" value="@user?.Email" type="email" class="form-control" placeholder="Enter email address" />
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="ContactNo" class="form-label">
+                        <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>Contact Number
                         </label>
-                        <input asp-for="ContactNo" class="form-control" placeholder="Enter contact number" />
-                        <span asp-validation-for="ContactNo" class="text-danger"></span>
+                        <input name="ContactNo" value="@user?.ContactNo" class="form-control" placeholder="Enter contact number" />
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="Address" class="form-label">
+                        <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>Address
                         </label>
-                        <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter address"></textarea>
-                        <span asp-validation-for="Address" class="text-danger"></span>
+                        <textarea name="Address" class="form-control" rows="3" placeholder="Enter address">@user?.Address</textarea>
                     </div>
 
                     <div class="form-group">
-                        <label asp-for="LoyaltyPoints" class="form-label">
+                        <label class="form-label">
                             <i class="bi bi-star me-1"></i>Loyalty Points
                         </label>
-                        <input asp-for="LoyaltyPoints" type="number" class="form-control" placeholder="Enter loyalty points" />
-                        <span asp-validation-for="LoyaltyPoints" class="text-danger"></span>
+                        <input name="LoyaltyPoints" value="@user?.LoyaltyPoints" type="number" class="form-control" placeholder="Enter loyalty points" />
                         <small class="form-text text-muted">Current loyalty points for this user</small>
                     </div>
 
@@ -92,10 +88,41 @@
                             <a asp-action="Index" class="btn btn-outline-secondary">
                                 <i class="bi bi-x-circle me-2"></i>Cancel
                             </a>
-                            <a asp-action="Details" asp-route-id="@Model?.Id" class="btn btn-outline-info">
+                            <a asp-action="Details" asp-route-id="@user?.Id" class="btn btn-outline-info">
                                 <i class="bi bi-eye me-2"></i>View Details
                             </a>
                         </div>
+                    </div>
+                </form>
+
+                <hr class="my-4">
+
+                <!-- Role Management Form -->
+                <form asp-action="ManageRoles">
+                    <input type="hidden" name="userId" value="@Model.UserId" />
+                    
+                    <h5><i class="bi bi-shield-check me-2"></i>Role Management</h5>
+                    <p class="text-muted">Select a role for this user (only one role can be assigned)</p>
+                    
+                    <div class="row">
+                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+                            <div class="col-md-6 mb-3">
+                                <div class="form-check">
+                                    <input type="hidden" asp-for="@Model.Roles[i].RoleName" />
+                                    <input asp-for="@Model.Roles[i].IsSelected" class="form-check-input" type="radio" name="SelectedRole" value="@Model.Roles[i].RoleName" />
+                                    <label asp-for="@Model.Roles[i].IsSelected" class="form-check-label">
+                                        @Model.Roles[i].RoleName
+                                    </label>
+                                </div>
+                            </div>
+                        }
+                    </div>
+
+                    <div class="form-group mt-3">
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-shield-check me-2"></i>Update Roles
+                        </button>
                     </div>
                 </form>
             </div>

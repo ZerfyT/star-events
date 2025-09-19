@@ -43,6 +43,10 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 
 builder.Services.AddScoped<DbInitializer>();
 
+// Add custom services
+builder.Services.AddScoped<star_events.Services.IPasswordService, star_events.Services.PasswordService>();
+builder.Services.AddScoped<star_events.Services.IEmailService, star_events.Services.EmailService>();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();

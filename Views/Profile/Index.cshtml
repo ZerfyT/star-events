@@ -1,33 +1,35 @@
-@model star_events.Models.ViewModels.CreateUserViewModel
+@model star_events.Models.ViewModels.ProfileViewModel
 
 @{
-    ViewData["Title"] = "Create User";
+    ViewData["Title"] = "My Profile";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
 <div class="page-header">
     <div class="d-flex justify-content-between align-items-center">
         <div>
-            <h1><i class="bi bi-person-plus me-3"></i>Create New User</h1>
-            <p>Add a new user to the system with appropriate roles and permissions</p>
+            <h1><i class="bi bi-person-circle me-3"></i>My Profile</h1>
+            <p>Manage your account information and settings</p>
         </div>
         <div>
-            <a asp-action="Index" class="btn btn-light">
-                <i class="bi bi-arrow-left"></i> Back to Users
+            <a asp-action="ChangePassword" class="btn btn-warning">
+                <i class="bi bi-key"></i> Change Password
             </a>
         </div>
     </div>
 </div>
 
+
 <div class="row justify-content-center">
     <div class="col-lg-8">
         <div class="form-card">
             <div class="card-header">
-                <h5><i class="bi bi-person-fill-add me-2"></i>User Information</h5>
+                <h5><i class="bi bi-person-fill-gear me-2"></i>Profile Information</h5>
             </div>
             <div class="card-body">
-                <form asp-action="Create">
+                <form asp-action="Update">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                    <input type="hidden" asp-for="Id" />
                     
                     <div class="row">
                         <div class="col-md-6">
@@ -58,22 +60,6 @@
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
-                    <div class="alert alert-info">
-                        <i class="bi bi-info-circle me-2"></i>
-                        <strong>Password Information:</strong> A secure password will be automatically generated and sent to the user's email address.
-                    </div>
-
-                    <div class="form-group">
-                        <label asp-for="SelectedRole" class="form-label">
-                            <i class="bi bi-shield me-1"></i>User Role
-                        </label>
-                        <select asp-for="SelectedRole" class="form-select" asp-items="@Model.AllRoles">
-                            <option value="">Select a role</option>
-                        </select>
-                        <span asp-validation-for="SelectedRole" class="text-danger"></span>
-                        <small class="form-text text-muted">Choose the appropriate role for this user (only one role can be assigned)</small>
-                    </div>
-
                     <div class="form-group">
                         <label asp-for="ContactNo" class="form-label">
                             <i class="bi bi-telephone me-1"></i>Contact Number
@@ -90,13 +76,22 @@
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
 
+                    <div class="form-group">
+                        <label asp-for="LoyaltyPoints" class="form-label">
+                            <i class="bi bi-star me-1"></i>Loyalty Points
+                        </label>
+                        <input asp-for="LoyaltyPoints" type="number" class="form-control" placeholder="Enter loyalty points" />
+                        <span asp-validation-for="LoyaltyPoints" class="text-danger"></span>
+                        <small class="form-text text-muted">Current loyalty points</small>
+                    </div>
+
                     <div class="form-group mt-4">
                         <div class="d-flex gap-3">
                             <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-check-circle me-2"></i>Create User
+                                <i class="bi bi-check-circle me-2"></i>Update Profile
                             </button>
-                            <a asp-action="Index" class="btn btn-outline-secondary">
-                                <i class="bi bi-x-circle me-2"></i>Cancel
+                            <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left me-2"></i>Back to Dashboard
                             </a>
                         </div>
                     </div>

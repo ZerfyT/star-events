@@ -47,6 +47,7 @@ public class LocationController : Controller
         {
             _locationRepository.Insert(location);
             _locationRepository.Save();
+            TempData["SuccessMessage"] = $"Location '{location.Name}' created successfully!";
             return RedirectToAction(nameof(Index));
         }
         else
@@ -87,6 +88,7 @@ public class LocationController : Controller
         {
             _locationRepository.Update(location);
             _locationRepository.Save();
+            TempData["SuccessMessage"] = $"Location '{location.Name}' updated successfully!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -115,6 +117,11 @@ public class LocationController : Controller
         {
             _locationRepository.Delete(id);
             _locationRepository.Save();
+            TempData["SuccessMessage"] = $"Location '{location.Name}' deleted successfully!";
+        }
+        else
+        {
+            TempData["ErrorMessage"] = "Location not found or already deleted.";
         }
 
         return RedirectToAction(nameof(Index));

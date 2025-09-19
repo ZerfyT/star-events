@@ -105,6 +105,7 @@ namespace star_events.Controllers
 
                 _eventRepository.Insert(@event);
                 _eventRepository.Save();
+                TempData["SuccessMessage"] = $"Event '{@event.Title}' created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             
@@ -227,6 +228,7 @@ namespace star_events.Controllers
 
                     _eventRepository.Update(@event);
                     _eventRepository.Save();
+                    TempData["SuccessMessage"] = $"Event '{@event.Title}' updated successfully!";
                 }
                 catch (Exception)
                 {
@@ -274,6 +276,11 @@ namespace star_events.Controllers
             {
                 _eventRepository.Delete(id);
                 _eventRepository.Save();
+                TempData["SuccessMessage"] = $"Event '{@event.Title}' deleted successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Event not found or already deleted.";
             }
 
             return RedirectToAction(nameof(Index));

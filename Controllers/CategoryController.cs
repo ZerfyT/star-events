@@ -47,6 +47,7 @@ public class CategoryController : Controller
         {
             _categoryRepository.Insert(category);
             _categoryRepository.Save();
+            TempData["SuccessMessage"] = $"Category '{category.Name}' created successfully!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -76,6 +77,7 @@ public class CategoryController : Controller
         {
             _categoryRepository.Update(category);
             _categoryRepository.Save();
+            TempData["SuccessMessage"] = $"Category '{category.Name}' updated successfully!";
             return RedirectToAction(nameof(Index));
         }
 
@@ -104,8 +106,12 @@ public class CategoryController : Controller
         {
             _categoryRepository.Delete(id);
             _categoryRepository.Save();
+            TempData["SuccessMessage"] = $"Category '{category.Name}' deleted successfully!";
         }
-
+        else
+        {
+            TempData["ErrorMessage"] = "Category not found or already deleted.";
+        }
 
         return RedirectToAction(nameof(Index));
     }
