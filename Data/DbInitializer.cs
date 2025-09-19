@@ -47,7 +47,6 @@ public class DbInitializer
 
     private void SeedUsers()
     {
-        // Check if the users already exist
         if (_userManager.Users.Any()) return;
 
         // Create Admin User
@@ -57,6 +56,7 @@ public class DbInitializer
             Email = "admin@starevents.lk",
             FirstName = "Admin",
             LastName = "User",
+            ContactNo = "+94 11 234 5678",
             EmailConfirmed = true
         };
 
@@ -66,20 +66,65 @@ public class DbInitializer
             // Assign the new user to the "Admin" role
             _userManager.AddToRoleAsync(adminUser, "Admin").Wait();
 
-        // Create Event Organizer User
-        var organizerUser = new ApplicationUser
+        // Create Event Organizer Users
+        var organizerUsers = new[]
         {
-            UserName = "organizer@starevents.lk",
-            Email = "organizer@starevents.lk",
-            FirstName = "Event",
-            LastName = "Organizer",
-            EmailConfirmed = true
+            new ApplicationUser
+            {
+                UserName = "organizer@starevents.lk",
+                Email = "organizer@starevents.lk",
+                FirstName = "Event",
+                LastName = "Organizer",
+                ContactNo = "+94 11 234 5679",
+                EmailConfirmed = true
+            },
+            new ApplicationUser
+            {
+                UserName = "organizer2@starevents.lk",
+                Email = "organizer2@starevents.lk",
+                FirstName = "Sarah",
+                LastName = "Johnson",
+                ContactNo = "+94 11 234 5680",
+                EmailConfirmed = true
+            }
         };
 
-        var orgResult = _userManager.CreateAsync(organizerUser, "Organizer@123").Result;
-        if (orgResult.Succeeded)
-            // Assign the new user to the "EventOrganizer" role
-            _userManager.AddToRoleAsync(organizerUser, "EventOrganizer").Wait();
+        foreach (var organizerUser in organizerUsers)
+        {
+            var orgResult = _userManager.CreateAsync(organizerUser, "Organizer@123").Result;
+            if (orgResult.Succeeded)
+                _userManager.AddToRoleAsync(organizerUser, "EventOrganizer").Wait();
+        }
+
+        // Create Customer Users
+        var customerUsers = new[]
+        {
+            new ApplicationUser
+            {
+                UserName = "customer@starevents.lk",
+                Email = "customer@starevents.lk",
+                FirstName = "John",
+                LastName = "Doe",
+                ContactNo = "+94 77 123 4567",
+                EmailConfirmed = true
+            },
+            new ApplicationUser
+            {
+                UserName = "customer02@starevents.lk",
+                Email = "customer02@starevents.lk",
+                FirstName = "Jane",
+                LastName = "Smith",
+                ContactNo = "+94 77 123 4568",
+                EmailConfirmed = true
+            }
+        };
+
+        foreach (var customerUser in customerUsers)
+        {
+            var customerResult = _userManager.CreateAsync(customerUser, "Customer@123").Result;
+            if (customerResult.Succeeded)
+                _userManager.AddToRoleAsync(customerUser, "Customer").Wait();
+        }
     }
 
     private void SeedEventCategories()
@@ -163,92 +208,309 @@ public class DbInitializer
     {
         if (_context.Events.Any()) return;
 
-        // Get dependencies
-        var organizer = _userManager.FindByEmailAsync("organizer@starevents.lk").Result;
+        var organizer = _context.Users.First(u => u.UserName == "organizer@starevents.lk");
         var concertCategory = _context.Categories.FirstOrDefault(c => c.Name == "Live Concert");
         var theatreCategory = _context.Categories.FirstOrDefault(c => c.Name == "Theatre & Drama");
+        var culturalCategory = _context.Categories.FirstOrDefault(c => c.Name == "Cultural Festival");
+        var comedyCategory = _context.Categories.FirstOrDefault(c => c.Name == "Stand-up Comedy");
+        var workshopCategory = _context.Categories.FirstOrDefault(c => c.Name == "Workshop & Seminar");
+
         var nelumPokuna = _context.Locations.FirstOrDefault(v => v.Name == "Nelum Pokuna Theatre");
         var lionelWendt = _context.Locations.FirstOrDefault(v => v.Name == "Lionel Wendt Art Centre");
+        var bmich = _context.Locations.FirstOrDefault(v => v.Name == "BMICH Main Hall");
+        var galleFace = _context.Locations.FirstOrDefault(v => v.Name == "Galle Face Green");
 
-        // Ensure dependencies exist before proceeding
-        if (organizer == null || concertCategory == null || theatreCategory == null || nelumPokuna == null ||
-            lionelWendt == null) return; // or throw an exception
+        if (concertCategory == null || theatreCategory == null || culturalCategory == null ||
+            comedyCategory == null || workshopCategory == null || nelumPokuna == null || lionelWendt == null ||
+            bmich == null || galleFace == null) return;
 
         var events = new[]
         {
+            // Past Events
             new Event
             {
                 Title = "Symphony of Strings - Live in Colombo",
                 Description =
                     "A magical evening featuring the nation's top classical and contemporary artists. Experience a fusion of sounds that will captivate your soul.",
-                StartDateTime = DateTime.Now.AddDays(45).Date.AddHours(19), // 7 PM
-                EndDateTime = DateTime.Now.AddDays(45).Date.AddHours(22), // 10 PM
+                StartDateTime = DateTime.Now.AddDays(-30).Date.AddHours(19),
+                EndDateTime = DateTime.Now.AddDays(-30).Date.AddHours(22),
                 OrganizerID = organizer.Id,
                 LocationID = nelumPokuna.LocationID,
                 CategoryID = concertCategory.CategoryID,
                 ImagePaths = "https://placehold.co/1024x768/334155/FFFFFF?text=Symphony+of+Strings",
-                Status = "Upcoming"
+                Status = "Completed"
             },
             new Event
             {
                 Title = "Colombo International Theatre Festival",
                 Description =
                     "Showcasing the best of local and international drama. A week-long festival of captivating performances, workshops, and artist talks.",
-                StartDateTime = DateTime.Now.AddDays(70).Date.AddHours(18), // 6 PM
-                EndDateTime = DateTime.Now.AddDays(70).Date.AddHours(21), // 9 PM
+                StartDateTime = DateTime.Now.AddDays(-15).Date.AddHours(18),
+                EndDateTime = DateTime.Now.AddDays(-15).Date.AddHours(21),
                 OrganizerID = organizer.Id,
                 LocationID = lionelWendt.LocationID,
                 CategoryID = theatreCategory.CategoryID,
                 ImagePaths = "https://placehold.co/1024x768/78350F/FFFFFF?text=Theatre+Festival",
+                Status = "Completed"
+            },
+            new Event
+            {
+                Title = "Sri Lankan Cultural Heritage Festival",
+                Description =
+                    "Celebrate the rich cultural heritage of Sri Lanka with traditional dance, music, and art exhibitions.",
+                StartDateTime = DateTime.Now.AddDays(-10).Date.AddHours(16),
+                EndDateTime = DateTime.Now.AddDays(-10).Date.AddHours(20),
+                OrganizerID = organizer.Id,
+                LocationID = galleFace.LocationID,
+                CategoryID = culturalCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/8B4513/FFFFFF?text=Cultural+Festival",
+                Status = "Completed"
+            },
+            new Event
+            {
+                Title = "Comedy Night with Local Stars",
+                Description =
+                    "An evening of laughter with Sri Lanka's top comedians. Prepare for a night of non-stop entertainment.",
+                StartDateTime = DateTime.Now.AddDays(-5).Date.AddHours(20),
+                EndDateTime = DateTime.Now.AddDays(-5).Date.AddHours(23),
+                OrganizerID = organizer.Id,
+                LocationID = bmich.LocationID,
+                CategoryID = comedyCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/FF6347/FFFFFF?text=Comedy+Night",
+                Status = "Completed"
+            },
+
+            // Current/Active Events
+            new Event
+            {
+                Title = "Digital Marketing Workshop",
+                Description =
+                    "Learn the latest digital marketing strategies and tools from industry experts. Perfect for entrepreneurs and marketing professionals.",
+                StartDateTime = DateTime.Now.AddDays(2).Date.AddHours(9),
+                EndDateTime = DateTime.Now.AddDays(2).Date.AddHours(17),
+                OrganizerID = organizer.Id,
+                LocationID = bmich.LocationID,
+                CategoryID = workshopCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/4169E1/FFFFFF?text=Digital+Marketing",
+                Status = "Active"
+            },
+            new Event
+            {
+                Title = "Jazz Under the Stars",
+                Description =
+                    "An intimate jazz performance under the beautiful Colombo sky. Featuring international and local jazz artists.",
+                StartDateTime = DateTime.Now.AddDays(7).Date.AddHours(19),
+                EndDateTime = DateTime.Now.AddDays(7).Date.AddHours(22),
+                OrganizerID = organizer.Id,
+                LocationID = nelumPokuna.LocationID,
+                CategoryID = concertCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/191970/FFFFFF?text=Jazz+Under+Stars",
+                Status = "Active"
+            },
+
+            // Upcoming Events
+            new Event
+            {
+                Title = "Tech Innovation Summit 2024",
+                Description =
+                    "Join industry leaders and innovators for a comprehensive look at the future of technology in Sri Lanka.",
+                StartDateTime = DateTime.Now.AddDays(15).Date.AddHours(8),
+                EndDateTime = DateTime.Now.AddDays(15).Date.AddHours(18),
+                OrganizerID = organizer.Id,
+                LocationID = bmich.LocationID,
+                CategoryID = workshopCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/32CD32/FFFFFF?text=Tech+Summit",
                 Status = "Upcoming"
+            },
+            new Event
+            {
+                Title = "Shakespeare in the Park",
+                Description =
+                    "Experience the magic of Shakespeare's timeless plays in an outdoor setting. Perfect for families and literature lovers.",
+                StartDateTime = DateTime.Now.AddDays(25).Date.AddHours(18),
+                EndDateTime = DateTime.Now.AddDays(25).Date.AddHours(21),
+                OrganizerID = organizer.Id,
+                LocationID = galleFace.LocationID,
+                CategoryID = theatreCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/228B22/FFFFFF?text=Shakespeare+Park",
+                Status = "Upcoming"
+            },
+            new Event
+            {
+                Title = "Rock the City Concert",
+                Description =
+                    "The biggest rock concert of the year featuring international and local rock bands. Don't miss this epic musical experience.",
+                StartDateTime = DateTime.Now.AddDays(35).Date.AddHours(19),
+                EndDateTime = DateTime.Now.AddDays(35).Date.AddHours(23),
+                OrganizerID = organizer.Id,
+                LocationID = galleFace.LocationID,
+                CategoryID = concertCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/DC143C/FFFFFF?text=Rock+Concert",
+                Status = "Upcoming"
+            },
+            new Event
+            {
+                Title = "Stand-up Comedy Championship",
+                Description =
+                    "Witness the funniest comedians compete for the title of Sri Lanka's best stand-up comedian.",
+                StartDateTime = DateTime.Now.AddDays(45).Date.AddHours(20),
+                EndDateTime = DateTime.Now.AddDays(45).Date.AddHours(23),
+                OrganizerID = organizer.Id,
+                LocationID = lionelWendt.LocationID,
+                CategoryID = comedyCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/FF8C00/FFFFFF?text=Comedy+Championship",
+                Status = "Upcoming"
+            },
+
+            // Cancelled Event
+            new Event
+            {
+                Title = "Cancelled Event Example",
+                Description = "This event was cancelled due to unforeseen circumstances.",
+                StartDateTime = DateTime.Now.AddDays(20).Date.AddHours(19),
+                EndDateTime = DateTime.Now.AddDays(20).Date.AddHours(22),
+                OrganizerID = organizer.Id,
+                LocationID = nelumPokuna.LocationID,
+                CategoryID = concertCategory.CategoryID,
+                ImagePaths = "https://placehold.co/1024x768/696969/FFFFFF?text=Cancelled+Event",
+                Status = "Cancelled"
             }
         };
 
         _context.Events.AddRange(events);
         _context.SaveChanges();
 
-        // Seed Ticket Types for the created events
-        var symphonyEvent = _context.Events.FirstOrDefault(e => e.Title.Contains("Symphony"));
-        if (symphonyEvent != null)
-        {
-            var symphonyTickets = new[]
-            {
-                new TicketType
-                {
-                    EventID = symphonyEvent.EventID, Name = "VIP Box", Price = 20, TotalQuantity = 100,
-                    AvailableQuantity = 100
-                },
-                new TicketType
-                {
-                    EventID = symphonyEvent.EventID, Name = "Balcony", Price = 13, TotalQuantity = 400,
-                    AvailableQuantity = 400
-                },
-                new TicketType
-                {
-                    EventID = symphonyEvent.EventID, Name = "Orchestra Stalls", Price = (decimal)8.99, TotalQuantity = 788,
-                    AvailableQuantity = 788
-                }
-            };
-            _context.TicketTypes.AddRange(symphonyTickets);
-        }
+        // Seed Ticket Types for all events
+        SeedTicketTypesForEvents();
+    }
 
-        var theatreEvent = _context.Events.FirstOrDefault(e => e.Title.Contains("Theatre Festival"));
-        if (theatreEvent != null)
+    private void SeedTicketTypesForEvents()
+    {
+        var events = _context.Events.ToList();
+
+        foreach (var evt in events)
         {
-            var theatreTickets = new[]
-            {
-                new TicketType
+            var ticketTypes = new List<TicketType>();
+
+            // Create different ticket types based on event category
+            if (evt.Category?.Name == "Live Concert")
+                ticketTypes.AddRange(new[]
                 {
-                    EventID = theatreEvent.EventID, Name = "Premium Seating", Price = 11, TotalQuantity = 200,
-                    AvailableQuantity = 200
-                },
-                new TicketType
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "VIP Box",
+                        Price = 25,
+                        TotalQuantity = 50,
+                        AvailableQuantity = 50
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Premium Seating",
+                        Price = 18,
+                        TotalQuantity = 200,
+                        AvailableQuantity = 200
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "General Admission",
+                        Price = 12,
+                        TotalQuantity = 500,
+                        AvailableQuantity = 500
+                    }
+                });
+            else if (evt.Category?.Name == "Theatre & Drama")
+                ticketTypes.AddRange(new[]
                 {
-                    EventID = theatreEvent.EventID, Name = "General Admission", Price = 4, TotalQuantity = 422,
-                    AvailableQuantity = 422
-                }
-            };
-            _context.TicketTypes.AddRange(theatreTickets);
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Front Row",
+                        Price = 15,
+                        TotalQuantity = 100,
+                        AvailableQuantity = 100
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Standard Seating",
+                        Price = 10,
+                        TotalQuantity = 300,
+                        AvailableQuantity = 300
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Balcony",
+                        Price = 7,
+                        TotalQuantity = 200,
+                        AvailableQuantity = 200
+                    }
+                });
+            else if (evt.Category?.Name == "Cultural Festival")
+                ticketTypes.AddRange(new[]
+                {
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Premium Pass",
+                        Price = 20,
+                        TotalQuantity = 100,
+                        AvailableQuantity = 100
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Standard Pass",
+                        Price = 8,
+                        TotalQuantity = 1000,
+                        AvailableQuantity = 1000
+                    }
+                });
+            else if (evt.Category?.Name == "Stand-up Comedy")
+                ticketTypes.AddRange(new[]
+                {
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "VIP Seating",
+                        Price = 22,
+                        TotalQuantity = 50,
+                        AvailableQuantity = 50
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Regular Seating",
+                        Price = 15,
+                        TotalQuantity = 400,
+                        AvailableQuantity = 400
+                    }
+                });
+            else if (evt.Category?.Name == "Workshop & Seminar")
+                ticketTypes.AddRange(new[]
+                {
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Full Day Pass",
+                        Price = 30,
+                        TotalQuantity = 200,
+                        AvailableQuantity = 200
+                    },
+                    new TicketType
+                    {
+                        EventID = evt.EventID,
+                        Name = "Half Day Pass",
+                        Price = 18,
+                        TotalQuantity = 300,
+                        AvailableQuantity = 300
+                    }
+                });
+
+            _context.TicketTypes.AddRange(ticketTypes);
         }
 
         _context.SaveChanges();
@@ -258,56 +520,154 @@ public class DbInitializer
     {
         if (_context.Bookings.Any()) return;
 
-        // Get dependencies
+        var customer = _userManager.FindByEmailAsync("customer@starevents.lk").Result;
         var adminUser = _userManager.FindByEmailAsync("admin@starevents.lk").Result;
-        var organizerUser = _userManager.FindByEmailAsync("organizer@starevents.lk").Result;
         var earlyBirdPromo = _context.Promotions.FirstOrDefault(p => p.PromoCode == "EARLYBIRD15");
         var save500Promo = _context.Promotions.FirstOrDefault(p => p.PromoCode == "SAVE500");
+        var ticketTypes = _context.TicketTypes.ToList();
 
-        // Create a sample customer user for bookings
-        var customerUser = new ApplicationUser
+        if (customer == null || adminUser == null || !ticketTypes.Any()) return;
+
+        var bookings = new List<Booking>();
+        var random = new Random();
+
+        // Create bookings for past events (completed events)
+        var completedEvents = _context.Events.Where(e => e.Status == "Completed").ToList();
+
+        foreach (var evt in completedEvents)
         {
-            UserName = "customer02@starevents.lk",
-            Email = "customer02@starevents.lk",
-            FirstName = "John",
-            LastName = "Doe",
-            EmailConfirmed = true
-        };
+            var eventTicketTypes = ticketTypes.Where(tt => tt.EventID == evt.EventID).ToList();
+            if (!eventTicketTypes.Any()) continue;
 
-        var customerResult = _userManager.CreateAsync(customerUser, "Customer@123").Result;
-        if (customerResult.Succeeded)
-            _userManager.AddToRoleAsync(customerUser, "Customer").Wait();
+            // Create 5-15 bookings per completed event
+            var bookingCount = random.Next(5, 16);
 
-        // Ensure dependencies exist
-        if (adminUser == null || organizerUser == null || customerUser == null) return;
+            for (var i = 0; i < bookingCount; i++)
+            {
+                var ticketType = eventTicketTypes[random.Next(eventTicketTypes.Count)];
+                var ticketQuantity = random.Next(1, 4); // 1-3 tickets per booking
+                var baseAmount = ticketType.Price * ticketQuantity;
 
-        var bookings = new[]
-        {
-            new Booking
-            {
-                UserID = customerUser.Id,
-                PromotionID = earlyBirdPromo?.PromotionID,
-                BookingDateTime = DateTime.Now.AddDays(-5),
-                TotalAmount = 17, // VIP Box (20) with 15% discount = 17
-                Status = "Confirmed"
-            },
-            new Booking
-            {
-                UserID = customerUser.Id,
-                PromotionID = save500Promo?.PromotionID,
-                BookingDateTime = DateTime.Now.AddDays(-3),
-                TotalAmount = 6, // Premium Seating (11) with 4 discount = 7, but using 6 for realistic amount
-                Status = "Confirmed"
-            },
-            new Booking
-            {
-                UserID = adminUser.Id,
-                PromotionID = null,
-                BookingDateTime = DateTime.Now.AddDays(-1),
-                TotalAmount = 13, // Balcony ticket
-                Status = "Pending"
+                // Apply promotions randomly
+                Promotion? selectedPromo = null;
+                var finalAmount = baseAmount;
+
+                if (random.NextDouble() < 0.3) // 30% chance of using promotion
+                {
+                    selectedPromo = random.NextDouble() < 0.5 ? earlyBirdPromo : save500Promo;
+                    if (selectedPromo != null)
+                    {
+                        if (selectedPromo.DiscountType == "Percentage")
+                            finalAmount = baseAmount * (1 - selectedPromo.DiscountValue / 100);
+                        else if (selectedPromo.DiscountType == "FixedAmount")
+                            finalAmount = Math.Max(0, baseAmount - selectedPromo.DiscountValue);
+                    }
+                }
+
+                var booking = new Booking
+                {
+                    UserID = customer.Id,
+                    PromotionID = selectedPromo?.PromotionID,
+                    BookingDateTime = evt.StartDateTime.AddDays(-random.Next(1, 30)), // Booked 1-30 days before event
+                    TotalAmount = finalAmount,
+                    Status = random.NextDouble() < 0.9 ? "Confirmed" : "Pending" // 90% confirmed, 10% pending
+                };
+
+                bookings.Add(booking);
             }
-        };
+        }
+
+        // Create bookings for active events
+        var activeEvents = _context.Events.Where(e => e.Status == "Active").ToList();
+
+        foreach (var evt in activeEvents)
+        {
+            var eventTicketTypes = ticketTypes.Where(tt => tt.EventID == evt.EventID).ToList();
+            if (!eventTicketTypes.Any()) continue;
+
+            // Create 3-10 bookings per active event
+            var bookingCount = random.Next(3, 11);
+
+            for (var i = 0; i < bookingCount; i++)
+            {
+                var ticketType = eventTicketTypes[random.Next(eventTicketTypes.Count)];
+                var ticketQuantity = random.Next(1, 3); // 1-2 tickets per booking
+                var baseAmount = ticketType.Price * ticketQuantity;
+
+                // Apply promotions randomly
+                Promotion? selectedPromo = null;
+                var finalAmount = baseAmount;
+
+                if (random.NextDouble() < 0.4) // 40% chance of using promotion for active events
+                {
+                    selectedPromo = random.NextDouble() < 0.5 ? earlyBirdPromo : save500Promo;
+                    if (selectedPromo != null)
+                    {
+                        if (selectedPromo.DiscountType == "Percentage")
+                            finalAmount = baseAmount * (1 - selectedPromo.DiscountValue / 100);
+                        else if (selectedPromo.DiscountType == "FixedAmount")
+                            finalAmount = Math.Max(0, baseAmount - selectedPromo.DiscountValue);
+                    }
+                }
+
+                var booking = new Booking
+                {
+                    UserID = customer.Id,
+                    PromotionID = selectedPromo?.PromotionID,
+                    BookingDateTime = DateTime.Now.AddDays(-random.Next(1, 10)), // Booked recently
+                    TotalAmount = finalAmount,
+                    Status = random.NextDouble() < 0.8 ? "Confirmed" : "Pending" // 80% confirmed, 20% pending
+                };
+
+                bookings.Add(booking);
+            }
+        }
+
+        // Create some bookings for upcoming events
+        var upcomingEvents = _context.Events.Where(e => e.Status == "Upcoming").Take(3).ToList();
+
+        foreach (var evt in upcomingEvents)
+        {
+            var eventTicketTypes = ticketTypes.Where(tt => tt.EventID == evt.EventID).ToList();
+            if (!eventTicketTypes.Any()) continue;
+
+            // Create 2-8 bookings per upcoming event
+            var bookingCount = random.Next(2, 9);
+
+            for (var i = 0; i < bookingCount; i++)
+            {
+                var ticketType = eventTicketTypes[random.Next(eventTicketTypes.Count)];
+                var ticketQuantity = random.Next(1, 3); // 1-2 tickets per booking
+                var baseAmount = ticketType.Price * ticketQuantity;
+
+                // Apply promotions randomly
+                Promotion? selectedPromo = null;
+                var finalAmount = baseAmount;
+
+                if (random.NextDouble() < 0.5) // 50% chance of using promotion for upcoming events
+                {
+                    selectedPromo = random.NextDouble() < 0.5 ? earlyBirdPromo : save500Promo;
+                    if (selectedPromo != null)
+                    {
+                        if (selectedPromo.DiscountType == "Percentage")
+                            finalAmount = baseAmount * (1 - selectedPromo.DiscountValue / 100);
+                        else if (selectedPromo.DiscountType == "FixedAmount")
+                            finalAmount = Math.Max(0, baseAmount - selectedPromo.DiscountValue);
+                    }
+                }
+
+                var booking = new Booking
+                {
+                    UserID = customer.Id,
+                    PromotionID = selectedPromo?.PromotionID,
+                    BookingDateTime = DateTime.Now.AddDays(-random.Next(1, 5)),
+                    TotalAmount = finalAmount,
+                    Status = random.NextDouble() < 0.7 ? "Confirmed" : "Pending" // 70% confirmed, 30% pending
+                };
+
+                bookings.Add(booking);
+            }
+        }
 
         _context.Bookings.AddRange(bookings);
         _context.SaveChanges();
@@ -317,40 +677,40 @@ public class DbInitializer
     {
         if (_context.Payments.Any()) return;
 
-        // Get the bookings we just created
         var bookings = _context.Bookings.ToList();
         if (!bookings.Any()) return;
 
-        var payments = new[]
-        {
-            new Payment
+        var payments = new List<Payment>();
+        var random = new Random();
+        var paymentMethods = new[] { "Credit Card", "Debit Card", "Bank Transfer", "PayPal", "Digital Wallet" };
+
+        foreach (var booking in bookings)
+            // Create payment for most bookings (90% have payments)
+            if (random.NextDouble() < 0.9)
             {
-                BookingID = bookings[0].BookingID,
-                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
-                AmountPaid = 17,
-                PaymentMethod = "Credit Card",
-                PaymentStatus = "Completed",
-                PaymentDateTime = bookings[0].BookingDateTime.AddMinutes(5)
-            },
-            new Payment
-            {
-                BookingID = bookings[1].BookingID,
-                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
-                AmountPaid = 6,
-                PaymentMethod = "Debit Card",
-                PaymentStatus = "Completed",
-                PaymentDateTime = bookings[1].BookingDateTime.AddMinutes(3)
-            },
-            new Payment
-            {
-                BookingID = bookings[2].BookingID,
-                PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
-                AmountPaid = 13,
-                PaymentMethod = "Bank Transfer",
-                PaymentStatus = "Pending",
-                PaymentDateTime = bookings[2].BookingDateTime.AddMinutes(10)
+                var paymentMethod = paymentMethods[random.Next(paymentMethods.Length)];
+                var paymentStatus = booking.Status == "Confirmed"
+                    ? random.NextDouble() < 0.95
+                        ? "Completed"
+                        : "Pending" // 95% of confirmed bookings have completed payments
+                    : random.NextDouble() < 0.3
+                        ? "Completed"
+                        : "Pending"; // 30% of pending bookings have completed payments
+
+                var payment = new Payment
+                {
+                    BookingID = booking.BookingID,
+                    PaymentGatewayTransactionID = "TXN_" + Guid.NewGuid().ToString("N")[..8].ToUpper(),
+                    AmountPaid = booking.TotalAmount,
+                    PaymentMethod = paymentMethod,
+                    PaymentStatus = paymentStatus,
+                    PaymentDateTime =
+                        booking.BookingDateTime.AddMinutes(random.Next(1,
+                            30)) // Payment made 1-30 minutes after booking
+                };
+
+                payments.Add(payment);
             }
-        };
 
         _context.Payments.AddRange(payments);
         _context.SaveChanges();
@@ -360,54 +720,83 @@ public class DbInitializer
     {
         if (_context.Tickets.Any()) return;
 
-        // Get the bookings and ticket types
         var bookings = _context.Bookings.ToList();
         var ticketTypes = _context.TicketTypes.ToList();
-        
+
         if (!bookings.Any() || !ticketTypes.Any()) return;
 
         var tickets = new List<Ticket>();
+        var random = new Random();
 
         // Create tickets for each booking
         foreach (var booking in bookings)
         {
-            // Find appropriate ticket type based on booking amount
+            // Find appropriate ticket type based on booking amount and event
+            var eventTicketTypes = ticketTypes.Where(tt =>
+                tt.EventID == _context.Events.FirstOrDefault(e =>
+                    e.OrganizerID == _context.Users.FirstOrDefault(u => u.Id == booking.UserID)!.Id)?.EventID).ToList();
+
+            if (!eventTicketTypes.Any())
+                eventTicketTypes = ticketTypes.Where(tt => tt.Price <= booking.TotalAmount).ToList();
+
+            if (!eventTicketTypes.Any()) continue;
+
+            // Select a ticket type based on booking amount
             TicketType? selectedTicketType = null;
-            
-            if (booking.TotalAmount >= 15) // VIP Box (20)
-            {
-                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "VIP Box");
-            }
-            else if (booking.TotalAmount >= 10) // Premium or Balcony
-            {
-                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "Premium Seating") ??
-                                   ticketTypes.FirstOrDefault(tt => tt.Name == "Balcony");
-            }
-            else // General or Orchestra
-            {
-                selectedTicketType = ticketTypes.FirstOrDefault(tt => tt.Name == "General Admission") ??
-                                   ticketTypes.FirstOrDefault(tt => tt.Name == "Orchestra Stalls");
-            }
 
-            if (selectedTicketType != null)
-            {
-                // Create 1-3 tickets per booking
-                var ticketCount = booking.TotalAmount >= 15 ? 1 : 
-                                 booking.TotalAmount >= 10 ? 2 : 3;
+            if (booking.TotalAmount >= 20) // High-end tickets
+                selectedTicketType = eventTicketTypes.FirstOrDefault(tt =>
+                    tt.Name.Contains("VIP") || tt.Name.Contains("Premium")) ?? eventTicketTypes.FirstOrDefault();
+            else if (booking.TotalAmount >= 10) // Mid-range tickets
+                selectedTicketType = eventTicketTypes.FirstOrDefault(tt =>
+                    tt.Name.Contains("Standard") || tt.Name.Contains("Regular")) ?? eventTicketTypes.FirstOrDefault();
+            else // Budget tickets
+                selectedTicketType = eventTicketTypes.FirstOrDefault(tt =>
+                    tt.Name.Contains("General") || tt.Name.Contains("Balcony")) ?? eventTicketTypes.FirstOrDefault();
 
-                for (int i = 0; i < ticketCount; i++)
+            if (selectedTicketType == null) continue;
+
+            // Calculate number of tickets based on booking amount
+            var ticketCount = Math.Max(1, (int)(booking.TotalAmount / selectedTicketType.Price));
+            ticketCount = Math.Min(ticketCount, 4); // Max 4 tickets per booking
+
+            for (var i = 0; i < ticketCount; i++)
+            {
+                var isScanned = false;
+                DateTime? scannedAt = null;
+
+                // Determine if ticket should be scanned based on event status and booking status
+                var eventForBooking = _context.Events.FirstOrDefault(e =>
+                    e.OrganizerID == _context.Users.FirstOrDefault(u => u.Id == booking.UserID)!.Id);
+
+                if (eventForBooking != null)
                 {
-                    var ticket = new Ticket
+                    if (eventForBooking.Status == "Completed" && booking.Status == "Confirmed")
                     {
-                        BookingID = booking.BookingID,
-                        TicketTypeID = selectedTicketType.TicketTypeID,
-                        QRCodeValue = "QR_" + Guid.NewGuid().ToString("N")[..12].ToUpper(),
-                        IsScanned = booking.Status == "Confirmed" && i == 0, // First ticket scanned for confirmed bookings
-                        ScannedAt = booking.Status == "Confirmed" && i == 0 ? 
-                                   booking.BookingDateTime.AddDays(1) : null
-                    };
-                    tickets.Add(ticket);
+                        // For completed events with confirmed bookings, some tickets are scanned
+                        isScanned = random.NextDouble() < 0.8; // 80% chance of being scanned
+                        if (isScanned)
+                            scannedAt = eventForBooking.StartDateTime.AddHours(random.Next(-2,
+                                2)); // Scanned around event time
+                    }
+                    else if (eventForBooking.Status == "Active" && booking.Status == "Confirmed")
+                    {
+                        // For active events, some tickets might be scanned early
+                        isScanned = random.NextDouble() < 0.3; // 30% chance of being scanned early
+                        if (isScanned)
+                            scannedAt = DateTime.Now.AddHours(-random.Next(1, 24)); // Scanned within last 24 hours
+                    }
                 }
+
+                var ticket = new Ticket
+                {
+                    BookingID = booking.BookingID,
+                    TicketTypeID = selectedTicketType.TicketTypeID,
+                    QRCodeValue = "QR_" + Guid.NewGuid().ToString("N")[..12].ToUpper(),
+                    IsScanned = isScanned,
+                    ScannedAt = scannedAt
+                };
+                tickets.Add(ticket);
             }
         }
 
