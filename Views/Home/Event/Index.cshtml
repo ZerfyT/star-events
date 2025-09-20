@@ -1,0 +1,220 @@
+@model star_events.Models.Event
+
+@{
+    ViewData["Title"] = Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/event-detail.css">
+}
+
+<div class="event-detail-container">
+    <!-- Event Hero Section -->
+    <div class="event-hero">
+        <div class="hero-background">
+            @if (Model.AllImagePaths.Any())
+            {
+                <img src="@Model.AllImagePaths[0]" alt="@Model.Title" class="hero-image">
+            }
+            <div class="hero-overlay"></div>
+        </div>
+        
+        <div class="hero-content">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="event-badge">
+                            <i class="bi bi-tag-fill"></i>
+                            @if (Model.Category != null)
+                            {
+                                <span>@Model.Category.Name</span>
+                            }
+                        </div>
+                        
+                        <h1 class="event-title">@Model.Title</h1>
+                        
+                        <div class="event-meta">
+                            <div class="meta-item">
+                                <i class="bi bi-calendar3"></i>
+                                <span>@Model.StartDateTime.ToString("dddd, MMMM dd, yyyy")</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-clock"></i>
+                                <span>@Model.StartDateTime.ToString("HH:mm") - @Model.EndDateTime.ToString("HH:mm")</span>
+                            </div>
+                            <div class="meta-item">
+                                <i class="bi bi-geo-alt-fill"></i>
+                                <span>
+                                    @if (Model.Location != null)
+                                    {
+                                        @Model.Location.Name
+                                        <text>, </text>
+                                        @Model.Location.City
+                                    }
+                                    else
+                                    {
+                                        <text>Location TBD</text>
+                                    }
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <div class="row">
+            <!-- Event Details -->
+            <div class="col-lg-8">
+                <div class="event-details-section">
+                    <div class="section-header">
+                        <h2>About This Event</h2>
+                    </div>
+                    <div class="event-description">
+                        <p>@Model.Description</p>
+                    </div>
+
+                    <!-- Event Images Gallery -->
+                    @if (Model.AllImagePaths != null && Model.AllImagePaths.Any())
+                    {
+                        <div class="event-gallery">
+                            <h3>Event Gallery</h3>
+                            <div class="gallery-grid">
+                                @foreach (var imagePath in Model.AllImagePaths.Take(6))
+                                {
+                                    <div class="gallery-item">
+                                        <img src="@imagePath" alt="@Model.Title" class="gallery-image">
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Event Information -->
+                    <div class="event-info">
+                        <h3>Event Information</h3>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <i class="bi bi-person-fill"></i>
+                                <div>
+                                    <strong>Organizer</strong>
+                                    <p>@Model.OrganizerName</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-clock-history"></i>
+                                <div>
+                                    <strong>Duration</strong>
+                                    <p>@Model.Allocated_Duration minutes</p>
+                                </div>
+                            </div>
+                            <div class="info-item">
+                                <i class="bi bi-shield-check"></i>
+                                <div>
+                                    <strong>Status</strong>
+                                    <p class="status-@Model.Status.ToLower()">@Model.Status</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Selection -->
+            <div class="col-lg-4">
+                <div class="ticket-selection-card">
+                    <div class="card-header">
+                        <h3>
+                            <i class="bi bi-ticket-perforated"></i>
+                            Select Tickets
+                        </h3>
+                    </div>
+
+                    <form id="ticketForm" action="@Url.Action("SelectSeats", "Home", new { id = Model.EventID })" method="get">
+                        <div class="ticket-types">
+                            <!-- VIP Tickets -->
+                            <div class="ticket-type">
+                                <div class="ticket-header">
+                                    <h4>VIP</h4>
+                                    <span class="ticket-price">LKR 5,000</span>
+                                </div>
+                                <p class="ticket-description">Premium seating with exclusive amenities</p>
+                                <div class="ticket-quantity">
+                                    <label>Quantity:</label>
+                                    <div class="quantity-controls">
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('vip')">-</button>
+                                        <input type="number" id="vip-qty" name="vipQuantity" value="0" min="0" max="8" readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('vip')">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Standard Tickets -->
+                            <div class="ticket-type">
+                                <div class="ticket-header">
+                                    <h4>Standard</h4>
+                                    <span class="ticket-price">LKR 4,000</span>
+                                </div>
+                                <p class="ticket-description">Great view with standard amenities</p>
+                                <div class="ticket-quantity">
+                                    <label>Quantity:</label>
+                                    <div class="quantity-controls">
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('standard')">-</button>
+                                        <input type="number" id="standard-qty" name="standardQuantity" value="0" min="0" max="8" readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('standard')">+</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Economy Tickets -->
+                            <div class="ticket-type">
+                                <div class="ticket-header">
+                                    <h4>Economy</h4>
+                                    <span class="ticket-price">LKR 3,000</span>
+                                </div>
+                                <p class="ticket-description">Affordable seating option</p>
+                                <div class="ticket-quantity">
+                                    <label>Quantity:</label>
+                                    <div class="quantity-controls">
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('economy')">-</button>
+                                        <input type="number" id="economy-qty" name="economyQuantity" value="0" min="0" max="8" readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('economy')">+</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ticket-summary" id="ticketSummary" style="display: none;">
+                            <h4>Order Summary</h4>
+                            <div class="summary-items" id="summaryItems"></div>
+                            <div class="summary-total">
+                                <div class="total-row">
+                                    <span>Total Amount:</span>
+                                    <span class="total-price" id="totalPrice">LKR 0</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ticket-actions">
+                            <button type="submit" class="btn btn-primary btn-book" id="selectSeatsBtn" disabled>
+                                <i class="bi bi-arrow-right"></i>
+                                Select Seats
+                            </button>
+                            <div class="secure-notice">
+                                <i class="bi bi-shield-check"></i>
+                                <span>Secure booking process</span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the event JavaScript -->
+<script src="~/js/event.js"></script>

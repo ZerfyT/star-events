@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TixWave</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="~/css/booking.css" />
+</head>
+<body>
+    <!-- Header -->
+    <header class="booking-header">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <div class="logo-section">
+                        <h1 class="logo">
+                            <i class="bi bi-ticket-perforated-fill"></i>
+                            TixWave
+                        </h1>
+                        <p class="tagline">Secure Event Booking</p>
+                    </div>
+                </div>
+                <div class="col-md-6 text-end">
+                    <div class="header-actions">
+                        <a href="/Event" class="btn btn-outline-light me-2">
+                            <i class="bi bi-arrow-left"></i> Back to Events
+                        </a>
+                        <div class="booking-progress">
+                            <span class="step active">1. Select Tickets</span>
+                            <span class="step">2. Payment</span>
+                            <span class="step">3. Confirmation</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="booking-main">
+        @RenderBody()
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <div class="brand-section">
+                        <h2 class="brand-title">Tixwave</h2>
+                        <p class="footer-text">Your gateway to amazing events</p>
+                    </div>
+                </div>
+
+                <div class="footer-center">
+                    <div class="footer-links">
+                        <div class="link-group">
+                            <h4>Quick Links</h4>
+                            <ul>
+                                <li><a href="#">Events</a></li>
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">Support</a></li>
+                            </ul>
+                        </div>
+                        <div class="link-group">
+                            <h4>Services</h4>
+                            <ul>
+                                <li><a href="#">Event Booking</a></li>
+                                <li><a href="#">Corporate Events</a></li>
+                                <li><a href="#">Workshops</a></li>
+                                <li><a href="#">Seminars</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-right">
+                    <div class="social-media">
+                        <h4>Follow Us</h4>
+                        <div class="social-icons">
+                            <img src="~/Images/d1e49ca07e951432c376d21f1d9c5d50.png" alt="Social Media" />
+                            <img src="~/Images/pngwing.com.png" alt="Social Media" />
+                        </div>
+                    </div>
+
+                    <div class="powered-by">
+                        <span class="powered-text">Powered by</span>
+                        <div class="bwt-brand">
+                            <img src="~/Images/donga.png" alt="BWT Logo" class="bwt-logo" />
+                            <span class="bwt-text">BWT Alpine Technologies</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>&copy; 2025 Tixwave. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+ 
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="~/js/booking.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

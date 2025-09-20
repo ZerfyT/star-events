@@ -192,10 +192,19 @@ public class DbInitializer
             new Promotion
             {
                 PromoCode = "SAVE500",
-                DiscountType = "FixedAmount",
+                DiscountType = "Fixed",
                 DiscountValue = 500,
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now.AddMonths(2),
+                IsActive = true
+            },
+            new Promotion
+            {
+                PromoCode = "WELCOME10",
+                DiscountType = "Percentage",
+                DiscountValue = 10,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddMonths(6),
                 IsActive = true
             }
         };

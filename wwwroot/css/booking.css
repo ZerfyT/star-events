@@ -1,0 +1,1004 @@
+﻿:root {
+    --Alpine_Blue: #005AFF;
+    --Alpine_Pink: #FD4BC7;
+    --Alpine_Dark_Blue: #0B1426;
+    --Alpine_Navy: #001A40;
+    --White: #FFFFFF;
+    --Black: #000000;
+    --brand-font: 'Brand-Font', sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, var(--Alpine_Navy) 0%, var(--Alpine_Dark_Blue) 100%);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+}
+
+/* Header Styles */
+.booking-header {
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    color: var(--White);
+    padding: 20px 0;
+    box-shadow: 0 4px 20px rgba(0, 90, 255, 0.3);
+}
+
+.logo-section .logo {
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--brand-font)
+}
+
+@font-face {
+    font-family: 'Brand-Font';
+    src: url('../fonts/Distancia-300-Light [TheFontsMaster.com].woff2') format('woff2');
+    font-weight: 100;
+    font-style: normal;
+    font-display: swap;
+}
+
+.logo-section .tagline {
+    font-size: 0.9rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.booking-progress {
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+    .booking-progress .step {
+        font-size: 0.85rem;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.2);
+        transition: all 0.3s ease;
+    }
+
+        .booking-progress .step.active {
+            background: var(--White);
+            color: var(--Alpine_Blue);
+            font-weight: 600;
+        }
+
+.btn-outline-light {
+    border: 2px solid var(--White);
+    color: var(--White);
+    padding: 8px 20px;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+    .btn-outline-light:hover {
+        background: var(--White);
+        color: var(--Alpine_Blue);
+        transform: translateY(-2px);
+    }
+
+/* Main Content */
+.booking-main {
+    min-height: 80vh;
+    padding: 30px 0;
+}
+
+/* Event Details Card */
+.event-details-card {
+    background: var(--White);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+}
+
+.event-header {
+    padding: 30px;
+    background: linear-gradient(135deg, var(--Alpine_Dark_Blue) 0%, var(--Alpine_Navy) 100%);
+    color: var(--White);
+}
+
+.event-category {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--Alpine_Pink);
+    color: var(--White);
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.event-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    line-height: 1.2;
+}
+
+.event-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+}
+
+.meta-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1rem;
+}
+
+    .meta-item i {
+        color: var(--Alpine_Pink);
+        font-size: 1.2rem;
+    }
+
+.event-poster {
+    padding: 0;
+}
+
+    .event-poster img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+    }
+
+.event-description {
+    padding: 30px;
+}
+
+    .event-description h4 {
+        color: var(--Alpine_Dark_Blue);
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+
+/* Booking Panel */
+.booking-panel {
+    background: var(--White);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 30px;
+}
+
+.panel-header {
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    color: var(--White);
+    padding: 25px 30px;
+    text-align: center;
+}
+
+    .panel-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+.booking-form {
+    padding: 30px;
+}
+
+/* Ticket Types */
+.ticket-types {
+    margin-bottom: 30px;
+}
+
+.ticket-type-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #f0f0f0;
+    border-radius: 15px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+    .ticket-type-card:hover {
+        border-color: var(--Alpine_Blue);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 90, 255, 0.1);
+    }
+
+    .ticket-type-card.selected {
+        border-color: var(--Alpine_Blue);
+        background: linear-gradient(135deg, rgba(0, 90, 255, 0.05) 0%, rgba(253, 75, 199, 0.05) 100%);
+    }
+
+.ticket-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 1.5rem;
+}
+
+.ticket-type-card[data-ticket-type="vip"] .ticket-icon {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: var(--White);
+}
+
+.ticket-type-card[data-ticket-type="adult"] .ticket-icon {
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Navy) 100%);
+    color: var(--White);
+}
+
+.ticket-type-card[data-ticket-type="child"] .ticket-icon {
+    background: linear-gradient(135deg, var(--Alpine_Pink) 0%, #FF6B9D 100%);
+    color: var(--White);
+}
+
+.ticket-info {
+    flex: 1;
+}
+
+    .ticket-info h5 {
+        margin: 0 0 5px 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--Alpine_Dark_Blue);
+    }
+
+    .ticket-info p {
+        margin: 0 0 8px 0;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+.ticket-price {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--Alpine_Blue);
+}
+
+.ticket-quantity {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.qty-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 50%;
+    background: var(--Alpine_Blue);
+    color: var(--White);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .qty-btn:hover {
+        background: var(--Alpine_Pink);
+        transform: scale(1.1);
+    }
+
+    .qty-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+.ticket-quantity input {
+    width: 50px;
+    text-align: center;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 8px;
+    font-weight: 600;
+    background: #f8f9fa;
+}
+
+
+/* Booking Summary */
+.booking-summary {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 2px solid var(--Alpine_Blue);
+}
+
+    .booking-summary h4 {
+        color: var(--Alpine_Dark_Blue);
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+.summary-items {
+    margin-bottom: 20px;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+.summary-total {
+    border-top: 2px solid var(--Alpine_Blue);
+    padding-top: 15px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.total-price {
+    color: var(--Alpine_Blue);
+}
+
+/* Customer Details */
+.customer-details {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+}
+
+    .customer-details h4 {
+        color: var(--Alpine_Dark_Blue);
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+.form-label {
+    font-weight: 500;
+    color: var(--Alpine_Dark_Blue);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-control {
+    border: 2px solid #e0e0e0;
+    border-radius: 10px;
+    padding: 12px 15px;
+    transition: all 0.3s ease;
+}
+
+    .form-control:focus {
+        border-color: var(--Alpine_Blue);
+        box-shadow: 0 0 0 0.2rem rgba(0, 90, 255, 0.25);
+    }
+
+/* Action Buttons */
+.booking-actions {
+    text-align: center;
+}
+
+.btn-book {
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    border: none;
+    color: var(--White);
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .btn-book:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 90, 255, 0.3);
+    }
+
+    .btn-book:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+        transform: none;
+    }
+
+.secure-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: #666;
+    margin-top: 15px;
+}
+
+    .secure-notice i {
+        color: #28a745;
+    }
+
+.footer {
+    background: linear-gradient(135deg, var(--Alpine_Dark_Blue) 0%, var(--Alpine_Navy) 100%);
+    color: var(--White);
+    padding: 40px 0 20px;
+    margin-top: auto;
+    position: relative;
+    overflow: hidden;
+}
+
+    .footer::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(90deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    }
+
+    .footer .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+.footer-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 30px;
+}
+
+/* Footer Left - Fixed Brand Title */
+.footer-left .brand-title {
+    font-family: var(--brand-font);
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--White); /* Make it white */
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.footer-text {
+    color: #B0BEC5;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.4;
+}
+
+/* Footer Center */
+.footer-links {
+    display: flex;
+    gap: 40px;
+}
+
+.link-group h4 {
+    color: var(--White);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.link-group ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .link-group ul li {
+        margin-bottom: 8px;
+    }
+
+        .link-group ul li a {
+            color: #B0BEC5;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+            .link-group ul li a:hover {
+                color: var(--Alpine_Blue);
+            }
+
+/* Footer Right */
+.footer-right {
+    text-align: right;
+}
+
+.social-media h4 {
+    color: var(--White);
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.social-icons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+
+    .social-icons img {
+        width: 120px;
+        height: 50px;
+        border-radius: 2px;
+        transition: transform 0.3s ease;
+        cursor: pointer;
+        padding: 5px;
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+        .social-icons img:hover {
+            transform: scale(1.05);
+        }
+
+.powered-by {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.powered-text {
+    display: block;
+    color: #B0BEC5;
+    font-size: 0.8rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.bwt-brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+}
+
+.bwt-logo {
+    width: 20px;
+    height: 20px;
+}
+
+.bwt-text {
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: var(--White);
+}
+
+
+/* Alpine F1 Seat Selection Styles */
+.seat-selection-container {
+    background: var(--White);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 2px solid var(--Alpine_Navy);
+}
+
+.screen-indicator {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.screen-text {
+    background: var(--Alpine_Dark_Blue);
+    color: var(--White);
+    padding: 8px 30px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+.screen-curve {
+    width: 80%;
+    height: 4px;
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    border-radius: 50px;
+    margin: 0 auto;
+}
+
+.seat-map {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.seat-row {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    justify-content: center;
+}
+
+.row-label {
+    width: 25px;
+    font-weight: 700;
+    color: var(--Alpine_Dark_Blue);
+    font-size: 1.1rem;
+}
+
+.seats {
+    display: flex;
+    gap: 8px;
+}
+
+.seat {
+    width: 35px;
+    height: 35px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid var(--Alpine_Navy);
+    background: var(--White);
+    color: var(--Alpine_Navy);
+}
+
+    .seat:hover:not(.occupied) {
+        transform: scale(1.1);
+        box-shadow: 0 4px 15px rgba(0, 90, 255, 0.3);
+    }
+
+    .seat.selected {
+        background: var(--Alpine_Blue);
+        color: var(--White);
+        border-color: var(--Alpine_Blue);
+        transform: scale(1.1);
+    }
+
+    .seat.occupied {
+        background: var(--Alpine_Dark_Blue);
+        color: var(--White);
+        border-color: var(--Alpine_Dark_Blue);
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+.seat-legend {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.seat-sample {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    border: 2px solid var(--Alpine_Navy);
+}
+
+    .seat-sample.available {
+        background: var(--White);
+        border-color: var(--Alpine_Navy);
+    }
+
+    .seat-sample.selected {
+        background: var(--Alpine_Blue);
+        border-color: var(--Alpine_Blue);
+    }
+
+    .seat-sample.occupied {
+        background: var(--Alpine_Dark_Blue);
+        border-color: var(--Alpine_Dark_Blue);
+    }
+
+.selected-seats-summary {
+    background: linear-gradient(135deg, rgba(0, 90, 255, 0.05) 0%, rgba(253, 75, 199, 0.05) 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border: 2px solid var(--Alpine_Blue);
+}
+
+    .selected-seats-summary h4 {
+        color: var(--Alpine_Dark_Blue);
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+.selected-seat-tag {
+    background: var(--Alpine_Blue);
+    color: var(--White);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    display: inline-block;
+}
+
+.booking-summary {
+    background: linear-gradient(135deg, rgba(0, 90, 255, 0.05) 0%, rgba(253, 75, 199, 0.05) 100%);
+    border-radius: 15px;
+    padding: 25px;
+    margin-bottom: 25px;
+    border: 2px solid var(--Alpine_Pink);
+}
+
+    .booking-summary h4 {
+        color: var(--Alpine_Dark_Blue);
+        font-weight: 600;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(0, 90, 255, 0.2);
+    color: var(--Alpine_Dark_Blue);
+}
+
+    .summary-item:last-child {
+        border-bottom: none;
+    }
+
+.summary-total {
+    border-top: 2px solid var(--Alpine_Pink);
+    padding-top: 15px;
+    margin-top: 15px;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.total-price {
+    color: var(--Alpine_Blue);
+}
+
+.btn-book {
+    background: linear-gradient(135deg, var(--Alpine_Blue) 0%, var(--Alpine_Pink) 100%);
+    border: none;
+    color: var(--White);
+    padding: 15px 40px;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+    .btn-book:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 30px rgba(0, 90, 255, 0.3);
+    }
+
+    .btn-book:disabled {
+        background: var(--Alpine_Navy);
+        cursor: not-allowed;
+        transform: none;
+        opacity: 0.6;
+    }
+
+.secure-notice {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--Alpine_Dark_Blue);
+    margin-top: 15px;
+}
+
+    .secure-notice i {
+        color: var(--Alpine_Blue);
+    }
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .seat-selection-container {
+        padding: 15px;
+    }
+
+    .seat {
+        width: 30px;
+        height: 30px;
+        font-size: 0.65rem;
+    }
+
+    .seats {
+        gap: 6px;
+    }
+
+    .seat-row {
+        gap: 10px;
+    }
+
+    .seat-legend {
+        gap: 15px;
+    }
+
+    .legend-item {
+        font-size: 0.8rem;
+    }
+
+    .selected-seats-summary,
+    .booking-summary {
+        padding: 15px;
+    }
+}
+
+
+
+
+/* Footer Bottom */
+.footer-bottom {
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 15px;
+    text-align: center;
+}
+
+.copyright p {
+    color: #B0BEC5;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .footer-content {
+        grid-template-columns: 1fr;
+        gap: 25px;
+        text-align: center;
+    }
+
+    .footer-links {
+        justify-content: center;
+        gap: 30px;
+    }
+
+    .footer-right {
+        text-align: center;
+    }
+
+    .social-icons {
+        justify-content: center;
+    }
+
+    .bwt-brand {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer {
+        padding: 30px 0 15px;
+    }
+
+    .footer-links {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .footer-left .brand-title {
+        font-size: 1.8rem;
+    }
+}
+
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .booking-panel {
+        position: static;
+        margin-top: 30px;
+    }
+
+    .event-title {
+        font-size: 2rem;
+    }
+
+    .event-meta {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+@media (max-width: 768px) {
+    .booking-progress {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .header-actions {
+        text-align: center !important;
+        margin-top: 15px;
+    }
+
+    .event-header {
+        padding: 20px;
+    }
+
+    .event-title {
+        font-size: 1.8rem;
+    }
+
+    .booking-form {
+        padding: 20px;
+    }
+
+    .ticket-type-card {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+
+    .ticket-quantity {
+        justify-content: center;
+    }
+}
+
+

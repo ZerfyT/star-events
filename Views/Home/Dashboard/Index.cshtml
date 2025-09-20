@@ -1,0 +1,416 @@
+@{
+    ViewData["Title"] = "Booking History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/booking-history.css">
+    <style>
+        .event-details {
+            margin-top: 0.5rem;
+        }
+        
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .detail-item i {
+            color: var(--primary-color);
+            width: 16px;
+        }
+        
+        .qr-code-item {
+            display: inline-block;
+            margin: 0.5rem;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--white);
+        }
+        
+        .qr-canvas {
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+        }
+        
+        .ticket-header-info {
+            background: var(--light-gray);
+            padding: 1rem;
+            border-radius: 10px;
+            border-left: 4px solid var(--primary-color);
+        }
+    </style>
+}
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-content">
+                <h1 class="page-title">Booking History</h1>
+                <div class="search-section">
+                    <div class="search-bar">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                        <input type="text" placeholder="Search your bookings..." class="search-input">
+                    </div>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Completed</button>
+                        <button class="filter-btn">Pending</button>
+                        <button class="filter-btn">Cancelled</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Today Section -->
+            <div class="date-group">
+                <div class="date-header">
+                    <h2 class="date-title">Today</h2>
+                    <span class="date-subtitle">September 18, 2025</span>
+                </div>
+
+                <div class="booking-card">
+                    <div class="booking-main">
+                        <div class="booking-time">2:30 PM</div>
+                        <div class="booking-details">
+                            <h3 class="event-name">Summer Music Festival 2025</h3>
+                            <div class="booking-meta">
+                                <span class="booking-id">Booking #BK001234</span>
+                                <span class="seat-info">Seats: A12, A13, A14</span>
+                                <span class="amount">LKR 15,000</span>
+                            </div>
+                            <div class="event-details">
+                                <div class="detail-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>September 18, 2025</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>Colombo Convention Centre</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                    <span>3 VIP Tickets</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-status">
+                            <span class="status-badge confirmed">Confirmed</span>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="action-btn primary" onclick="viewTickets('BK001234', 'Summer Music Festival 2025', ['A12', 'A13', 'A14'], 'VIP', 5000)">View Tickets</button>
+                        <button class="action-btn secondary" onclick="downloadPDF('BK001234')">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yesterday Section -->
+            <div class="date-group">
+                <div class="date-header">
+                    <h2 class="date-title">Yesterday</h2>
+                    <span class="date-subtitle">September 17, 2025</span>
+                </div>
+
+                <div class="booking-card">
+                    <div class="booking-main">
+                        <div class="booking-time">7:45 PM</div>
+                        <div class="booking-details">
+                            <h3 class="event-name">Tech Conference 2025</h3>
+                            <div class="booking-meta">
+                                <span class="booking-id">Booking #BK001230</span>
+                                <span class="seat-info">Seats: B05, B06</span>
+                                <span class="amount">LKR 8,000</span>
+                            </div>
+                            <div class="event-details">
+                                <div class="detail-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>September 17, 2025</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>BMICH, Colombo</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                    <span>2 Standard Tickets</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-status">
+                            <span class="status-badge completed">Completed</span>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="action-btn primary" onclick="viewTickets('BK001230', 'Tech Conference 2025', ['B05', 'B06'], 'Standard', 4000)">View Tickets</button>
+                        <button class="action-btn secondary" onclick="downloadPDF('BK001230')">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This Week Section -->
+            <div class="date-group">
+                <div class="date-header">
+                    <h2 class="date-title">This Week</h2>
+                    <span class="date-subtitle">September 15 - 16, 2025</span>
+                </div>
+
+                <div class="booking-card">
+                    <div class="booking-main">
+                        <div class="booking-time">6:00 PM</div>
+                        <div class="booking-details">
+                            <h3 class="event-name">Broadway Show: The Lion King</h3>
+                            <div class="booking-meta">
+                                <span class="booking-id">Booking #BK001225</span>
+                                <span class="seat-info">Seats: C10, C11</span>
+                                <span class="amount">LKR 6,000</span>
+                            </div>
+                            <div class="event-details">
+                                <div class="detail-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>September 15, 2025</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>Nelum Pokuna Theatre</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                    <span>2 Economy Tickets</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-status">
+                            <span class="status-badge cancelled">Cancelled</span>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="action-btn primary" onclick="requestRefund('BK001225')">Request Refund</button>
+                        <button class="action-btn secondary" onclick="viewDetails('BK001225')">View Details</button>
+                    </div>
+                </div>
+
+                <div class="booking-card">
+                    <div class="booking-main">
+                        <div class="booking-time">3:15 PM</div>
+                        <div class="booking-details">
+                            <h3 class="event-name">Art Gallery Opening</h3>
+                            <div class="booking-meta">
+                                <span class="booking-id">Booking #BK001220</span>
+                                <span class="seat-info">General Admission</span>
+                                <span class="amount">LKR 2,500</span>
+                            </div>
+                            <div class="event-details">
+                                <div class="detail-item">
+                                    <i class="bi bi-calendar3"></i>
+                                    <span>September 16, 2025</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span>National Art Gallery</span>
+                                </div>
+                                <div class="detail-item">
+                                    <i class="bi bi-ticket-perforated"></i>
+                                    <span>1 General Ticket</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="booking-status">
+                            <span class="status-badge completed">Completed</span>
+                        </div>
+                    </div>
+                    <div class="booking-actions">
+                        <button class="action-btn primary" onclick="viewTickets('BK001220', 'Art Gallery Opening', ['GA001'], 'General', 2500)">View Tickets</button>
+                        <button class="action-btn secondary" onclick="downloadPDF('BK001220')">Download PDF</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Load More Button -->
+            <div class="load-more-container">
+                <button class="load-more-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                    Load More History
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- View Tickets Modal -->
+    <div class="modal fade" id="viewTicketsModal" tabindex="-1" aria-labelledby="viewTicketsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewTicketsModalLabel">
+                        <i class="bi bi-ticket-perforated me-2"></i>
+                        Your Tickets
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="ticket-header-info mb-4">
+                        <h4 id="modalEventName" class="text-primary mb-2"></h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <strong>Booking ID:</strong>
+                                <p id="modalBookingId" class="text-muted"></p>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Ticket Type:</strong>
+                                <p id="modalTicketType" class="text-muted"></p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-codes-container" id="modalQrCodesContainer">
+                        <!-- QR codes will be generated here -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="downloadAllTicketsBtn">
+                        <i class="bi bi-download me-2"></i>
+                        Download All Tickets
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    <script src="
+https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js
+"></script>
+    <script>
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+
+        // Search functionality
+        document.querySelector('.search-input').addEventListener('input', function() {
+            // Add search logic here
+            console.log('Searching for:', this.value);
+        });
+
+        // View Tickets Modal Functions
+        function viewTickets(bookingId, eventName, seats, ticketType, price) {
+            // Update modal content
+            document.getElementById('modalEventName').textContent = eventName;
+            document.getElementById('modalBookingId').textContent = bookingId;
+            document.getElementById('modalTicketType').textContent = ticketType;
+            
+            // Generate QR codes for each seat
+            generateTicketQRCodes(bookingId, eventName, seats, ticketType, price);
+            
+            // Show modal
+            const modal = new bootstrap.Modal(document.getElementById('viewTicketsModal'));
+            modal.show();
+        }
+
+        function generateTicketQRCodes(bookingId, eventName, seats, ticketType, price) {
+            const container = document.getElementById('modalQrCodesContainer');
+            container.innerHTML = '';
+            
+            seats.forEach((seat, index) => {
+                const qrDiv = document.createElement('div');
+                qrDiv.className = 'qr-code-item mb-3 text-center';
+                qrDiv.innerHTML = `
+                    <div class="qr-code-wrapper d-inline-block">
+                        <canvas id="modal-qr-${index}" class="qr-canvas mb-2"></canvas>
+                        <div class="qr-info">
+                            <h6>Seat ${seat}</h6>
+                            <p class="text-muted small">${ticketType} - LKR ${price.toLocaleString()}</p>
+                            <button class="btn btn-sm btn-outline-primary" onclick="downloadTicketQR('modal-qr-${index}', '${seat}-${ticketType}')">
+                                <i class="bi bi-download"></i> Download
+                            </button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(qrDiv);
+                
+                // Generate QR code
+                const canvas = document.getElementById(`modal-qr-${index}`);
+                const ticketData = `BOOKING:${bookingId}|EVENT:${eventName}|SEAT:${seat}|TYPE:${ticketType}|PRICE:${price}`;
+                
+                // Simple QR code generation (you can replace with actual QR library)
+                generateSimpleQR(canvas, ticketData);
+            });
+        }
+
+        function generateSimpleQR(canvas, data) {
+            QRCode.toCanvas(canvas, data);
+            // Simple placeholder QR code generation
+            // const ctx = canvas.getContext('2d');
+            // canvas.width = 150;
+            // canvas.height = 150;
+            
+            // // Create a simple pattern as placeholder
+            // ctx.fillStyle = '#000';
+            // ctx.fillRect(0, 0, 150, 150);
+            
+            // ctx.fillStyle = '#fff';
+            // for (let i = 0; i < 150; i += 10) {
+            //     for (let j = 0; j < 150; j += 10) {
+            //         if ((i + j) % 20 === 0) {
+            //             ctx.fillRect(i, j, 8, 8);
+            //         }
+            //     }
+            // }
+            
+            // // Add text
+            // ctx.fillStyle = '#000';
+            // ctx.font = '8px Arial';
+            // ctx.fillText('QR Code', 50, 75);
+        }
+
+        function downloadTicketQR(canvasId, filename) {
+            const canvas = document.getElementById(canvasId);
+            const link = document.createElement('a');
+            link.download = `${filename}-Ticket.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        }
+
+        function downloadPDF(bookingId) {
+            // Simulate PDF download
+            alert(`Downloading PDF for booking ${bookingId}`);
+        }
+
+        function requestRefund(bookingId) {
+            // Simulate refund request
+            alert(`Refund requested for booking ${bookingId}`);
+        }
+
+        function viewDetails(bookingId) {
+            // Simulate viewing details
+            alert(`Viewing details for booking ${bookingId}`);
+        }
+
+        // Download all tickets
+        document.getElementById('downloadAllTicketsBtn').addEventListener('click', function() {
+            const canvases = document.querySelectorAll('#modalQrCodesContainer .qr-canvas');
+            canvases.forEach((canvas, index) => {
+                setTimeout(() => {
+                    const link = document.createElement('a');
+                    link.download = `Ticket-${index + 1}.png`;
+                    link.href = canvas.toDataURL();
+                    link.click();
+                }, index * 500);
+            });
+        });
+    </script>
+}

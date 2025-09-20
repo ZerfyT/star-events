@@ -5,11 +5,15 @@
     const navLinks = document.querySelectorAll('.nav-pills .nav-link');
     navLinks.forEach(link => {
         link.addEventListener('click', function (e) {
-            e.preventDefault();
-            navLinks.forEach(nav => nav.classList.remove('active'));
-            this.classList.add('active');
+            // Only prevent default for data-page links (old system)
             const page = this.getAttribute('data-page');
-            console.log('Navigating to:', page);
+            if (page) {
+                e.preventDefault();
+                navLinks.forEach(nav => nav.classList.remove('active'));
+                this.classList.add('active');
+                console.log('Navigating to:', page);
+            }
+            // For href links, let them navigate normally
         });
     });
 
@@ -67,6 +71,8 @@
     const clearSearch = document.getElementById('clearSearch');
     const sortSelect = document.getElementById('sortSelect');
     const statusFilter = document.getElementById('statusFilter');
+    const locationFilter = document.getElementById('locationFilter');
+    const categoryFilter = document.getElementById('categoryFilter');
     const resultsCount = document.getElementById('resultsCount');
     const resetFilters = document.getElementById('resetFilters');
     const noResults = document.getElementById('noResults');
@@ -87,10 +93,13 @@
             element: parentCol,
             name: card.querySelector('.event-name')?.textContent?.toLowerCase() || '',
             type: card.querySelector('.event-type')?.textContent?.toLowerCase() || '',
-            organizer: card.querySelector('.event-organizer')?.textContent?.toLowerCase() || '',
+            organizer: card.querySelector('.event-organizer')?.textContent?.replace(/^\s*[^\s]+\s*/, '').toLowerCase() || '', // Remove icon and get text
             status: statusText.toLowerCase(), // Store lowercase for comparison
             statusOriginal: statusText, // Store original for debugging
             date: card.querySelector('.event-date span')?.textContent || '',
+            venue: card.querySelector('.event-venue span')?.textContent?.toLowerCase() || '',
+            locationId: card.getAttribute('data-location-id') || '',
+            categoryId: card.getAttribute('data-category-id') || '',
             originalOrder: Array.from(parentCol?.parentNode?.children || []).indexOf(parentCol)
         };
     });
@@ -98,6 +107,8 @@
     let currentSearchTerm = '';
     let currentSortValue = 'default';
     let currentStatusFilter = 'all';
+    let currentLocationFilter = 'all';
+    let currentCategoryFilter = 'all';
 
     console.log('All events with status:', allEvents.map(e => ({ name: e.name, status: e.status, statusOriginal: e.statusOriginal })));
 
@@ -119,7 +130,21 @@
                 currentSearchTerm = this.value.toLowerCase().trim();
                 updateClearButton();
                 applyFiltersAndDisplay();
+                updateResultsCount();
             }, 300);
+        });
+
+        // Add search suggestions on focus
+        searchInput.addEventListener('focus', function() {
+            if (!this.value) {
+                this.placeholder = 'Search by event name, type, organizer, or venue...';
+            }
+        });
+
+        searchInput.addEventListener('blur', function() {
+            if (!this.value) {
+                this.placeholder = 'Search events by name, type, or organizer...';
+            }
         });
     }
 
@@ -152,15 +177,37 @@
         });
     }
 
+    // Location filter
+    if (locationFilter) {
+        locationFilter.addEventListener('change', function() {
+            currentLocationFilter = this.value;
+            console.log('Location filter changed to:', currentLocationFilter);
+            applyFiltersAndDisplay();
+        });
+    }
+
+    // Category filter
+    if (categoryFilter) {
+        categoryFilter.addEventListener('change', function() {
+            currentCategoryFilter = this.value;
+            console.log('Category filter changed to:', currentCategoryFilter);
+            applyFiltersAndDisplay();
+        });
+    }
+
     // Reset filters
     if (resetFilters) {
         resetFilters.addEventListener('click', function() {
             searchInput.value = '';
             sortSelect.value = 'default';
             statusFilter.value = 'all';
+            locationFilter.value = 'all';
+            categoryFilter.value = 'all';
             currentSearchTerm = '';
             currentSortValue = 'default';
             currentStatusFilter = 'all';
+            currentLocationFilter = 'all';
+            currentCategoryFilter = 'all';
             isShowingAll = false;
             updateClearButton();
             applyFiltersAndDisplay();
@@ -184,6 +231,20 @@
         }
     }
 
+    function updateResultsCount() {
+        const resultsCount = document.getElementById('resultsCount');
+        if (resultsCount) {
+            const visibleEvents = document.querySelectorAll('.event-card:not([style*="display: none"])').length;
+            const totalEvents = allEvents.length;
+            
+            if (currentSearchTerm || currentStatusFilter !== 'all') {
+                resultsCount.textContent = `Showing ${visibleEvents} of ${totalEvents} events`;
+            } else {
+                resultsCount.textContent = `Showing all ${totalEvents} events`;
+            }
+        }
+    }
+
     function updateViewAllButton() {
         if (!viewAllBtn) return;
 
@@ -204,15 +265,18 @@
         console.log('Applying filters:', {
             search: currentSearchTerm,
             status: currentStatusFilter,
+            location: currentLocationFilter,
+            category: currentCategoryFilter,
             sort: currentSortValue
         });
 
-        // Step 1: Filter events based on search and status
+        // Step 1: Filter events based on search, status, location, and category
         let filteredEvents = allEvents.filter(event => {
             const matchesSearch = !currentSearchTerm ||
                 event.name.includes(currentSearchTerm) ||
                 event.type.includes(currentSearchTerm) ||
-                event.organizer.includes(currentSearchTerm);
+                event.organizer.includes(currentSearchTerm) ||
+                event.venue.includes(currentSearchTerm);
 
             // FIXED STATUS MATCHING - case insensitive comparison
             let matchesStatus = currentStatusFilter === 'all';
@@ -220,9 +284,21 @@
                 matchesStatus = event.status.toLowerCase() === currentStatusFilter.toLowerCase();
             }
 
-            console.log(`Event: ${event.name}, Status: "${event.status}", Filter: "${currentStatusFilter}", Match: ${matchesStatus}`);
+            // Location filter
+            let matchesLocation = currentLocationFilter === 'all';
+            if (!matchesLocation) {
+                matchesLocation = event.locationId === currentLocationFilter;
+            }
 
-            return matchesSearch && matchesStatus;
+            // Category filter
+            let matchesCategory = currentCategoryFilter === 'all';
+            if (!matchesCategory) {
+                matchesCategory = event.categoryId === currentCategoryFilter;
+            }
+
+            console.log(`Event: ${event.name}, Status: "${event.status}", Location: "${event.locationId}", Category: "${event.categoryId}", Match: ${matchesSearch && matchesStatus && matchesLocation && matchesCategory}`);
+
+            return matchesSearch && matchesStatus && matchesLocation && matchesCategory;
         });
 
         console.log(`Filtered ${filteredEvents.length} events from ${allEvents.length} total`);
@@ -254,7 +330,7 @@
 
         // Step 3: Apply View All logic (only if no active search/filter)
         let eventsToShow = filteredEvents;
-        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all';
+        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all';
 
         if (!hasActiveFilters && !isShowingAll) {
             // Show only first 6 events when no filters and not showing all
@@ -308,7 +384,7 @@
         const totalEvents = allEvents.length;
         let message = '';
 
-        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentSortValue !== 'default';
+        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all' || currentSortValue !== 'default';
 
         if (hasActiveFilters) {
             message = `Showing ${showingCount} of ${totalEvents} events`;
@@ -545,15 +621,15 @@ document.addEventListener('DOMContentLoaded', function() {
             // Handle different menu items
             switch(text) {
                 case 'My Profile':
-                    // Redirect to profile page or open modal
+                    // Redirect to profile page
                     console.log('Navigate to profile');
-                    // window.location.href = '/Account/Profile';
+                    window.location.href = '/Home/Profile';
                     break;
 
                 case 'My Tickets':
-                    // Redirect to tickets page
+                    // Redirect to dashboard page
                     console.log('Navigate to tickets');
-                    // window.location.href = '/Tickets/MyTickets';
+                    window.location.href = '/Home/Dashboard';
                     break;
 
                 case 'My Events':
@@ -563,9 +639,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     break;
 
                 case 'Settings':
-                    // Redirect to settings page
+                    // Redirect to profile page (settings tab)
                     console.log('Navigate to settings');
-                    // window.location.href = '/Account/Settings';
+                    window.location.href = '/Home/Profile';
                     break;
 
                 default:

@@ -50,7 +50,7 @@
             <div class="filter-wrapper">
                 <label for="statusFilter" class="filter-label">
                     <i class="bi bi-filter"></i>
-                    Filter:
+                    Status:
                 </label>
                 <select id="statusFilter" class="status-filter">
                     <option value="all">All Events</option>
@@ -58,6 +58,40 @@
                     <option value="Ongoing">Ongoing</option>
                     <option value="Completed">Completed</option>
                     <option value="Cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="filter-wrapper">
+                <label for="locationFilter" class="filter-label">
+                    <i class="bi bi-geo-alt"></i>
+                    Location:
+                </label>
+                <select id="locationFilter" class="location-filter">
+                    <option value="all">All Locations</option>
+                    @if (ViewBag.Locations != null)
+                    {
+                        @foreach (var location in ViewBag.Locations)
+                        {
+                            <option value="@location.LocationID">@location.Name</option>
+                        }
+                    }
+                </select>
+            </div>
+
+            <div class="filter-wrapper">
+                <label for="categoryFilter" class="filter-label">
+                    <i class="bi bi-tags"></i>
+                    Category:
+                </label>
+                <select id="categoryFilter" class="category-filter">
+                    <option value="all">All Categories</option>
+                    @if (ViewBag.Categories != null)
+                    {
+                        @foreach (var category in ViewBag.Categories)
+                        {
+                            <option value="@category.CategoryID">@category.Name</option>
+                        }
+                    }
                 </select>
             </div>
         </div>
@@ -102,7 +136,7 @@
                         @foreach (var eventItem in Model)
                         {
                             <div class="col-lg-4 col-md-6 col-sm-12">
-                            <div class="event-card" data-event-id="@eventItem.EventID">
+                            <div class="event-card" data-event-id="@eventItem.EventID" data-location-id="@eventItem.LocationID" data-category-id="@eventItem.CategoryID">
                                     <!-- Alpine F1 Style Delete Button -->
                                 <button type="button" class="alpine-delete-btn" onclick="deleteEvent('@eventItem.EventID')" title="Delete Event">
                                         <i class='bx bx-trash'></i>
@@ -150,13 +184,13 @@
                                         <!-- Action Buttons -->
                                         <div class="event-actions">
                                             <div class="event-actions-left">
-                                            <a href="@Url.Action("Booking", "Events", new { id = eventItem.EventID })" class="btn-book-now">
+                                            <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })" class="btn-book-now">
                                                     <span>Book Now</span>
                                                     <i class='bx bx-ticket'></i>
                                                 </a>
                                             </div>
                                             <div class="event-actions-right">
-                                                <a href="#" class="btn-view-details">
+                                                <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })" class="btn-view-details">
                                                     <i class='bx bx-info-circle'></i>
                                                 </a>
                                             </div>

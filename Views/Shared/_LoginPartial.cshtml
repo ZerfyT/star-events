@@ -31,21 +31,25 @@
                         <div class="user-details">
                             <span class="user-name">@fullName</span>
                             <span class="user-email">@User.Identity?.Name</span>
+                            <div class="loyalty-points-display">
+                                <i class='bx bx-star'></i>
+                                <span class="loyalty-points-text">@user.LoyaltyPoints points</span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div class="dropdown-divider"></div>
                 <div class="dropdown-items">
-                    <a href="#" class="dropdown-item">
+                    <a href="@Url.Action("Profile", "Home")" class="dropdown-item">
                         <i class='bx bx-user'></i>
                         <span>My Profile</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="@Url.Action("Dashboard", "Home")" class="dropdown-item">
                         <i class='bx bx-receipt'></i>
                         <span>My Tickets</span>
                     </a>
-                    <a href="#" class="dropdown-item">
+                    <a href="@Url.Action("Profile", "Home")" class="dropdown-item">
                         <i class='bx bx-cog'></i>
                         <span>Settings</span>
                     </a>

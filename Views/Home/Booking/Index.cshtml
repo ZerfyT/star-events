@@ -1,0 +1,202 @@
+﻿@model star_events.Models.Event
+
+@{
+    ViewData["Title"] = "Book - " + Model.Title;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/booking.css">
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-7">
+            <div class="event-details-card">
+                <div class="event-header">
+                    <div class="event-category">
+                        <i class="bi bi-tag-fill"></i>
+                        @if (Model.Category != null)
+                        {
+                            <span>@Model.Category.Name</span>
+                        }
+                    </div>
+                    <h2 class="event-title">@Model.Title</h2>
+                    <div class="event-meta">
+                        <div class="meta-item">
+                            <i class="bi bi-calendar3"></i>
+                            <span>@Model.StartDateTime.ToString("dddd, MMMM dd, yyyy")</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-clock"></i>
+                            <span>@Model.StartDateTime.ToString("HH:mm") - @Model.EndDateTime.ToString("HH:mm")</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="bi bi-geo-alt-fill"></i>
+                            <span>
+                                @if (Model.Location != null)
+                                {
+                                    @Model.Location.Name
+                                    <text>, </text>
+                                    @Model.Location.City
+                                }
+                                else
+                                {
+                                    <text>Location TBD</text>
+                                }
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                @if (Model.AllImagePaths.Any())
+                {
+                    <div class="event-poster">
+                        <img src="@Model.AllImagePaths[0]" alt="@Model.Title" class="img-fluid">
+                    </div>
+                }
+
+                <div class="event-description">
+                    <h4>About This Event</h4>
+                    <p>@Model.Description</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-5">
+            <div class="booking-panel">
+                <div class="panel-header">
+                    <h3>
+                        <i class="bi bi-ticket-perforated"></i>
+                        Select Your Seats
+                    </h3>
+                </div>
+
+                <!-- FIXED: Changed form action to Payment -->
+                <form id="bookingForm" action="@Url.Action("Payment", "Home")" method="get" class="booking-form">
+                    <input type="hidden" name="eventId" value="@Model.EventID" />
+                    <input type="hidden" name="selectedSeats" id="selectedSeatsInput" />
+                    <input type="hidden" name="totalAmount" id="totalAmountInput" />
+
+                    <div class="seat-selection-container">
+                        <div class="screen-indicator">
+                            <div class="screen-text">SCREEN</div>
+                            <div class="screen-curve"></div>
+                        </div>
+
+                        <div class="seat-map" id="seatMap">
+                            <!-- Row A -->
+                            <div class="seat-row">
+                                <span class="row-label">A</span>
+                                <div class="seats">
+                                    <div class="seat" data-seat="A1" data-price="5000">A1</div>
+                                    <div class="seat" data-seat="A2" data-price="5000">A2</div>
+                                    <div class="seat" data-seat="A3" data-price="5000">A3</div>
+                                    <div class="seat" data-seat="A4" data-price="5000">A4</div>
+                                    <div class="seat" data-seat="A5" data-price="5000">A5</div>
+                                    <div class="seat" data-seat="A6" data-price="5000">A6</div>
+                                    <div class="seat" data-seat="A7" data-price="5000">A7</div>
+                                    <div class="seat" data-seat="A8" data-price="5000">A8</div>
+                                </div>
+                                <span class="row-label">A</span>
+                            </div>
+
+                            <!-- Row B -->
+                            <div class="seat-row">
+                                <span class="row-label">B</span>
+                                <div class="seats">
+                                    <div class="seat" data-seat="B1" data-price="5000">B1</div>
+                                    <div class="seat" data-seat="B2" data-price="5000">B2</div>
+                                    <div class="seat" data-seat="B3" data-price="5000">B3</div>
+                                    <div class="seat" data-seat="B4" data-price="5000">B4</div>
+                                    <div class="seat" data-seat="B5" data-price="5000">B5</div>
+                                    <div class="seat" data-seat="B6" data-price="5000">B6</div>
+                                    <div class="seat" data-seat="B7" data-price="5000">B7</div>
+                                    <div class="seat" data-seat="B8" data-price="5000">B8</div>
+                                </div>
+                                <span class="row-label">B</span>
+                            </div>
+
+                            <!-- Row C -->
+                            <div class="seat-row">
+                                <span class="row-label">C</span>
+                                <div class="seats">
+                                    <div class="seat" data-seat="C1" data-price="4000">C1</div>
+                                    <div class="seat" data-seat="C2" data-price="4000">C2</div>
+                                    <div class="seat" data-seat="C3" data-price="4000">C3</div>
+                                    <div class="seat" data-seat="C4" data-price="4000">C4</div>
+                                    <div class="seat" data-seat="C5" data-price="4000">C5</div>
+                                    <div class="seat" data-seat="C6" data-price="4000">C6</div>
+                                    <div class="seat" data-seat="C7" data-price="4000">C7</div>
+                                    <div class="seat" data-seat="C8" data-price="4000">C8</div>
+                                </div>
+                                <span class="row-label">C</span>
+                            </div>
+
+                            <!-- Row D -->
+                            <div class="seat-row">
+                                <span class="row-label">D</span>
+                                <div class="seats">
+                                    <div class="seat" data-seat="D1" data-price="3000">D1</div>
+                                    <div class="seat" data-seat="D2" data-price="3000">D2</div>
+                                    <div class="seat" data-seat="D3" data-price="3000">D3</div>
+                                    <div class="seat" data-seat="D4" data-price="3000">D4</div>
+                                    <div class="seat" data-seat="D5" data-price="3000">D5</div>
+                                    <div class="seat" data-seat="D6" data-price="3000">D6</div>
+                                    <div class="seat" data-seat="D7" data-price="3000">D7</div>
+                                    <div class="seat" data-seat="D8" data-price="3000">D8</div>
+                                </div>
+                                <span class="row-label">D</span>
+                            </div>
+                        </div>
+
+                        <div class="seat-legend">
+                            <div class="legend-item">
+                                <div class="seat-sample available"></div>
+                                <span>Available</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="seat-sample selected"></div>
+                                <span>Selected</span>
+                            </div>
+                            <div class="legend-item">
+                                <div class="seat-sample occupied"></div>
+                                <span>Occupied</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="selected-seats-summary" id="selectedSeatsContainer" style="display: none;">
+                        <h4>Selected Seats</h4>
+                        <div id="selectedSeatsList"></div>
+                    </div>
+
+                    <div class="booking-summary" id="bookingSummary" style="display: none;">
+                        <h4>Booking Summary</h4>
+                        <div class="summary-items" id="summaryItems"></div>
+                        <div class="summary-total">
+                            <div class="total-row">
+                                <span>Total Amount:</span>
+                                <span class="total-price" id="totalPrice">LKR 0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="booking-actions">
+                        <button type="submit" class="btn btn-book" id="proceedBtn" disabled>
+                            <i class="bi bi-credit-card"></i>
+                            Proceed to Payment
+                        </button>
+                        <div class="secure-notice">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Your booking is secured with SSL encryption</span>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include the booking JavaScript -->
+<script src="~/js/booking.js"></script>

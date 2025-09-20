@@ -512,7 +512,9 @@
     }
 
 .sort-select,
-.status-filter {
+.status-filter,
+.location-filter,
+.category-filter {
     background: transparent;
     border: none;
     font-family: var(--body-font);
@@ -2061,6 +2063,28 @@
     flex-direction: column;
     gap: 2px;
     overflow: hidden;
+}
+
+.loyalty-points-display {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: rgba(253, 75, 199, 0.1);
+    border-radius: 12px;
+    border: 1px solid rgba(253, 75, 199, 0.2);
+}
+
+.loyalty-points-display i {
+    color: var(--Alpine_Pink);
+    font-size: 14px;
+}
+
+.loyalty-points-text {
+    color: var(--Alpine_Pink);
+    font-size: 12px;
+    font-weight: 600;
 }
 
 .user-name {

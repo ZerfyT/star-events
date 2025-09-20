@@ -12,60 +12,72 @@
     <!-- CSS Reset / Optional Frameworks -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
     <!--Box-icons-->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css"/>
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="~/css/home.css">
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+
+    @await RenderSectionAsync("Styles", false)
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.10.4/sweetalert2.all.min.js"></script>
 </head>
 <body>
-    <!-- Anti-forgery token for AJAX requests -->
-    @Html.AntiForgeryToken()
 
-    <!-- Header -->
-    <header class="site-header" id="site-header">
-        <div class="container">
-            <div class="header-content">
-                <!-- Brand Section -->
-                <div class="header-inner">
-                    <i class='bx bx-movie-play'></i>
-                    <span class="brand-name">TIXWAVE</span>
-                </div>
+<!-- Anti-forgery token for AJAX requests -->
+@Html.AntiForgeryToken()
 
-                <!-- Navigation Pills - Thinner -->
-                <nav class="nav-pills d-none d-md-flex">
-                    <a class="nav-link active" href="#" data-page="home">Home</a>
-                    <a class="nav-link" href="#" data-page="events">Events</a>
-                    <a class="nav-link" href="#" data-page="trending">Trending Now</a>
-                    <a class="nav-link" href="#" data-page="bookings">My Bookings</a>
-                </nav>
+<!-- Header -->
+<header class="site-header" id="site-header">
+    <div class="container">
+        <div class="header-content">
+            <!-- Brand Section -->
+            <div class="header-inner">
+                <i class="bx bx-movie-play"></i>
+                <span class="brand-name">TIXWAVE</span>
+            </div>
 
-                <!-- Right Side - Add Button + Actions -->
-                <div class="header-right">
+            <!-- Navigation Pills - Thinner -->
+            <nav class="nav-pills d-none d-md-flex">
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">Home</a>
+                <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Events</a>
+                <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Trending Now</a>
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")" href="@Url.Action("Dashboard", "Home")">My Bookings</a>
+            </nav>
 
-                    <div class="actions">
-                        @await Html.PartialAsync("_LoginPartial")
-                    </div>
+            <!-- Right Side - Add Button + Actions -->
+            <div class="header-right">
+
+                <div class="actions">
+                    @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
         </div>
-    </header>
+    </div>
+</header>
 
-    <!-- Main Content -->
-    <main>
-        @RenderBody()
-    </main>
+<!-- Main Content -->
+<main>
+    @RenderBody()
+</main>
 
-    <!-- Footer -->
+
+<!-- Footer -->
+@{
+    var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
+    var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
+    var hideFooter = (currentController == "Home" && (currentAction == "SelectSeats" || currentAction == "Payment"));
+}
+
+@if (!hideFooter)
+{
     <footer class="main-footer">
         <div class="container-fluid px-4">
             <div class="footer-content">
@@ -103,31 +115,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- App Download Section -->
-            @* <div class="app-download-section"> *@
-            @*     <div class="download-content"> *@
-            @*         <h6>Get the TixWave App</h6> *@
-            @*         <p>Book tickets on the go with our mobile app</p> *@
-            @*         <div class="download-buttons"> *@
-            @*             <a href="#" class="download-btn"> *@
-            @*                 <img src="~/images/d1e49ca07e951432c376d21f1d9c5d50.png" alt="Download from Microsoft Store" class="store-badge"> *@
-            @*                 <div class="download-text"> *@
-            @*                     <span class="download-label">Download on the</span> *@
-            @*                     <span class="store-name">Microsoft Store</span> *@
-            @*                 </div> *@
-            @*             </a> *@
-            @*             <a href="#" class="download-btn"> *@
-            @*                 <img src="~/images/pngwing.com.png" alt="Get it on Google Play" class="store-badge"> *@
-            @*                 <div class="download-text"> *@
-            @*                     <span class="download-label">Get it on</span> *@
-            @*                     <span class="store-name">Google Play</span> *@
-            @*                 </div> *@
-            @*             </a> *@
-            @*         </div> *@
-            @*     </div> *@
-            @* </div> *@
-
+        
             <!-- Bottom Section -->
             <div class="footer-bottom align-items-center">
                 <div class="footer-copyright">
@@ -150,14 +138,17 @@
             </div>
         </div>
     </footer>
+}
 
-    <!-- JS Libraries -->
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    
-    @await RenderSectionAsync("Scripts", required: false)
+
+
+<!-- JS Libraries -->
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

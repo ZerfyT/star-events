@@ -1,0 +1,535 @@
+﻿:root {
+    --Alpine_Blue: #005AFF;
+    --Alpine_Pink: #FD4BC7;
+    --Alpine_Dark_Blue: #0B1426;
+    --Alpine_Navy: #001A40;
+    --White: #FFFFFF;
+    --Black: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--White);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.payment-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.payment-card {
+    background: var(--White);
+    border-radius: 20px;
+    box-shadow: 0 20px 40px rgba(11, 20, 38, 0.1);
+    border: 1px solid rgba(0, 90, 255, 0.1);
+    overflow: hidden;
+    position: relative;
+}
+
+    .payment-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--Alpine_Blue), var(--Alpine_Pink));
+    }
+
+.header {
+    text-align: center;
+    padding: 40px 30px 20px;
+    background: linear-gradient(135deg, rgba(0, 90, 255, 0.05), rgba(253, 75, 199, 0.05));
+}
+
+    .header h1 {
+        color: var(--Alpine_Dark_Blue);
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
+
+    .header p {
+        color: var(--Alpine_Navy);
+        font-size: 16px;
+        opacity: 0.8;
+    }
+
+.payment-form {
+    padding: 30px;
+}
+
+.form-group {
+    margin-bottom: 24px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--Alpine_Dark_Blue);
+    font-weight: 600;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 16px 20px;
+    border: 2px solid rgba(0, 90, 255, 0.1);
+    border-radius: 12px;
+    font-size: 16px;
+    color: var(--Alpine_Dark_Blue);
+    background-color: var(--White);
+    transition: all 0.3s ease;
+}
+
+    input:focus {
+        outline: none;
+        border-color: var(--Alpine_Blue);
+        box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
+        transform: translateY(-2px);
+    }
+
+    input::placeholder {
+        color: rgba(11, 20, 38, 0.4);
+    }
+
+    input:valid {
+        border-color: rgba(0, 90, 255, 0.3);
+    }
+
+.amount-section {
+    margin: 30px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(0, 90, 255, 0.05), rgba(253, 75, 199, 0.05));
+    border-radius: 12px;
+    border: 1px solid rgba(0, 90, 255, 0.1);
+}
+
+.amount-display {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.amount-label {
+    color: var(--Alpine_Dark_Blue);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.amount-value {
+    color: var(--Alpine_Blue);
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.pay-button {
+    width: 100%;
+    padding: 18px 24px;
+    background: linear-gradient(135deg, var(--Alpine_Blue), var(--Alpine_Pink));
+    color: var(--White);
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+    .pay-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(0, 90, 255, 0.3);
+    }
+
+    .pay-button:active {
+        transform: translateY(0);
+    }
+
+.security-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--Alpine_Navy);
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+    .security-info svg {
+        color: var(--Alpine_Blue);
+    }
+
+/* Card number formatting */
+#cardNumber {
+    letter-spacing: 2px;
+    font-family: 'Courier New', monospace;
+}
+
+/* CVV input styling */
+#cvv {
+    text-align: center;
+    letter-spacing: 4px;
+    font-family: 'Courier New', monospace;
+}
+
+/* Expiry date styling */
+#expiryDate {
+    text-align: center;
+    font-family: 'Courier New', monospace;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .payment-container {
+        padding: 0 10px;
+    }
+
+    .header {
+        padding: 30px 20px 15px;
+    }
+
+        .header h1 {
+            font-size: 24px;
+        }
+
+    .payment-form {
+        padding: 20px;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+
+        .form-row .form-group:first-child {
+            margin-bottom: 24px;
+        }
+
+    .amount-section {
+        margin: 20px 0;
+    }
+
+    .amount-value {
+        font-size: 20px;
+    }
+}
+
+/* Loading animation for button */
+.pay-button.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+    .pay-button.loading::after {
+        content: '';
+        width: 20px;
+        height: 20px;
+        border: 2px solid transparent;
+        border-top: 2px solid var(--White);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-left: 10px;
+    }
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+/* Focus states for accessibility */
+input:focus,
+button:focus {
+    outline: 2px solid var(--Alpine_Blue);
+    outline-offset: 2px;
+}
+
+/* Error states */
+input.error {
+    border-color: #ff4444;
+    background-color: rgba(255, 68, 68, 0.05);
+}
+
+    input.error:focus {
+        border-color: #ff4444;
+        box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+    }
+
+/* Promo Code Section */
+.promo-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(0, 90, 255, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(0, 90, 255, 0.1);
+}
+
+.promo-input-group {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.promo-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid rgba(0, 90, 255, 0.2);
+    border-radius: 10px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: var(--White);
+}
+
+.promo-input:focus {
+    outline: none;
+    border-color: var(--Alpine_Blue);
+    box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
+}
+
+.apply-promo-btn {
+    padding: 12px 20px;
+    background: linear-gradient(135deg, var(--Alpine_Blue), var(--Alpine_Pink));
+    color: var(--White);
+    border: none;
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.apply-promo-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 90, 255, 0.3);
+}
+
+.apply-promo-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.promo-message {
+    font-size: 14px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 10px;
+    display: none;
+}
+
+.promo-message.success {
+    background: rgba(76, 175, 80, 0.1);
+    color: #4CAF50;
+    border: 1px solid rgba(76, 175, 80, 0.2);
+}
+
+.promo-message.error {
+    background: rgba(244, 67, 54, 0.1);
+    color: #F44336;
+    border: 1px solid rgba(244, 67, 54, 0.2);
+}
+
+/* Loyalty Points Section */
+.loyalty-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: rgba(253, 75, 199, 0.05);
+    border-radius: 15px;
+    border: 1px solid rgba(253, 75, 199, 0.1);
+}
+
+.loyalty-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.loyalty-balance {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    background: rgba(253, 75, 199, 0.1);
+    border-radius: 10px;
+}
+
+.loyalty-label {
+    font-weight: 600;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.loyalty-points {
+    font-weight: 700;
+    color: var(--Alpine_Pink);
+    font-size: 18px;
+}
+
+.loyalty-usage {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.loyalty-checkbox {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+}
+
+.loyalty-checkbox input[type="checkbox"] {
+    display: none;
+}
+
+.checkmark {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--Alpine_Blue);
+    border-radius: 4px;
+    margin-right: 10px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.loyalty-checkbox input[type="checkbox"]:checked + .checkmark {
+    background: var(--Alpine_Blue);
+}
+
+.loyalty-checkbox input[type="checkbox"]:checked + .checkmark::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 6px;
+    height: 10px;
+    border: solid var(--White);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.loyalty-text {
+    font-weight: 500;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.loyalty-input {
+    flex: 1;
+    max-width: 150px;
+    padding: 8px 12px;
+    border: 2px solid rgba(253, 75, 199, 0.2);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: var(--White);
+}
+
+.loyalty-input:focus {
+    outline: none;
+    border-color: var(--Alpine_Pink);
+    box-shadow: 0 0 0 3px rgba(253, 75, 199, 0.1);
+}
+
+.loyalty-input:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+/* Amount Breakdown */
+.amount-breakdown {
+    background: rgba(0, 90, 255, 0.05);
+    border-radius: 15px;
+    padding: 20px;
+    border: 1px solid rgba(0, 90, 255, 0.1);
+}
+
+.amount-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.amount-row:last-child {
+    margin-bottom: 0;
+}
+
+.amount-label {
+    font-weight: 500;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.amount-value {
+    font-weight: 600;
+    color: var(--Alpine_Dark_Blue);
+}
+
+.amount-value.discount {
+    color: var(--Alpine_Pink);
+}
+
+.amount-row.total {
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.amount-row.total .amount-label {
+    color: var(--Alpine_Dark_Blue);
+}
+
+.amount-row.total .amount-value {
+    color: var(--Alpine_Blue);
+}
+
+.amount-divider {
+    height: 1px;
+    background: rgba(0, 90, 255, 0.2);
+    margin: 15px 0;
+}
+
+/* Responsive Design Updates */
+@media (max-width: 768px) {
+    .promo-input-group {
+        flex-direction: column;
+    }
+
+    .apply-promo-btn {
+        align-self: stretch;
+    }
+
+    .loyalty-usage {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .loyalty-input {
+        max-width: none;
+    }
+}
