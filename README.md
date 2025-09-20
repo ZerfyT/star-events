@@ -8,12 +8,25 @@ The application is built using repository pattern to ensuring separation of conc
 
 ### For Customers
 
-- User Authentication: Secure registration and login.
-- Profile Management: View and update personal details and see booking history.
-- Event Discovery: Browse, search, and filter events by category, date, or location.
-- Secure Payments: Integrated with Stripe for reliable payment processing.
-- E-Ticketing: Receive unique, QR-coded e-tickets upon successful purchase.
-- Promotions: Apply discount codes for special offers.
+- **User Authentication**: Secure registration and login with role-based access control.
+- **Enhanced Profile Management**: View and update personal details, contact information, and address with real-time validation.
+- **Event Discovery**: Browse, search, and filter events by category, date, or location with advanced filtering options.
+- **Loyalty Points System**: Earn loyalty points with every purchase and redeem them for discounts on future bookings.
+- **Enhanced Payment Processing**: 
+  - Integrated with Stripe for secure payment processing
+  - Support for multiple payment methods
+  - Real-time payment status tracking
+  - Payment history and transaction details
+- **Promotional System**: 
+  - Apply discount codes for special offers
+  - Support for both percentage and fixed amount discounts
+  - Real-time promo code validation
+- **E-Ticketing**: Receive unique, QR-coded e-tickets upon successful purchase with booking confirmation.
+- **Booking Management**: 
+  - View complete booking history
+  - Track booking status and payment details
+  - Access to detailed transaction reports
+- **Customer Dashboard**: Personalized dashboard with booking overview, loyalty points, and quick access to features.
 
 ### For Event Organizers
 
@@ -23,31 +36,63 @@ The application is built using repository pattern to ensuring separation of conc
 
 ### For Administrators
 
-- User Management: Full CRUD operations for all users and their roles (Admin, Organizer, Customer).
-- System-wide Management: Manage core entities like Venues and Categories.
-- Promotions & Discounts: Create and manage promotional codes.
-- Comprehensive Reporting: Generate system-wide reports on sales, user activity, and events.
+- **Advanced User Management**: 
+  - Full CRUD operations for all users and their roles (Admin, Organizer, Customer)
+  - User role assignment and management
+  - User profile editing and account management
+  - Automated password generation and email notifications
+  - User activity tracking and account status management
+- **System-wide Management**: 
+  - Manage core entities like Venues and Categories
+  - Event approval and management
+  - System configuration and settings
+- **Enhanced Promotions & Discounts**: 
+  - Create and manage promotional codes with flexible discount types
+  - Set promotion validity periods and usage limits
+  - Track promotion usage and effectiveness
+  - Support for both percentage and fixed amount discounts
+- **Comprehensive Reporting System**: 
+  - **Sales Reports**: Detailed revenue and transaction reports with date filtering
+  - **User Activity Reports**: User registration, login, and engagement analytics
+  - **Event Performance Reports**: Event popularity, ticket sales, and revenue analysis
+  - **Payment Analytics**: Payment method usage, success rates, and transaction trends
+  - **Export Functionality**: Export reports in CSV and PDF formats
+- **Payment Management**: 
+  - Monitor all payment transactions across the system
+  - Payment status management and updates
+  - Transaction history and detailed payment analytics
+  - Payment method analysis and reporting
+- **Booking Oversight**: 
+  - View all bookings across the platform
+  - Booking status management
+  - Customer booking history and patterns
+  - Revenue tracking per booking
 
 ## 💻 Technology Stack
 
-- Backend: C#, ASP.NET Core 8 MVC, Entity Framework Core 8
-- Database: MySQL Server
-- Authentication: ASP.NET Core Identity (Users, Roles, Cookie-based auth)
-- Frontend: Razor Views, HTML5, CSS3, JavaScript, Bootstrap 5
-- Payment Gateway: Stripe
-- QR Code Generation: QRCoder Library
-- Architecture: Layered Architecture, Repository Pattern, Dependency Injection
+- **Backend**: C#, ASP.NET Core 8 MVC, Entity Framework Core 8
+- **Database**: MySQL Server with Pomelo.EntityFrameworkCore.MySql
+- **Authentication**: ASP.NET Core Identity (Users, Roles, Cookie-based auth)
+- **Frontend**: Razor Views, HTML5, CSS3, JavaScript, Bootstrap 5
+- **Payment Gateway**: Stripe integration with webhook support
+- **QR Code Generation**: QRCoder Library for e-ticket generation
+- **PDF Generation**: iTextSharp for report generation
+- **Email Services**: Integrated email service for notifications
+- **Architecture**: Layered Architecture, Repository Pattern, Dependency Injection
+- **Services**: Custom services for password generation, email notifications, and PDF report generation
 
 ## Project Structure
 
-- `Controllers/` — Handles HTTP requests for each entity (Event, Booking, User, etc.)
+- `Controllers/` — Handles HTTP requests for each entity (Event, Booking, User, Payment, Reports, etc.)
 - `Models/` — Entity classes and ViewModels (`Models/ViewModels/`)
 - `Repository/Interfaces/` and `Repository/Services/` — Repository pattern for data access
-- `Data/ApplicationDbContext.cs` — Entity Framework Core DB context
+- `Services/` — Custom business services (Email, Password, PDF Report services)
+- `Data/ApplicationDbContext.cs` — Entity Framework Core DB context with DbInitializer
 - `Migrations/` — Database schema migrations
 - `Areas/Identity/Pages/` — Razor Pages for authentication
-- `Views/` — Razor views organized by feature
-- `wwwroot/` — Static assets (CSS, JS, images, uploads)
+- `Views/` — Razor views organized by feature with enhanced UI components
+- `wwwroot/` — Static assets (CSS, JS, images, uploads, videos)
+- `wwwroot/uploads/` — File upload storage for event images and documents
 
 ## 🚀 Getting Started
 
@@ -121,6 +166,7 @@ The following user accounts are automatically created by the data seeder:
 |----------------|------------------------|----------------|
 | Admin          | <admin@starevents.lk>    | Admin@123      |
 | Event Organizer| <organizer@starevents.lk>| Organizer@123  |
+| Customer | <customer@starevents.lk>| Customer@123  |
 
 ## License
 
