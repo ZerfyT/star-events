@@ -745,11 +745,8 @@ public class DbInitializer
         {
             // Find ticket type based on booking amount
             var eventTicketTypes = ticketTypes.Where(tt => tt.Price <= booking.TotalAmount * 1.5m).ToList();
-            
-            if (!eventTicketTypes.Any())
-            {
-                eventTicketTypes = ticketTypes.ToList();
-            }
+
+            if (!eventTicketTypes.Any()) eventTicketTypes = ticketTypes.ToList();
 
             if (!eventTicketTypes.Any()) continue;
 
@@ -784,7 +781,8 @@ public class DbInitializer
                     {
                         isScanned = random.NextDouble() < 0.8; // 80% chance of being scanned
                         if (isScanned)
-                            scannedAt = eventForTicket.StartDateTime.AddHours(random.Next(-2, 2)); // Scanned around event time
+                            scannedAt = eventForTicket.StartDateTime.AddHours(random.Next(-2,
+                                2)); // Scanned around event time
                     }
                     else if (eventForTicket.Status == "Active" && booking.Status == "Confirmed")
                     {

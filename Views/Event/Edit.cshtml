@@ -1,4 +1,4 @@
-@model star_events.Models.Event
+@model Event
 
 @{
     ViewData["Title"] = "Edit Event";
@@ -19,16 +19,16 @@
             <div class="card-body">
                 <form asp-action="Edit" class="needs-validation" novalidate enctype="multipart/form-data">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    <input type="hidden" asp-for="EventID" />
-                    <input type="hidden" id="deletedImageIndexes" name="deletedImageIndexes" value="" />
-                    
+                    <input type="hidden" asp-for="EventID"/>
+                    <input type="hidden" id="deletedImageIndexes" name="deletedImageIndexes" value=""/>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="Title" class="form-label">
                                     <i class="bi bi-type"></i> Event Title <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="Title" class="form-control" placeholder="Enter event title" required />
+                                <input asp-for="Title" class="form-control" placeholder="Enter event title" required/>
                                 <span asp-validation-for="Title" class="text-danger"></span>
                             </div>
                         </div>
@@ -54,7 +54,8 @@
                                 <label asp-for="Description" class="form-label">
                                     <i class="bi bi-text-paragraph"></i> Description <span class="text-danger">*</span>
                                 </label>
-                                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter event description" required></textarea>
+                                <textarea asp-for="Description" class="form-control" rows="4"
+                                          placeholder="Enter event description" required></textarea>
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
                         </div>
@@ -66,7 +67,8 @@
                                 <label asp-for="LocationID" class="form-label">
                                     <i class="bi bi-geo-alt"></i> Venue <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="LocationID" class="form-select" asp-items="ViewBag.LocationID" required>
+                                <select asp-for="LocationID" class="form-select" asp-items="ViewBag.LocationID"
+                                        required>
                                     <option value="">-- Select Venue --</option>
                                 </select>
                                 <span asp-validation-for="LocationID" class="text-danger"></span>
@@ -77,7 +79,8 @@
                                 <label asp-for="CategoryID" class="form-label">
                                     <i class="bi bi-tags"></i> Category <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="CategoryID" class="form-select" asp-items="ViewBag.CategoryID" required>
+                                <select asp-for="CategoryID" class="form-select" asp-items="ViewBag.CategoryID"
+                                        required>
                                     <option value="">-- Select Category --</option>
                                 </select>
                                 <span asp-validation-for="CategoryID" class="text-danger"></span>
@@ -88,7 +91,8 @@
                                 <label asp-for="OrganizerID" class="form-label">
                                     <i class="bi bi-person"></i> Organizer <span class="text-danger">*</span>
                                 </label>
-                                <select asp-for="OrganizerID" class="form-select" asp-items="ViewBag.OrganizerID" required>
+                                <select asp-for="OrganizerID" class="form-select" asp-items="ViewBag.OrganizerID"
+                                        required>
                                     <option value="">-- Select Organizer --</option>
                                 </select>
                                 <span asp-validation-for="OrganizerID" class="text-danger"></span>
@@ -100,9 +104,10 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="StartDateTime" class="form-label">
-                                    <i class="bi bi-calendar-plus"></i> Start Date & Time <span class="text-danger">*</span>
+                                    <i class="bi bi-calendar-plus"></i> Start Date & Time <span
+                                        class="text-danger">*</span>
                                 </label>
-                                <input asp-for="StartDateTime" class="form-control" type="datetime-local" required />
+                                <input asp-for="StartDateTime" class="form-control" type="datetime-local" required/>
                                 <span asp-validation-for="StartDateTime" class="text-danger"></span>
                             </div>
                         </div>
@@ -111,13 +116,13 @@
                                 <label asp-for="EndDateTime" class="form-label">
                                     <i class="bi bi-calendar-x"></i> End Date & Time <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="EndDateTime" class="form-control" type="datetime-local" required />
+                                <input asp-for="EndDateTime" class="form-control" type="datetime-local" required/>
                                 <span asp-validation-for="EndDateTime" class="text-danger"></span>
                             </div>
                         </div>
                     </div>
-                    
-                    <input asp-for="ImagePaths" type="hidden" />
+
+                    <input asp-for="ImagePaths" type="hidden"/>
 
                     <!-- Current Images Display -->
                     @if (Model.AllImagePaths.Any())
@@ -129,24 +134,29 @@
                                         <i class="bi bi-images"></i> Current Images
                                     </label>
                                     <div class="row" id="currentImagesContainer">
-                                        @for (int i = 0; i < Model.AllImagePaths.Count; i++)
+                                        @for (var i = 0; i < Model.AllImagePaths.Count; i++)
                                         {
                                             var imagePath = Model.AllImagePaths[i];
                                             <div class="col-md-3 mb-3" data-image-index="@i">
                                                 <div class="card">
-                                                    <img src="@imagePath" class="card-img-top" alt="Event Image" style="height: 150px; object-fit: cover;">
+                                                    <img src="@imagePath" class="card-img-top" alt="Event Image"
+                                                         style="height: 150px; object-fit: cover;">
                                                     <div class="card-body p-2">
                                                         <small class="text-muted">
                                                             @if (imagePath.StartsWith("http"))
                                                             {
-                                                                <i class="bi bi-link-45deg"></i> <span>External URL</span>
+                                                                <i class="bi bi-link-45deg"></i>
+                                                                <span>External URL</span>
                                                             }
                                                             else
                                                             {
-                                                                <i class="bi bi-cloud-check"></i> <span>Uploaded File</span>
+                                                                <i class="bi bi-cloud-check"></i>
+                                                                <span>Uploaded File</span>
                                                             }
                                                         </small>
-                                                        <button type="button" class="btn btn-sm btn-outline-danger float-end" onclick="deleteCurrentImage(@i, '@imagePath')">
+                                                        <button type="button"
+                                                                class="btn btn-sm btn-outline-danger float-end"
+                                                                onclick="deleteCurrentImage(@i, '@imagePath')">
                                                             <i class="bi bi-trash"></i>
                                                         </button>
                                                     </div>
@@ -165,11 +175,13 @@
                                 <label class="form-label">
                                     <i class="bi bi-cloud-upload"></i> Upload New Event Images
                                 </label>
-                                <input type="file" id="fileInput" name="uploadedImages" class="form-control" multiple accept="image/*" />
-                                <div class="form-text">Optional: Upload up to 10 new image files (JPG, PNG, GIF, WebP)</div>
+                                <input type="file" id="fileInput" name="uploadedImages" class="form-control" multiple
+                                       accept="image/*"/>
+                                <div class="form-text">Optional: Upload up to 10 new image files (JPG, PNG, GIF, WebP)
+                                </div>
                                 <div class="mt-2">
                                     <small class="text-warning">
-                                        <i class="bi bi-exclamation-triangle"></i> 
+                                        <i class="bi bi-exclamation-triangle"></i>
                                         Uploading new images will replace all existing images.
                                     </small>
                                 </div>
@@ -206,17 +218,17 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
         let selectedFiles = [];
         let deletedImageIndexes = [];
         let currentImagePaths = @Html.Raw(Json.Serialize(Model.AllImagePaths));
 
         // Validate end date is after start date
-        document.getElementById('EndDateTime').addEventListener('change', function() {
+        document.getElementById('EndDateTime').addEventListener('change', function () {
             const startDate = new Date(document.getElementById('StartDateTime').value);
             const endDate = new Date(this.value);
-            
+
             if (endDate <= startDate) {
                 this.setCustomValidity('End date must be after start date');
             } else {
@@ -225,7 +237,7 @@
         });
 
         // File input change handler
-        document.getElementById('fileInput').addEventListener('change', function(e) {
+        document.getElementById('fileInput').addEventListener('change', function (e) {
             const files = Array.from(e.target.files);
             selectedFiles = files;
             updateImagePreview();
@@ -234,7 +246,7 @@
         function updateImagePreview() {
             const previewSection = document.getElementById('imagePreviewSection');
             const previewContainer = document.getElementById('imagePreview');
-            
+
             // Clear existing previews
             previewContainer.innerHTML = '';
 
@@ -250,7 +262,7 @@
             selectedFiles.forEach((file, index) => {
                 if (file.type.startsWith('image/')) {
                     const reader = new FileReader();
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         const previewDiv = document.createElement('div');
                         previewDiv.className = 'col-md-3 mb-3';
                         previewDiv.innerHTML = `
@@ -290,16 +302,16 @@
                 if (!deletedImageIndexes.includes(index)) {
                     deletedImageIndexes.push(index);
                 }
-                
+
                 // Update hidden input
                 document.getElementById('deletedImageIndexes').value = deletedImageIndexes.join(',');
-                
+
                 // Remove from DOM
                 const imageElement = document.querySelector(`[data-image-index="${index}"]`);
                 if (imageElement) {
                     imageElement.remove();
                 }
-                
+
                 // Show message if no images left
                 const remainingImages = document.querySelectorAll('#currentImagesContainer .col-md-3');
                 if (remainingImages.length === 0) {
@@ -310,7 +322,7 @@
         }
 
         // Update form submission to include deleted image indexes
-        document.querySelector('form').addEventListener('submit', function() {
+        document.querySelector('form').addEventListener('submit', function () {
             document.getElementById('deletedImageIndexes').value = deletedImageIndexes.join(',');
         });
     </script>

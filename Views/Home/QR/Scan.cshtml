@@ -22,7 +22,8 @@
             <!-- Manual QR Code Input -->
             <div class="manual-input-section">
                 <div class="input-group">
-                    <input type="text" id="qrCodeInput" class="form-control" placeholder="Enter QR code or scan with camera" autocomplete="off">
+                    <input type="text" id="qrCodeInput" class="form-control"
+                           placeholder="Enter QR code or scan with camera" autocomplete="off">
                     <button class="btn btn-primary" id="validateBtn" type="button">
                         <i class="bi bi-search"></i> Validate
                     </button>
@@ -87,7 +88,7 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
-    
+
     <script>
         let video = null;
         let canvas = null;
@@ -98,14 +99,14 @@
         // Initialize toast
         const scanToast = new bootstrap.Toast(document.getElementById('scanToast'));
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             video = document.getElementById('video');
             canvas = document.getElementById('canvas');
             context = canvas.getContext('2d');
 
             // Initialize event listeners
             document.getElementById('validateBtn').addEventListener('click', validateQRCode);
-            document.getElementById('qrCodeInput').addEventListener('keypress', function(e) {
+            document.getElementById('qrCodeInput').addEventListener('keypress', function (e) {
                 if (e.key === 'Enter') {
                     validateQRCode();
                 }
@@ -133,10 +134,10 @@
                 if (result.success && result.isValid) {
                     // Show ticket details
                     displayScanResult(result.ticket);
-                    
+
                     // Add to recent scans
                     addToRecentScans(qrCode, result.ticket);
-                    
+
                     showToast('Ticket validated successfully', 'success');
                 } else {
                     showToast(result.message || 'Invalid QR code', 'error');
@@ -152,7 +153,7 @@
         function displayScanResult(ticket) {
             const resultsDiv = document.getElementById('scanResults');
             const resultContent = document.getElementById('resultContent');
-            
+
             const statusClass = ticket.isScanned ? 'scanned' : 'valid';
             const statusText = ticket.isScanned ? 'Already Scanned' : 'Valid Ticket';
             const statusIcon = ticket.isScanned ? 'bi-check-circle-fill text-warning' : 'bi-check-circle-fill text-success';
@@ -192,14 +193,14 @@
                     ` : ''}
                 </div>
             `;
-            
+
             resultsDiv.style.display = 'block';
         }
 
         function displayErrorResult(message) {
             const resultsDiv = document.getElementById('scanResults');
             const resultContent = document.getElementById('resultContent');
-            
+
             resultContent.innerHTML = `
                 <div class="error-info">
                     <div class="error-status">
@@ -211,7 +212,7 @@
                     </div>
                 </div>
             `;
-            
+
             resultsDiv.style.display = 'block';
         }
 
@@ -245,9 +246,9 @@
         function showToast(message, type) {
             const toastMessage = document.getElementById('toastMessage');
             const toastHeader = document.querySelector('.toast-header i');
-            
+
             toastMessage.textContent = message;
-            
+
             if (type === 'success') {
                 toastHeader.className = 'bi bi-check-circle-fill text-success me-2';
             } else if (type === 'error') {
@@ -255,7 +256,7 @@
             } else {
                 toastHeader.className = 'bi bi-info-circle text-primary me-2';
             }
-            
+
             scanToast.show();
         }
 
@@ -267,22 +268,22 @@
                 isScanned: ticket.isScanned,
                 scannedAt: new Date().toISOString()
             };
-            
+
             recentScans.unshift(scan);
             recentScans = recentScans.slice(0, 10); // Keep only last 10 scans
-            
+
             localStorage.setItem('recentScans', JSON.stringify(recentScans));
             loadRecentScans();
         }
 
         function loadRecentScans() {
             const recentScansList = document.getElementById('recentScansList');
-            
+
             if (recentScans.length === 0) {
                 recentScansList.innerHTML = '<p class="text-muted">No recent scans</p>';
                 return;
             }
-            
+
             recentScansList.innerHTML = recentScans.map(scan => `
                 <div class="recent-scan-item">
                     <div class="scan-info">
@@ -302,18 +303,18 @@
         // Camera functionality
         async function startCamera() {
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    video: { 
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
                         facingMode: 'environment' // Use back camera if available
-                    } 
+                    }
                 });
-                
+
                 video.srcObject = stream;
                 video.style.display = 'block';
                 document.getElementById('cameraPlaceholder').style.display = 'none';
                 document.getElementById('startCameraBtn').style.display = 'none';
                 document.getElementById('stopCameraBtn').style.display = 'inline-block';
-                
+
                 isScanning = true;
                 scanForQRCode();
             } catch (error) {
@@ -327,12 +328,12 @@
                 video.srcObject.getTracks().forEach(track => track.stop());
                 video.srcObject = null;
             }
-            
+
             video.style.display = 'none';
             document.getElementById('cameraPlaceholder').style.display = 'block';
             document.getElementById('startCameraBtn').style.display = 'inline-block';
             document.getElementById('stopCameraBtn').style.display = 'none';
-            
+
             isScanning = false;
         }
 
@@ -343,17 +344,17 @@
                 canvas.height = video.videoHeight;
                 canvas.width = video.videoWidth;
                 context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                
+
                 const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
                 const code = jsQR(imageData.data, imageData.width, imageData.height);
-                
+
                 if (code) {
                     document.getElementById('qrCodeInput').value = code.data;
                     validateQRCode();
                     stopCamera();
                 }
             }
-            
+
             requestAnimationFrame(scanForQRCode);
         }
     </script>

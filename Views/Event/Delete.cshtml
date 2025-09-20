@@ -1,4 +1,4 @@
-@model star_events.Models.Event
+@model Event
 
 @{
     ViewData["Title"] = "Delete Event";
@@ -30,9 +30,10 @@
                     <h5 class="alert-heading">
                         <i class="bi bi-exclamation-triangle me-2"></i>Warning!
                     </h5>
-                    <p class="mb-0">Are you sure you want to delete this event? This action cannot be undone and may affect existing bookings.</p>
+                    <p class="mb-0">Are you sure you want to delete this event? This action cannot be undone and may
+                        affect existing bookings.</p>
                 </div>
-                
+
                 <h5 class="mb-3">Event Information:</h5>
                 <div class="detail-item">
                     <div class="detail-label">
@@ -42,7 +43,7 @@
                         <strong>@Html.DisplayFor(model => model.Title)</strong>
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-calendar-plus me-1"></i>@Html.DisplayNameFor(model => model.StartDateTime)
@@ -51,7 +52,7 @@
                         <span class="text-info">@Model.StartDateTime.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-geo-alt me-1"></i>Venue
@@ -67,11 +68,12 @@
                         }
                     </div>
                 </div>
-                
+
                 <form asp-action="Delete" class="mt-4">
-                    <input type="hidden" asp-for="EventID" />
+                    <input type="hidden" asp-for="EventID"/>
                     <div class="d-flex gap-3">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this event? This action cannot be undone!')">
+                        <button type="submit" class="btn btn-danger"
+                                onclick="return confirm('Are you absolutely sure you want to delete this event? This action cannot be undone!')">
                             <i class="bi bi-trash me-2"></i>Yes, Delete Event
                         </button>
                         <a asp-action="Index" class="btn btn-outline-secondary">

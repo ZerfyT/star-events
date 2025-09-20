@@ -35,7 +35,8 @@
                                 </div>
                                 <div class="qr-info">
                                     <p class="qr-description">This QR code represents a valid, unscanned ticket</p>
-                                    <button onclick="testQR('TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED')" class="btn btn-outline-primary">
+                                    <button onclick="testQR('TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED')"
+                                            class="btn btn-outline-primary">
                                         <i class="bi bi-eye"></i> Test This QR Code
                                     </button>
                                 </div>
@@ -50,7 +51,8 @@
                                 </div>
                                 <div class="qr-info">
                                     <p class="qr-description">This QR code represents an already scanned ticket</p>
-                                    <button onclick="testQR('TICKET:2|SEAT:B2|TIME:20250101120000|STATUS:CONFIRMED')" class="btn btn-outline-primary">
+                                    <button onclick="testQR('TICKET:2|SEAT:B2|TIME:20250101120000|STATUS:CONFIRMED')"
+                                            class="btn btn-outline-primary">
                                         <i class="bi bi-eye"></i> Test This QR Code
                                     </button>
                                 </div>
@@ -86,13 +88,16 @@
                         <ol>
                             <li>Click on any "Test This QR Code" button above</li>
                             <li>This will open the QR summary page in a new tab</li>
-                            <li>You can also use the <a href="/Home/QRScanner">Security Scanner</a> to test scanning functionality</li>
+                            <li>You can also use the <a href="/Home/QRScanner">Security Scanner</a> to test scanning
+                                functionality
+                            </li>
                             <li>The scanner allows both manual QR code input and camera scanning</li>
                         </ol>
-                        
+
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle"></i>
-                            <strong>Note:</strong> These are test QR codes. In a real application, QR codes would be generated during the payment process and contain actual ticket information.
+                            <strong>Note:</strong> These are test QR codes. In a real application, QR codes would be
+                            generated during the payment process and contain actual ticket information.
                         </div>
                     </div>
                 </div>
@@ -111,13 +116,13 @@
                             <p>Get ticket details by ticket ID</p>
                             <code>Example: /api/qr/ticket/1</code>
                         </div>
-                        
+
                         <div class="endpoint-item">
                             <h6>GET /api/qr/validate/{qrCode}</h6>
                             <p>Validate a QR code</p>
                             <code>Example: /api/qr/validate/TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED</code>
                         </div>
-                        
+
                         <div class="endpoint-item">
                             <h6>POST /api/qr/scan/{ticketId}</h6>
                             <p>Mark a ticket as scanned</p>
@@ -132,9 +137,9 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
-    
+
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Generate test QR codes
             generateTestQRCodes();
         });

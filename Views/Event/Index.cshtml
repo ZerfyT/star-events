@@ -1,4 +1,4 @@
-@model IEnumerable<star_events.Models.Event>
+@model IEnumerable<Event>
 
 @{
     ViewData["Title"] = "Events";
@@ -25,161 +25,170 @@
             <div class="table-responsive">
                 <table class="table table-hover mb-0" id="dataTable">
                     <thead>
-                        <tr>
-                            <th>
-                                <i class="bi bi-calendar-event"></i> Event
-                            </th>
-                            <th>
-                                <i class="bi bi-geo-alt"></i> Location
-                            </th>
-                            <th>
-                                <i class="bi bi-tags"></i> Category
-                            </th>
-                            <th>
-                                <i class="bi bi-calendar-plus"></i> Start Date
-                            </th>
-                            <th>
-                                <i class="bi bi-calendar-x"></i> End Date
-                            </th>
-                            <th>
-                                <i class="bi bi-toggle-on"></i> Status
-                            </th>
-                            <th>
-                                <i class="bi bi-person"></i> Organizer
-                            </th>
-                            <th class="text-center">
-                                <i class="bi bi-gear"></i> Actions
-                            </th>
-                        </tr>
+                    <tr>
+                        <th>
+                            <i class="bi bi-calendar-event"></i> Event
+                        </th>
+                        <th>
+                            <i class="bi bi-geo-alt"></i> Location
+                        </th>
+                        <th>
+                            <i class="bi bi-tags"></i> Category
+                        </th>
+                        <th>
+                            <i class="bi bi-calendar-plus"></i> Start Date
+                        </th>
+                        <th>
+                            <i class="bi bi-calendar-x"></i> End Date
+                        </th>
+                        <th>
+                            <i class="bi bi-toggle-on"></i> Status
+                        </th>
+                        <th>
+                            <i class="bi bi-person"></i> Organizer
+                        </th>
+                        <th class="text-center">
+                            <i class="bi bi-gear"></i> Actions
+                        </th>
+                    </tr>
                     </thead>
                     <tbody>
-                        @foreach (var item in Model)
-                        {
-                            <tr>
-                                <td>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="d-flex align-items-center">
+                                    @if (item.AllImagePaths.Any())
+                                    {
+                                        <img src="@item.AllImagePaths[0]" alt="@item.Title" class="rounded me-2"
+                                             style="width: 40px; height: 40px; object-fit: cover;">
+                                    }
+                                    else
+                                    {
+                                        <div
+                                            class="bg-light rounded me-2 d-flex align-items-center justify-content-center"
+                                            style="width: 40px; height: 40px;">
+                                            <i class="bi bi-image text-muted"></i>
+                                        </div>
+                                    }
+                                    <div>
+                                        <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                        <br>
+                                        <small
+                                            class="text-muted">@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                @if (item.Location != null)
+                                {
+                                    <span class="badge bg-info">@item.Location.Address</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Location</span>
+                                }
+                            </td>
+                            <td>
+                                @if (item.Category != null)
+                                {
+                                    <span class="badge bg-secondary">@item.Category.Name</span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Category</span>
+                                }
+                            </td>
+                            <td>
+                                <small>@item.StartDateTime.ToString("MMM dd, yyyy")</small>
+                                <br>
+                                <small class="text-muted">@item.StartDateTime.ToString("h:mm tt")</small>
+                            </td>
+                            <td>
+                                <small>@item.EndDateTime.ToString("MMM dd, yyyy")</small>
+                                <br>
+                                <small class="text-muted">@item.EndDateTime.ToString("h:mm tt")</small>
+                            </td>
+                            <td>
+                                @{
+                                    var now = DateTime.Now;
+                                    var isPast = item.EndDateTime < now;
+                                    var isUpcoming = item.StartDateTime > now;
+                                    var isOngoing = item.StartDateTime <= now && item.EndDateTime >= now;
+
+                                    string statusClass;
+                                    string statusText;
+
+                                    if (item.Status == "Cancelled")
+                                    {
+                                        statusClass = "bg-danger";
+                                        statusText = "Cancelled";
+                                    }
+                                    else if (item.Status == "Draft")
+                                    {
+                                        statusClass = "bg-secondary";
+                                        statusText = "Draft";
+                                    }
+                                    else if (isPast)
+                                    {
+                                        statusClass = "bg-dark";
+                                        statusText = "Past";
+                                    }
+                                    else if (isOngoing)
+                                    {
+                                        statusClass = "bg-success";
+                                        statusText = "Ongoing";
+                                    }
+                                    else if (isUpcoming)
+                                    {
+                                        statusClass = "bg-primary";
+                                        statusText = "Upcoming";
+                                    }
+                                    else
+                                    {
+                                        statusClass = "bg-warning";
+                                        statusText = item.Status;
+                                    }
+                                }
+                                <span class="badge @statusClass">@statusText</span>
+                            </td>
+                            <td>
+                                @if (item.Organizer != null)
+                                {
                                     <div class="d-flex align-items-center">
-                                        @if (item.AllImagePaths.Any())
-                                        {
-                                            <img src="@item.AllImagePaths[0]" alt="@item.Title" class="rounded me-2" style="width: 40px; height: 40px; object-fit: cover;">
-                                        }
-                                        else
-                                        {
-                                            <div class="bg-light rounded me-2 d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
-                                                <i class="bi bi-image text-muted"></i>
-                                            </div>
-                                        }
+                                        <div
+                                            class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                            style="width: 32px; height: 32px;">
+                                            <i class="bi bi-person text-white" style="font-size: 12px;"></i>
+                                        </div>
                                         <div>
-                                            <strong>@Html.DisplayFor(modelItem => item.Title)</strong>
+                                            <small class="fw-bold">@item.Organizer.UserName</small>
                                             <br>
-                                            <small class="text-muted">@(item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description)</small>
+                                            <small class="text-muted">@item.Organizer.Email</small>
                                         </div>
                                     </div>
-                                </td>
-                                <td>
-                                    @if (item.Location != null)
-                                    {
-                                        <span class="badge bg-info">@item.Location.Address</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Location</span>
-                                    }
-                                </td>
-                                <td>
-                                    @if (item.Category != null)
-                                    {
-                                        <span class="badge bg-secondary">@item.Category.Name</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Category</span>
-                                    }
-                                </td>
-                                <td>
-                                    <small>@item.StartDateTime.ToString("MMM dd, yyyy")</small>
-                                    <br>
-                                    <small class="text-muted">@item.StartDateTime.ToString("h:mm tt")</small>
-                                </td>
-                                <td>
-                                    <small>@item.EndDateTime.ToString("MMM dd, yyyy")</small>
-                                    <br>
-                                    <small class="text-muted">@item.EndDateTime.ToString("h:mm tt")</small>
-                                </td>
-                                <td>
-                                    @{
-                                        var now = DateTime.Now;
-                                        var isPast = item.EndDateTime < now;
-                                        var isUpcoming = item.StartDateTime > now;
-                                        var isOngoing = item.StartDateTime <= now && item.EndDateTime >= now;
-                                        
-                                        string statusClass;
-                                        string statusText;
-                                        
-                                        if (item.Status == "Cancelled")
-                                        {
-                                            statusClass = "bg-danger";
-                                            statusText = "Cancelled";
-                                        }
-                                        else if (item.Status == "Draft")
-                                        {
-                                            statusClass = "bg-secondary";
-                                            statusText = "Draft";
-                                        }
-                                        else if (isPast)
-                                        {
-                                            statusClass = "bg-dark";
-                                            statusText = "Past";
-                                        }
-                                        else if (isOngoing)
-                                        {
-                                            statusClass = "bg-success";
-                                            statusText = "Ongoing";
-                                        }
-                                        else if (isUpcoming)
-                                        {
-                                            statusClass = "bg-primary";
-                                            statusText = "Upcoming";
-                                        }
-                                        else
-                                        {
-                                            statusClass = "bg-warning";
-                                            statusText = item.Status;
-                                        }
-                                    }
-                                    <span class="badge @statusClass">@statusText</span>
-                                </td>
-                                <td>
-                                    @if (item.Organizer != null)
-                                    {
-                                        <div class="d-flex align-items-center">
-                                            <div class="bg-primary rounded-circle me-2 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">
-                                                <i class="bi bi-person text-white" style="font-size: 12px;"></i>
-                                            </div>
-                                            <div>
-                                                <small class="fw-bold">@item.Organizer.UserName</small>
-                                                <br>
-                                                <small class="text-muted">@item.Organizer.Email</small>
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <span class="text-muted">No Organizer</span>
-                                    }
-                                </td>
-                                <td class="text-center">
-                                    <a asp-action="Details" asp-route-id="@item.EventID" class="btn btn-outline-info btn-action" title="View Details">
-                                        <i class="bi bi-eye"></i>
-                                    </a>
-                                    <a asp-action="Edit" asp-route-id="@item.EventID" class="btn btn-outline-primary btn-action" title="Edit">
-                                        <i class="bi bi-pencil"></i>
-                                    </a>
-                                    <a asp-action="Delete" asp-route-id="@item.EventID" class="btn btn-outline-danger btn-action" title="Delete">
-                                        <i class="bi bi-trash"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                        }
+                                }
+                                else
+                                {
+                                    <span class="text-muted">No Organizer</span>
+                                }
+                            </td>
+                            <td class="text-center">
+                                <a asp-action="Details" asp-route-id="@item.EventID"
+                                   class="btn btn-outline-info btn-action" title="View Details">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+                                <a asp-action="Edit" asp-route-id="@item.EventID"
+                                   class="btn btn-outline-primary btn-action" title="Edit">
+                                    <i class="bi bi-pencil"></i>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.EventID"
+                                   class="btn btn-outline-danger btn-action" title="Delete">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
                     </tbody>
                 </table>
             </div>
@@ -200,12 +209,12 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             $('#dataTable').DataTable({
                 "pageLength": 10,
-                "order": [[ 3, "desc" ]], // Sort by Start Date descending
+                "order": [[3, "desc"]], // Sort by Start Date descending
                 "columnDefs": [
-                    { "orderable": false, "targets": 7 }
+                    {"orderable": false, "targets": 7}
                 ]
             });
         });

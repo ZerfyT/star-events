@@ -123,89 +123,93 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-0" id="usersTable">
                         <thead>
-                            <tr>
-                                <th class="border-0">
-                                    <i class="bi bi-person me-1"></i>
-                                    @Html.DisplayNameFor(model => model.FirstName)
-                                </th>
-                                <th class="border-0">
-                                    <i class="bi bi-envelope me-1"></i>
-                                    @Html.DisplayNameFor(model => model.Email)
-                                </th>
-                                <th class="border-0">
-                                    <i class="bi bi-telephone me-1"></i>
-                                    @Html.DisplayNameFor(model => model.ContactNo)
-                                </th>
-                                <th class="border-0">
-                                    <i class="bi bi-star me-1"></i>
-                                    @Html.DisplayNameFor(model => model.LoyaltyPoints)
-                                </th>
-                                <th class="border-0">
-                                    <i class="bi bi-shield me-1"></i>
-                                    Roles
-                                </th>
-                                <th class="border-0 text-center">
-                                    <i class="bi bi-gear me-1"></i>
-                                    Actions
-                                </th>
-                            </tr>
+                        <tr>
+                            <th class="border-0">
+                                <i class="bi bi-person me-1"></i>
+                                @Html.DisplayNameFor(model => model.FirstName)
+                            </th>
+                            <th class="border-0">
+                                <i class="bi bi-envelope me-1"></i>
+                                @Html.DisplayNameFor(model => model.Email)
+                            </th>
+                            <th class="border-0">
+                                <i class="bi bi-telephone me-1"></i>
+                                @Html.DisplayNameFor(model => model.ContactNo)
+                            </th>
+                            <th class="border-0">
+                                <i class="bi bi-star me-1"></i>
+                                @Html.DisplayNameFor(model => model.LoyaltyPoints)
+                            </th>
+                            <th class="border-0">
+                                <i class="bi bi-shield me-1"></i>
+                                Roles
+                            </th>
+                            <th class="border-0 text-center">
+                                <i class="bi bi-gear me-1"></i>
+                                Actions
+                            </th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in Model)
-                            {
-                                <tr>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                                @item.FirstName.Substring(0, 1).ToUpper()
-                                            </div>
-                                            <div>
-                                                <div class="fw-semibold">@item.FirstName @item.LastName</div>
-                                                <small class="text-muted">ID: @item.Id.Substring(0, 8)...</small>
-                                            </div>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                            @item.FirstName.Substring(0, 1).ToUpper()
                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-envelope text-muted me-2"></i>
-                                            @item.Email
+                                        <div>
+                                            <div class="fw-semibold">@item.FirstName @item.LastName</div>
+                                            <small class="text-muted">ID: @item.Id.Substring(0, 8)...</small>
                                         </div>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <i class="bi bi-telephone text-muted me-2"></i>
-                                            @(string.IsNullOrEmpty(item.ContactNo) ? "N/A" : item.ContactNo)
-                                        </div>
-                                    </td>
-                                    <td>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-envelope text-muted me-2"></i>
+                                        @item.Email
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-telephone text-muted me-2"></i>
+                                        @(string.IsNullOrEmpty(item.ContactNo) ? "N/A" : item.ContactNo)
+                                    </div>
+                                </td>
+                                <td>
                                         <span class="badge bg-warning text-dark fs-6">
                                             <i class="bi bi-star-fill me-1"></i>
                                             @item.LoyaltyPoints
                                         </span>
-                                    </td>
-                                    <td>
-                                        @foreach (var role in item.Roles)
-                                        {
-                                            <span class="badge @(role == "Admin" ? "bg-danger" : "bg-primary") me-1">
+                                </td>
+                                <td>
+                                    @foreach (var role in item.Roles)
+                                    {
+                                        <span class="badge @(role == "Admin" ? "bg-danger" : "bg-primary") me-1">
                                                 @role
                                             </span>
-                                        }
-                                    </td>
-                                    <td class="text-center">
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-info btn-action" title="View Details">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-outline-warning btn-action" title="Edit User">
-                                                <i class="bi bi-pencil"></i>
-                                            </a>
-                                            <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-action" title="Delete User">
-                                                <i class="bi bi-trash"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="Details" asp-route-id="@item.Id"
+                                           class="btn btn-outline-info btn-action" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                        <a asp-action="Edit" asp-route-id="@item.Id"
+                                           class="btn btn-outline-warning btn-action" title="Edit User">
+                                            <i class="bi bi-pencil"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id"
+                                           class="btn btn-outline-danger btn-action" title="Delete User">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -217,17 +221,17 @@
 @section Scripts {
     <script>
         // Search functionality
-        document.getElementById('searchInput').addEventListener('keyup', function() {
+        document.getElementById('searchInput').addEventListener('keyup', function () {
             filterTable();
         });
 
         // Role filter
-        document.getElementById('roleFilter').addEventListener('change', function() {
+        document.getElementById('roleFilter').addEventListener('change', function () {
             filterTable();
         });
 
         // Sort functionality
-        document.getElementById('sortBy').addEventListener('change', function() {
+        document.getElementById('sortBy').addEventListener('change', function () {
             sortTable();
         });
 
@@ -255,8 +259,8 @@
 
             rows.sort((a, b) => {
                 let aVal, bVal;
-                
-                switch(sortBy) {
+
+                switch (sortBy) {
                     case 'name':
                         aVal = a.cells[0].textContent.trim();
                         bVal = b.cells[0].textContent.trim();

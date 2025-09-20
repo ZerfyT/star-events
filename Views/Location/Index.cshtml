@@ -1,4 +1,4 @@
-@model IEnumerable<star_events.Models.Location>
+@model IEnumerable<Location>
 
 @{
     ViewData["Title"] = "Venues";
@@ -23,52 +23,56 @@
         <div class="table-responsive">
             <table class="table table-hover mb-0">
                 <thead>
-                    <tr>
-                        <th>
-                            <i class="bi bi-building"></i> @Html.DisplayNameFor(model => model.Name)
-                        </th>
-                        <th>
-                            <i class="bi bi-geo-alt"></i> @Html.DisplayNameFor(model => model.Address)
-                        </th>
-                        <th>
-                            <i class="bi bi-geo"></i> @Html.DisplayNameFor(model => model.City)
-                        </th>
-                        <th>
-                            <i class="bi bi-people"></i> @Html.DisplayNameFor(model => model.Capacity)
-                        </th>
-                        <th class="text-center">
-                            <i class="bi bi-gear"></i> Actions
-                        </th>
-                    </tr>
+                <tr>
+                    <th>
+                        <i class="bi bi-building"></i> @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        <i class="bi bi-geo-alt"></i> @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        <i class="bi bi-geo"></i> @Html.DisplayNameFor(model => model.City)
+                    </th>
+                    <th>
+                        <i class="bi bi-people"></i> @Html.DisplayNameFor(model => model.Capacity)
+                    </th>
+                    <th class="text-center">
+                        <i class="bi bi-gear"></i> Actions
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model) {
-                        <tr>
-                            <td>
-                                <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.Address)
-                            </td>
-                            <td>
-                                @Html.DisplayFor(modelItem => item.City)
-                            </td>
-                            <td>
-                                <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Capacity)</span>
-                            </td>
-                            <td class="text-center">
-                                <a asp-action="Edit" asp-route-id="@item.LocationID" class="btn btn-outline-primary btn-action" title="Edit">
-                                    <i class="bi bi-pencil"></i>
-                                </a>
-                                <a asp-action="Details" asp-route-id="@item.LocationID" class="btn btn-outline-info btn-action" title="Details">
-                                    <i class="bi bi-eye"></i>
-                                </a>
-                                <a asp-action="Delete" asp-route-id="@item.LocationID" class="btn btn-outline-danger btn-action" title="Delete">
-                                    <i class="bi bi-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                    }
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <strong>@Html.DisplayFor(modelItem => item.Name)</strong>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.City)
+                        </td>
+                        <td>
+                            <span class="badge bg-info">@Html.DisplayFor(modelItem => item.Capacity)</span>
+                        </td>
+                        <td class="text-center">
+                            <a asp-action="Edit" asp-route-id="@item.LocationID"
+                               class="btn btn-outline-primary btn-action" title="Edit">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a asp-action="Details" asp-route-id="@item.LocationID"
+                               class="btn btn-outline-info btn-action" title="Details">
+                                <i class="bi bi-eye"></i>
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@item.LocationID"
+                               class="btn btn-outline-danger btn-action" title="Delete">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
                 </tbody>
             </table>
         </div>

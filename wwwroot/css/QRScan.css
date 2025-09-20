@@ -44,13 +44,17 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
     animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
 }
 
 .header-icon {
@@ -396,50 +400,50 @@
     .scanner-container {
         padding: 1rem 0;
     }
-    
+
     .scanner-card {
         margin: 0 1rem;
         border-radius: 15px;
     }
-    
+
     .scanner-header {
         padding: 1.5rem;
     }
-    
+
     .scanner-header h1 {
         font-size: 1.8rem;
     }
-    
+
     .scanner-content {
         padding: 1.5rem;
     }
-    
+
     .input-group {
         flex-direction: column;
     }
-    
+
     .camera-container {
         min-height: 250px;
     }
-    
+
     #video {
         height: 250px;
     }
-    
+
     .detail-row {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.25rem;
     }
-    
+
     .detail-row label {
         min-width: auto;
     }
-    
+
     .detail-row span {
         text-align: left;
     }
-    
+
     .scan-details {
         flex-direction: column;
         gap: 0.25rem;
@@ -450,31 +454,31 @@
     .scanner-header {
         padding: 1rem;
     }
-    
+
     .scanner-header h1 {
         font-size: 1.6rem;
     }
-    
+
     .header-icon {
         font-size: 2.5rem;
     }
-    
+
     .scanner-content {
         padding: 1rem;
     }
-    
+
     .camera-container {
         min-height: 200px;
     }
-    
+
     #video {
         height: 200px;
     }
-    
+
     .camera-placeholder i {
         font-size: 2.5rem;
     }
-    
+
     .btn {
         padding: 0.6rem 1.2rem;
         font-size: 0.9rem;

@@ -1,4 +1,4 @@
-@model star_events.Models.Category
+@model Category
 
 @{
     ViewData["Title"] = "Edit Category";
@@ -19,24 +19,25 @@
             <div class="card-body">
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    <input type="hidden" asp-for="CategoryID" />
-                    
+                    <input type="hidden" asp-for="CategoryID"/>
+
                     <div class="form-group">
                         <label asp-for="Name" class="form-label">
                             <i class="bi bi-tag"></i> Category Name
                         </label>
-                        <input asp-for="Name" class="form-control" placeholder="Enter category name" />
+                        <input asp-for="Name" class="form-control" placeholder="Enter category name"/>
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label asp-for="Description" class="form-label">
                             <i class="bi bi-text-paragraph"></i> Description
                         </label>
-                        <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter category description"></textarea>
+                        <textarea asp-for="Description" class="form-control" rows="4"
+                                  placeholder="Enter category description"></textarea>
                         <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-circle"></i> Save Changes
@@ -52,5 +53,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

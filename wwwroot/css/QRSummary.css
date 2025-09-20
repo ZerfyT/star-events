@@ -44,13 +44,17 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
     animation: float 6s ease-in-out infinite;
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px) rotate(0deg); }
-    50% { transform: translateY(-20px) rotate(180deg); }
+    0%, 100% {
+        transform: translateY(0px) rotate(0deg);
+    }
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+    }
 }
 
 .header-icon {
@@ -503,43 +507,43 @@
     .qr-summary-container {
         padding: 1rem 0;
     }
-    
+
     .summary-card {
         margin: 0 1rem;
         border-radius: 15px;
     }
-    
+
     .summary-header {
         padding: 2rem 1.5rem;
     }
-    
+
     .summary-header h1 {
         font-size: 2rem;
     }
-    
+
     .summary-section {
         padding: 1.5rem;
     }
-    
+
     .event-info {
         grid-template-columns: 1fr;
         gap: 1.5rem;
     }
-    
+
     .event-image {
         max-width: 200px;
         margin: 0 auto;
     }
-    
+
     .ticket-details-grid,
     .customer-details-grid {
         grid-template-columns: 1fr;
     }
-    
+
     .payment-summary {
         gap: 1rem;
     }
-    
+
     .amount-breakdown {
         padding: 1rem;
     }
@@ -549,31 +553,31 @@
     .summary-header {
         padding: 1.5rem 1rem;
     }
-    
+
     .summary-header h1 {
         font-size: 1.8rem;
     }
-    
+
     .header-icon {
         font-size: 3rem;
     }
-    
+
     .summary-section {
         padding: 1rem;
     }
-    
+
     .section-header h3 {
         font-size: 1.2rem;
     }
-    
+
     .event-title {
         font-size: 1.4rem;
     }
-    
+
     .qr-code-container {
         padding: 0.75rem;
     }
-    
+
     .qr-canvas {
         width: 150px !important;
         height: 150px !important;

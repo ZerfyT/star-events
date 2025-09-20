@@ -73,10 +73,10 @@ body {
     backdrop-filter: blur(10px);
 }
 
-    .back-btn:hover {
-        background: rgba(255, 255, 255, 0.2);
-        transform: translateY(-2px);
-    }
+.back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
 
 .logo-text {
     font-size: 1.75rem;
@@ -120,17 +120,17 @@ body {
     flex-wrap: wrap;
 }
 
-    .event-meta span {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        color: var(--medium-gray);
-        font-weight: 500;
-    }
+.event-meta span {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--medium-gray);
+    font-weight: 500;
+}
 
-    .event-meta i {
-        color: var(--alpine-rose);
-    }
+.event-meta i {
+    color: var(--alpine-rose);
+}
 
 .event-details {
     display: grid;
@@ -149,10 +149,10 @@ body {
     border-left: 4px solid var(--alpine-rose);
 }
 
-    .detail-item i {
-        color: var(--navy-blue);
-        font-size: 1.1rem;
-    }
+.detail-item i {
+    color: var(--navy-blue);
+    font-size: 1.1rem;
+}
 
 .status-badge {
     display: inline-block;
@@ -224,15 +224,15 @@ body {
     transition: var(--transition);
 }
 
-    .thumbnail:hover {
-        opacity: 1;
-        transform: scale(1.05);
-    }
+.thumbnail:hover {
+    opacity: 1;
+    transform: scale(1.05);
+}
 
-    .thumbnail .poster-image {
-        height: 80px;
-        object-fit: cover;
-    }
+.thumbnail .poster-image {
+    height: 80px;
+    object-fit: cover;
+}
 
 /* Ticket Categories Section */
 .ticket-categories-section {
@@ -273,32 +273,32 @@ body {
     overflow: hidden;
 }
 
-    .ticket-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: var(--gradient-secondary);
-        transform: translateX(-100%);
-        transition: var(--transition);
-    }
+.ticket-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient-secondary);
+    transform: translateX(-100%);
+    transition: var(--transition);
+}
 
-    .ticket-card:hover::before {
-        transform: translateX(0);
-    }
+.ticket-card:hover::before {
+    transform: translateX(0);
+}
 
-    .ticket-card.available:hover {
-        transform: translateY(-4px);
-        box-shadow: var(--shadow-heavy);
-        border-color: var(--alpine-rose);
-    }
+.ticket-card.available:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-heavy);
+    border-color: var(--alpine-rose);
+}
 
-    .ticket-card.unavailable {
-        opacity: 0.6;
-        background: var(--light-gray);
-    }
+.ticket-card.unavailable {
+    opacity: 0.6;
+    background: var(--light-gray);
+}
 
 .ticket-header {
     display: flex;
@@ -331,10 +331,10 @@ body {
     justify-content: center;
 }
 
-    .ticket-icon i {
-        font-size: 1.25rem;
-        color: var(--alpine-rose);
-    }
+.ticket-icon i {
+    font-size: 1.25rem;
+    color: var(--alpine-rose);
+}
 
 .ticket-price {
     margin-bottom: 1rem;
@@ -380,14 +380,14 @@ body {
     border-radius: 50%;
 }
 
-    .availability-indicator.available {
-        background: var(--success-green);
-        animation: pulse 2s infinite;
-    }
+.availability-indicator.available {
+    background: var(--success-green);
+    animation: pulse 2s infinite;
+}
 
-    .availability-indicator.unavailable {
-        background: var(--danger-red);
-    }
+.availability-indicator.unavailable {
+    background: var(--danger-red);
+}
 
 @keyframes pulse {
     0% {
@@ -420,21 +420,21 @@ body {
     gap: 0.5rem;
 }
 
-    .buy-ticket-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
-    }
+.buy-ticket-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.3);
+}
 
-    .buy-ticket-btn:active {
-        transform: translateY(0);
-    }
+.buy-ticket-btn:active {
+    transform: translateY(0);
+}
 
-    .buy-ticket-btn.disabled {
-        background: var(--medium-gray);
-        cursor: not-allowed;
-        transform: none !important;
-        box-shadow: none !important;
-    }
+.buy-ticket-btn.disabled {
+    background: var(--medium-gray);
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
 
 /* Event Description Section */
 .event-description-section {
@@ -468,10 +468,10 @@ body {
     gap: 0.75rem;
 }
 
-    .feature-item i {
-        color: var(--success-green);
-        font-size: 1.1rem;
-    }
+.feature-item i {
+    color: var(--success-green);
+    font-size: 1.1rem;
+}
 
 /* Footer */
 .ticket-footer {
@@ -500,9 +500,9 @@ body {
     transition: var(--transition);
 }
 
-    .footer-link:hover {
-        color: var(--alpine-rose);
-    }
+.footer-link:hover {
+    color: var(--alpine-rose);
+}
 
 /* Loading Overlay */
 .loading-overlay {
@@ -524,12 +524,12 @@ body {
     color: var(--primary-white);
 }
 
-    .loading-spinner i {
-        font-size: 3rem;
-        animation: spin 1s linear infinite;
-        margin-bottom: 1rem;
-        display: block;
-    }
+.loading-spinner i {
+    font-size: 3rem;
+    animation: spin 1s linear infinite;
+    margin-bottom: 1rem;
+    display: block;
+}
 
 @keyframes spin {
     from {

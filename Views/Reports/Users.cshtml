@@ -27,18 +27,22 @@
                 <form method="get" class="row align-items-end">
                     <div class="col-md-2">
                         <label class="form-label">Start Date</label>
-                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="startDate" class="form-control"
+                               value="@Model.StartDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">End Date</label>
-                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="endDate" class="form-control"
+                               value="@Model.EndDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Role</label>
                         <select name="role" class="form-select">
                             <option value="">All Roles</option>
                             <option value="Admin" selected="@(Model.SelectedRole == "Admin")">Admin</option>
-                            <option value="EventOrganizer" selected="@(Model.SelectedRole == "EventOrganizer")">Event Organizer</option>
+                            <option value="EventOrganizer" selected="@(Model.SelectedRole == "EventOrganizer")">Event
+                                Organizer
+                            </option>
                             <option value="Customer" selected="@(Model.SelectedRole == "Customer")">Customer</option>
                         </select>
                     </div>
@@ -132,7 +136,8 @@
                     <div class="role-breakdown">
                         <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="role-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="role-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-shield-check"></i>
                                 </div>
                                 <div>
@@ -142,12 +147,14 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.AdminUsers</div>
-                                <small class="text-muted">@((Model.AdminUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.AdminUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
                         <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="role-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="role-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-calendar-event"></i>
                                 </div>
                                 <div>
@@ -157,12 +164,14 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.EventOrganizerUsers</div>
-                                <small class="text-muted">@((Model.EventOrganizerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.EventOrganizerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
                         <div class="role-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="role-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="role-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-person"></i>
                                 </div>
                                 <div>
@@ -172,7 +181,8 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.CustomerUsers</div>
-                                <small class="text-muted">@((Model.CustomerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.CustomerUsers * 100.0 / Model.TotalUsers).ToString("F1"))%</small>
                             </div>
                         </div>
                     </div>
@@ -193,7 +203,8 @@
                 <div class="date-summary">
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-calendar-event me-2"></i>Report Period</span>
-                        <span class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
+                        <span
+                            class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-clock me-2"></i>Days Covered</span>
@@ -201,7 +212,8 @@
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-graph-up me-2"></i>Users per Day</span>
-                        <span class="fw-semibold">@((Model.TotalUsers / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                        <span
+                            class="fw-semibold">@((Model.TotalUsers / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
                     </div>
                 </div>
             </div>
@@ -220,42 +232,43 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
-                            <tr>
-                                <th class="border-0">User ID</th>
-                                <th class="border-0">Email</th>
-                                <th class="border-0">Name</th>
-                                <th class="border-0">Roles</th>
-                                <th class="border-0">Status</th>
-                            </tr>
+                        <tr>
+                            <th class="border-0">User ID</th>
+                            <th class="border-0">Email</th>
+                            <th class="border-0">Name</th>
+                            <th class="border-0">Roles</th>
+                            <th class="border-0">Status</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var user in Model.Users)
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="fw-semibold">@user.Id.Substring(0, 8)...</span>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold">@user.Email</span>
-                                    </td>
-                                    <td>@user.FirstName @user.LastName</td>
-                                    <td>
-                                        @{
-                                            var userRoles = ViewBag.UserRoles as Dictionary<string, List<string>>;
-                                            var roles = userRoles?.GetValueOrDefault(user.Id, new List<string>()) ?? new List<string>();
-                                        }
-                                        @foreach (var role in roles)
-                                        {
-                                            <span class="badge @(role == "Admin" ? "bg-danger" : role == "EventOrganizer" ? "bg-success" : "bg-info") me-1">
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">@user.Id.Substring(0, 8)...</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">@user.Email</span>
+                                </td>
+                                <td>@user.FirstName @user.LastName</td>
+                                <td>
+                                    @{
+                                        var userRoles = ViewBag.UserRoles as Dictionary<string, List<string>>;
+                                        var roles = userRoles?.GetValueOrDefault(user.Id, new List<string>()) ?? new List<string>();
+                                    }
+                                    @foreach (var role in roles)
+                                    {
+                                        <span
+                                            class="badge @(role == "Admin" ? "bg-danger" : role == "EventOrganizer" ? "bg-success" : "bg-info") me-1">
                                                 @role
                                             </span>
-                                        }
-                                    </td>
-                                    <td>
-                                        <span class="badge bg-success">Active</span>
-                                    </td>
-                                </tr>
-                            }
+                                    }
+                                </td>
+                                <td>
+                                    <span class="badge bg-success">Active</span>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -270,23 +283,23 @@
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
             const role = document.querySelector('select[name="role"]').value;
-            
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '@Url.Action("Export", "Reports")';
-            
+
             const typeInput = document.createElement('input');
             typeInput.type = 'hidden';
             typeInput.name = 'reportType';
             typeInput.value = type;
             form.appendChild(typeInput);
-            
+
             const formatInput = document.createElement('input');
             formatInput.type = 'hidden';
             formatInput.name = 'format';
             formatInput.value = format;
             form.appendChild(formatInput);
-            
+
             if (startDate) {
                 const startInput = document.createElement('input');
                 startInput.type = 'hidden';
@@ -294,7 +307,7 @@
                 startInput.value = startDate;
                 form.appendChild(startInput);
             }
-            
+
             if (endDate) {
                 const endInput = document.createElement('input');
                 endInput.type = 'hidden';
@@ -302,7 +315,7 @@
                 endInput.value = endDate;
                 form.appendChild(endInput);
             }
-            
+
             if (role) {
                 const roleInput = document.createElement('input');
                 roleInput.type = 'hidden';
@@ -310,7 +323,7 @@
                 roleInput.value = role;
                 form.appendChild(roleInput);
             }
-            
+
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);

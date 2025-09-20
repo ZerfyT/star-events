@@ -1,4 +1,4 @@
-﻿@model star_events.Models.Event
+﻿@model Event
 
 @{
     ViewData["Title"] = "Book - " + Model.Title;
@@ -74,9 +74,9 @@
 
                 <!-- FIXED: Changed form action to Payment -->
                 <form id="bookingForm" action="@Url.Action("Payment", "Home")" method="get" class="booking-form">
-                    <input type="hidden" name="eventId" value="@Model.EventID" />
-                    <input type="hidden" name="selectedSeats" id="selectedSeatsInput" />
-                    <input type="hidden" name="totalAmount" id="totalAmountInput" />
+                    <input type="hidden" name="eventId" value="@Model.EventID"/>
+                    <input type="hidden" name="selectedSeats" id="selectedSeatsInput"/>
+                    <input type="hidden" name="totalAmount" id="totalAmountInput"/>
 
                     <div class="seat-selection-container">
                         <div class="screen-indicator">

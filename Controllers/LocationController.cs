@@ -50,18 +50,15 @@ public class LocationController : Controller
             TempData["SuccessMessage"] = $"Location '{location.Name}' created successfully!";
             return RedirectToAction(nameof(Index));
         }
-        else
-        {
-            // foreach (var modelStateEntry in ModelState.Values)
-            // {
-            //     foreach (var error in modelStateEntry.Errors)
-            //     {
-            //         // Log or display error.ErrorMessage
-            //         Console.WriteLine(error.ErrorMessage);
-            //     }
-            // }
-        }
-        
+
+        // foreach (var modelStateEntry in ModelState.Values)
+        // {
+        //     foreach (var error in modelStateEntry.Errors)
+        //     {
+        //         // Log or display error.ErrorMessage
+        //         Console.WriteLine(error.ErrorMessage);
+        //     }
+        // }
         return View(location);
     }
 

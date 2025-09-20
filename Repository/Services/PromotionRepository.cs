@@ -9,7 +9,6 @@ public class PromotionRepository : GenericRepository<Promotion>, IPromotionRepos
 {
     public PromotionRepository(ApplicationDbContext context) : base(context)
     {
-        
     }
 
     public override IEnumerable<Promotion> GetAll()

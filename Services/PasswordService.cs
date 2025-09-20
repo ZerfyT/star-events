@@ -16,7 +16,7 @@ public class PasswordService : IPasswordService
 
         var allChars = LowercaseChars + UppercaseChars + DigitChars + SpecialChars;
         var password = new char[length];
-        
+
         // Ensure at least one character from each category
         password[0] = LowercaseChars[RandomNumberGenerator.GetInt32(LowercaseChars.Length)];
         password[1] = UppercaseChars[RandomNumberGenerator.GetInt32(UppercaseChars.Length)];
@@ -24,15 +24,12 @@ public class PasswordService : IPasswordService
         password[3] = SpecialChars[RandomNumberGenerator.GetInt32(SpecialChars.Length)];
 
         // Fill the rest with random characters
-        for (int i = 4; i < length; i++)
-        {
-            password[i] = allChars[RandomNumberGenerator.GetInt32(allChars.Length)];
-        }
+        for (var i = 4; i < length; i++) password[i] = allChars[RandomNumberGenerator.GetInt32(allChars.Length)];
 
         // Shuffle the password array
-        for (int i = 0; i < length; i++)
+        for (var i = 0; i < length; i++)
         {
-            int randomIndex = RandomNumberGenerator.GetInt32(length);
+            var randomIndex = RandomNumberGenerator.GetInt32(length);
             (password[i], password[randomIndex]) = (password[randomIndex], password[i]);
         }
 

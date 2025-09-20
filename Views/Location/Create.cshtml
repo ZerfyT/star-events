@@ -1,4 +1,4 @@
-@model star_events.Models.Location
+@model Location
 
 @{
     ViewData["Title"] = "Create Venue";
@@ -19,39 +19,40 @@
             <div class="card-body">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    
+
                     <div class="form-group">
                         <label asp-for="Name" class="form-label">
                             <i class="bi bi-building"></i> Venue Name
                         </label>
-                        <input asp-for="Name" class="form-control" placeholder="Enter venue name" />
+                        <input asp-for="Name" class="form-control" placeholder="Enter venue name"/>
                         <span asp-validation-for="Name" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label asp-for="Address" class="form-label">
                             <i class="bi bi-geo-alt"></i> Address
                         </label>
-                        <input asp-for="Address" class="form-control" placeholder="Enter venue address" />
+                        <input asp-for="Address" class="form-control" placeholder="Enter venue address"/>
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label asp-for="City" class="form-label">
                             <i class="bi bi-geo"></i> City
                         </label>
-                        <input asp-for="City" class="form-control" placeholder="Enter city" />
+                        <input asp-for="City" class="form-control" placeholder="Enter city"/>
                         <span asp-validation-for="City" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <label asp-for="Capacity" class="form-label">
                             <i class="bi bi-people"></i> Capacity
                         </label>
-                        <input asp-for="Capacity" type="number" class="form-control" placeholder="Enter maximum capacity" />
+                        <input asp-for="Capacity" type="number" class="form-control"
+                               placeholder="Enter maximum capacity"/>
                         <span asp-validation-for="Capacity" class="text-danger"></span>
                     </div>
-                    
+
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-check-circle"></i> Create Venue
@@ -67,5 +68,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

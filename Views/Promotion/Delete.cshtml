@@ -1,9 +1,9 @@
-@model star_events.Models.Promotion
+@model Promotion
 
 @{
     ViewData["Title"] = "Delete Promotion";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    
+
     var now = DateTime.Now;
     var isExpired = Model.EndDate < now;
     var isNotStarted = Model.StartDate > now;
@@ -25,8 +25,9 @@
                     <i class="bi bi-exclamation-triangle"></i>
                 </div>
                 <h4>Are you sure you want to delete this promotion?</h4>
-                <p class="text-muted">This action cannot be undone. Existing bookings that used this promotion may be affected.</p>
-                
+                <p class="text-muted">This action cannot be undone. Existing bookings that used this promotion may be
+                    affected.</p>
+
                 <div class="details-card mt-4">
                     <div class="card-header">
                         <h6><i class="bi bi-percent"></i> Promotion to be deleted</h6>
@@ -40,7 +41,7 @@
                                 <strong class="text-primary">@Html.DisplayFor(model => model.PromoCode)</strong>
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-calendar-event"></i> Event
@@ -56,7 +57,7 @@
                                 }
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-percent"></i> @Html.DisplayNameFor(model => model.DiscountType)
@@ -65,10 +66,11 @@
                                 @{
                                     var discountTypeClass = Model.DiscountType == "Percentage" ? "bg-success" : "bg-warning";
                                 }
-                                <span class="badge @discountTypeClass fs-6">@Html.DisplayFor(model => model.DiscountType)</span>
+                                <span
+                                    class="badge @discountTypeClass fs-6">@Html.DisplayFor(model => model.DiscountType)</span>
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-currency-dollar"></i> @Html.DisplayNameFor(model => model.DiscountValue)
@@ -76,15 +78,17 @@
                             <div class="detail-value">
                                 @if (Model.DiscountType == "Percentage")
                                 {
-                                    <span class="text-success fw-bold fs-5">@Html.DisplayFor(model => model.DiscountValue)%</span>
+                                    <span
+                                        class="text-success fw-bold fs-5">@Html.DisplayFor(model => model.DiscountValue)%</span>
                                 }
                                 else
                                 {
-                                    <span class="text-success fw-bold fs-5">$@Html.DisplayFor(model => model.DiscountValue)</span>
+                                    <span
+                                        class="text-success fw-bold fs-5">$@Html.DisplayFor(model => model.DiscountValue)</span>
                                 }
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-calendar-plus"></i> @Html.DisplayNameFor(model => model.StartDate)
@@ -93,7 +97,7 @@
                                 <span class="text-info">@Model.StartDate.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-calendar-x"></i> @Html.DisplayNameFor(model => model.EndDate)
@@ -102,7 +106,7 @@
                                 <span class="text-info">@Model.EndDate.ToString("MMM dd, yyyy 'at' h:mm tt")</span>
                             </div>
                         </div>
-                        
+
                         <div class="detail-item">
                             <div class="detail-label">
                                 <i class="bi bi-toggle-on"></i> Status
@@ -110,10 +114,10 @@
                             <div class="detail-value">
                                 @{
                                     var isActive = Model.IsActive && !isExpired && !isNotStarted;
-                                    
+
                                     string statusClass;
                                     string statusText;
-                                    
+
                                     if (!Model.IsActive)
                                     {
                                         statusClass = "bg-secondary";
@@ -140,10 +144,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <form asp-action="Delete" class="mt-4">
-                    <input type="hidden" asp-for="PromotionID" />
-                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you absolutely sure you want to delete this promotion? This action cannot be undone!')">
+                    <input type="hidden" asp-for="PromotionID"/>
+                    <button type="submit" class="btn btn-danger"
+                            onclick="return confirm('Are you absolutely sure you want to delete this promotion? This action cannot be undone!')">
                         <i class="bi bi-trash"></i> Yes, Delete Promotion
                     </button>
                     <a asp-action="Index" class="btn btn-outline-secondary">
@@ -153,7 +158,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="col-lg-4">
         <div class="stats-card">
             <div class="d-flex align-items-center mb-3">
@@ -167,7 +172,7 @@
             @{
                 var isCurrentlyActive = Model.IsActive && !isExpired && !isNotStarted;
             }
-            
+
             <div class="mb-3">
                 <div class="d-flex justify-content-between">
                     <span>Promotion Status:</span>
@@ -180,16 +185,17 @@
                     <small class="text-warning">⚠️ This promotion is currently active and may be in use</small>
                 }
             </div>
-            
+
             <div class="mb-3">
                 <div class="d-flex justify-content-between">
                     <span>Time Remaining:</span>
-                    <strong class="@(Model.EndDate < now ? "text-danger" : Model.EndDate - now < TimeSpan.FromDays(7) ? "text-warning" : "text-success")">
+                    <strong
+                        class="@(Model.EndDate < now ? "text-danger" : Model.EndDate - now < TimeSpan.FromDays(7) ? "text-warning" : "text-success")">
                         @(Model.EndDate < now ? "Expired" : (Model.EndDate - now).Days + " days")
                     </strong>
                 </div>
             </div>
-            
+
             <div class="text-center">
                 <div class="h6 text-primary">Discount Value</div>
                 <div class="h5 text-danger">

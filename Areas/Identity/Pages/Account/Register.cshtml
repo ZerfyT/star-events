@@ -1,5 +1,5 @@
 ﻿@page
-@model star_events.Areas.Identity.Pages.Account.RegisterModel
+@model RegisterModel
 @{
     ViewData["Title"] = "Register - TixWave";
     Layout = "_AuthLayout";
@@ -54,11 +54,12 @@
         <div class="form-group half">
             @Html.LabelFor(m => m.Input.FirstName, new { @class = "form-label" })
             <div class="position-relative">
-                <i class='bx bx-user input-icon'></i>
-                @Html.TextBoxFor(m => m.Input.FirstName, new { 
-                    @class = "form-control", 
-                    @placeholder = "First Name",
-                    @required = "required"
+                <i class="bx bx-user input-icon"></i>
+                @Html.TextBoxFor(m => m.Input.FirstName, new
+                {
+                    @class = "form-control",
+                    placeholder = "First Name",
+                    required = "required"
                 })
             </div>
             @Html.ValidationMessageFor(m => m.Input.FirstName, "", new { @class = "text-danger" })
@@ -68,11 +69,12 @@
         <div class="form-group half">
             @Html.LabelFor(m => m.Input.LastName, new { @class = "form-label" })
             <div class="position-relative">
-                <i class='bx bx-user input-icon'></i>
-                @Html.TextBoxFor(m => m.Input.LastName, new { 
-                    @class = "form-control", 
-                    @placeholder = "Last Name",
-                    @required = "required"
+                <i class="bx bx-user input-icon"></i>
+                @Html.TextBoxFor(m => m.Input.LastName, new
+                {
+                    @class = "form-control",
+                    placeholder = "Last Name",
+                    required = "required"
                 })
             </div>
             @Html.ValidationMessageFor(m => m.Input.LastName, "", new { @class = "text-danger" })
@@ -83,11 +85,12 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Input.Username, new { @class = "form-label" })
         <div class="position-relative">
-            <i class='bx bx-at input-icon'></i>
-            @Html.TextBoxFor(m => m.Input.Username, new { 
-                @class = "form-control", 
-                @placeholder = "Choose a unique username",
-                @required = "required"
+            <i class="bx bx-at input-icon"></i>
+            @Html.TextBoxFor(m => m.Input.Username, new
+            {
+                @class = "form-control",
+                placeholder = "Choose a unique username",
+                required = "required"
             })
         </div>
         @Html.ValidationMessageFor(m => m.Input.Username, "", new { @class = "text-danger" })
@@ -99,13 +102,14 @@
         <div class="form-group half">
             @Html.LabelFor(m => m.Input.Email, new { @class = "form-label" })
             <div class="position-relative">
-                <i class='bx bx-envelope input-icon'></i>
-                @Html.TextBoxFor(m => m.Input.Email, new { 
-                    @class = "form-control", 
-                    @type = "email",
-                    @placeholder = "Enter your email address",
-                    @autocomplete = "email",
-                    @required = "required"
+                <i class="bx bx-envelope input-icon"></i>
+                @Html.TextBoxFor(m => m.Input.Email, new
+                {
+                    @class = "form-control",
+                    type = "email",
+                    placeholder = "Enter your email address",
+                    autocomplete = "email",
+                    required = "required"
                 })
             </div>
             @Html.ValidationMessageFor(m => m.Input.Email, "", new { @class = "text-danger" })
@@ -135,12 +139,13 @@
         <div class="form-group half">
             @Html.LabelFor(m => m.Input.ContactNo, new { @class = "form-label" })
             <div class="position-relative">
-                <i class='bx bx-phone input-icon'></i>
-                @Html.TextBoxFor(m => m.Input.ContactNo, new { 
-                    @class = "form-control", 
-                    @placeholder = "0771234567",
-                    @maxlength = "10",
-                    @required = "required"
+                <i class="bx bx-phone input-icon"></i>
+                @Html.TextBoxFor(m => m.Input.ContactNo, new
+                {
+                    @class = "form-control",
+                    placeholder = "0771234567",
+                    maxlength = "10",
+                    required = "required"
                 })
             </div>
             @Html.ValidationMessageFor(m => m.Input.ContactNo, "", new { @class = "text-danger" })
@@ -165,15 +170,16 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Input.Password, new { @class = "form-label" })
         <div class="position-relative">
-            <i class='bx bx-lock-alt input-icon'></i>
-            @Html.PasswordFor(m => m.Input.Password, new { 
-                @class = "form-control", 
-                @placeholder = "Create a strong password",
-                @autocomplete = "new-password",
-                @required = "required"
+            <i class="bx bx-lock-alt input-icon"></i>
+            @Html.PasswordFor(m => m.Input.Password, new
+            {
+                @class = "form-control",
+                placeholder = "Create a strong password",
+                autocomplete = "new-password",
+                required = "required"
             })
             <button type="button" class="password-toggle" title="Show password">
-                <i class='bx bx-hide'></i>
+                <i class="bx bx-hide"></i>
             </button>
         </div>
         @Html.ValidationMessageFor(m => m.Input.Password, "", new { @class = "text-danger" })
@@ -183,15 +189,16 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Input.ConfirmPassword, new { @class = "form-label" })
         <div class="position-relative">
-            <i class='bx bx-lock input-icon'></i>
-            @Html.PasswordFor(m => m.Input.ConfirmPassword, new { 
-                @class = "form-control", 
-                @placeholder = "Confirm your password",
-                @autocomplete = "new-password",
-                @required = "required"
+            <i class="bx bx-lock input-icon"></i>
+            @Html.PasswordFor(m => m.Input.ConfirmPassword, new
+            {
+                @class = "form-control",
+                placeholder = "Confirm your password",
+                autocomplete = "new-password",
+                required = "required"
             })
             <button type="button" class="password-toggle" title="Show password">
-                <i class='bx bx-hide'></i>
+                <i class="bx bx-hide"></i>
             </button>
         </div>
         @Html.ValidationMessageFor(m => m.Input.ConfirmPassword, "", new { @class = "text-danger" })
@@ -199,14 +206,14 @@
 
     <!-- Terms and Conditions -->
     <div class="form-check">
-        @Html.CheckBoxFor(m => m.Input.AgreeToTerms, new { @class = "form-check-input", @required = "required" })
+        @Html.CheckBoxFor(m => m.Input.AgreeToTerms, new { @class = "form-check-input", required = "required" })
         @Html.LabelFor(m => m.Input.AgreeToTerms, new { @class = "form-check-label" })
         @Html.ValidationMessageFor(m => m.Input.AgreeToTerms, "", new { @class = "text-danger" })
     </div>
 
     <!-- Submit Button -->
     <button type="submit" class="submit-btn">
-        <i class='bx bx-user-plus'></i>
+        <i class="bx bx-user-plus"></i>
         Create Account
     </button>
 </form>
@@ -219,11 +226,11 @@
 
 @section OverlayFeatures {
     <li>
-        <i class='bx bx-check'></i>
+        <i class="bx bx-check"></i>
         <span>Loyalty points & rewards</span>
     </li>
     <li>
-        <i class='bx bx-check'></i>
+        <i class="bx bx-check"></i>
         <span>Early bird discounts</span>
     </li>
 }

@@ -1,4 +1,4 @@
-@model star_events.Models.ApplicationUser
+@model ApplicationUser
 @{
     ViewData["Title"] = "My Profile - TixWave";
     Layout = "_Layout";
@@ -12,7 +12,7 @@
                 <div class="profile-header">
                     <div class="profile-avatar">
                         <div class="avatar-circle">
-                            <i class='bx bx-user'></i>
+                            <i class="bx bx-user"></i>
                         </div>
                     </div>
                     <div class="profile-info">
@@ -34,12 +34,14 @@
                 <!-- Profile Tabs -->
                 <div class="profile-tabs">
                     <nav class="nav nav-tabs" id="profileTabs" role="tablist">
-                        <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#personal" type="button" role="tab">
-                            <i class='bx bx-user'></i>
+                        <button class="nav-link active" id="personal-tab" data-bs-toggle="tab"
+                                data-bs-target="#personal" type="button" role="tab">
+                            <i class="bx bx-user"></i>
                             Personal Info
                         </button>
-                        <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password" type="button" role="tab">
-                            <i class='bx bx-lock-alt'></i>
+                        <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#password"
+                                type="button" role="tab">
+                            <i class="bx bx-lock-alt"></i>
                             Change Password
                         </button>
                     </nav>
@@ -55,13 +57,15 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="firstName" class="form-label">First Name</label>
-                                                <input type="text" class="form-control" id="firstName" name="FirstName" value="@Model.FirstName" required>
+                                                <input type="text" class="form-control" id="firstName" name="FirstName"
+                                                       value="@Model.FirstName" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="lastName" class="form-label">Last Name</label>
-                                                <input type="text" class="form-control" id="lastName" name="LastName" value="@Model.LastName" required>
+                                                <input type="text" class="form-control" id="lastName" name="LastName"
+                                                       value="@Model.LastName" required>
                                             </div>
                                         </div>
                                     </div>
@@ -69,23 +73,25 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="email" class="form-label">Email Address</label>
-                                                <input type="email" class="form-control" id="email" name="Email" value="@Model.Email" required>
+                                                <input type="email" class="form-control" id="email" name="Email"
+                                                       value="@Model.Email" required>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="phoneNumber" class="form-label">Phone Number</label>
-                                                <input type="tel" class="form-control" id="phoneNumber" name="PhoneNumber" value="@Model.PhoneNumber">
+                                                <input type="tel" class="form-control" id="phoneNumber"
+                                                       name="PhoneNumber" value="@Model.PhoneNumber">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">
-                                            <i class='bx bx-save'></i>
+                                            <i class="bx bx-save"></i>
                                             Update Profile
                                         </button>
                                         <button type="button" class="btn btn-secondary" onclick="resetProfileForm()">
-                                            <i class='bx bx-reset'></i>
+                                            <i class="bx bx-reset"></i>
                                             Reset
                                         </button>
                                     </div>
@@ -101,35 +107,40 @@
                                     @Html.AntiForgeryToken()
                                     <div class="form-group">
                                         <label for="currentPassword" class="form-label">Current Password</label>
-                                        <input type="password" class="form-control" id="currentPassword" name="CurrentPassword" required>
+                                        <input type="password" class="form-control" id="currentPassword"
+                                               name="CurrentPassword" required>
                                     </div>
                                     <div class="row">
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="newPassword" class="form-label">New Password</label>
-                                                <input type="password" class="form-control" id="newPassword" name="NewPassword" required>
+                                                <input type="password" class="form-control" id="newPassword"
+                                                       name="NewPassword" required>
                                                 <div class="password-strength">
                                                     <div class="strength-bar">
                                                         <div class="strength-fill" id="strengthFill"></div>
                                                     </div>
-                                                    <span class="strength-text" id="strengthText">Enter a password</span>
+                                                    <span class="strength-text"
+                                                          id="strengthText">Enter a password</span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                                                <input type="password" class="form-control" id="confirmPassword" name="ConfirmPassword" required>
+                                                <label for="confirmPassword" class="form-label">Confirm New
+                                                    Password</label>
+                                                <input type="password" class="form-control" id="confirmPassword"
+                                                       name="ConfirmPassword" required>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-actions">
                                         <button type="submit" class="btn btn-primary">
-                                            <i class='bx bx-key'></i>
+                                            <i class="bx bx-key"></i>
                                             Change Password
                                         </button>
                                         <button type="button" class="btn btn-secondary" onclick="resetPasswordForm()">
-                                            <i class='bx bx-reset'></i>
+                                            <i class="bx bx-reset"></i>
                                             Reset
                                         </button>
                                     </div>

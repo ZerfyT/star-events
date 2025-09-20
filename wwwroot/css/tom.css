@@ -49,16 +49,16 @@ body {
     overflow: hidden;
 }
 
-    .form-header::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-        animation: float 6s ease-in-out infinite;
-    }
+.form-header::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: float 6s ease-in-out infinite;
+}
 
 @keyframes float {
     0%, 100% {
@@ -108,11 +108,11 @@ body {
     font-size: 0.95rem;
 }
 
-    .form-label i {
-        margin-right: 8px;
-        font-size: 1.1rem;
-        color: var(--Alpine_Blue);
-    }
+.form-label i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+    color: var(--Alpine_Blue);
+}
 
 .form-control {
     width: 100%;
@@ -125,17 +125,17 @@ body {
     color: var(--Alpine_Dark_Blue);
 }
 
-    .form-control:focus {
-        outline: none;
-        border-color: var(--Alpine_Blue);
-        box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
-        transform: translateY(-1px);
-    }
+.form-control:focus {
+    outline: none;
+    border-color: var(--Alpine_Blue);
+    box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
+    transform: translateY(-1px);
+}
 
-    .form-control::placeholder {
-        color: var(--Text_Gray);
-        opacity: 0.7;
-    }
+.form-control::placeholder {
+    color: var(--Text_Gray);
+    opacity: 0.7;
+}
 
 /* Date Time Section */
 .date-time-section {
@@ -167,10 +167,10 @@ body {
     margin-bottom: 8px;
 }
 
-    .section-title i {
-        margin-right: 10px;
-        color: var(--Alpine_Pink);
-    }
+.section-title i {
+    margin-right: 10px;
+    color: var(--Alpine_Pink);
+}
 
 .section-subtitle {
     color: var(--Text_Gray);
@@ -206,11 +206,11 @@ body {
     text-align: center;
 }
 
-    .file-label:hover {
-        border-color: var(--Alpine_Pink);
-        background: rgba(0, 90, 255, 0.02);
-        transform: translateY(-2px);
-    }
+.file-label:hover {
+    border-color: var(--Alpine_Pink);
+    background: rgba(0, 90, 255, 0.02);
+    transform: translateY(-2px);
+}
 
 .upload-icon {
     font-size: 2.5rem;
@@ -256,10 +256,10 @@ body {
     transition: all 0.2s ease;
 }
 
-    .remove-image:hover {
-        background: #b02a37;
-        transform: scale(1.1);
-    }
+.remove-image:hover {
+    background: #b02a37;
+    transform: scale(1.1);
+}
 
 /* Form Actions */
 .form-actions {
@@ -291,16 +291,16 @@ body {
     box-shadow: 0 4px 12px rgba(0, 90, 255, 0.3);
 }
 
-    .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 20px rgba(0, 90, 255, 0.4);
-    }
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 90, 255, 0.4);
+}
 
-    .btn-primary:disabled {
-        opacity: 0.6;
-        cursor: not-allowed;
-        transform: none;
-    }
+.btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
 
 .btn-secondary {
     background: var(--White);
@@ -308,11 +308,11 @@ body {
     border: 2px solid var(--Border_Gray);
 }
 
-    .btn-secondary:hover {
-        background: var(--Light_Gray);
-        border-color: var(--Text_Gray);
-        transform: translateY(-1px);
-    }
+.btn-secondary:hover {
+    background: var(--Light_Gray);
+    border-color: var(--Text_Gray);
+    transform: translateY(-1px);
+}
 
 /* Loading Overlay */
 .loading-overlay {

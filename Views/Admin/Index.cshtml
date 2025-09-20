@@ -98,28 +98,32 @@
                     <div class="col-6">
                         @if (User.IsInRole("Admin"))
                         {
-                            <a asp-controller="User" asp-action="Create" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <a asp-controller="User" asp-action="Create"
+                               class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                                 <i class="bi bi-person-plus display-6 mb-2"></i>
                                 <span>Add User</span>
                             </a>
                         }
                         else
                         {
-                            <a asp-controller="Promotion" asp-action="Create" class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <a asp-controller="Promotion" asp-action="Create"
+                               class="btn btn-outline-primary w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                                 <i class="bi bi-percent display-6 mb-2"></i>
                                 <span>Add Promo</span>
                             </a>
                         }
-                        
+
                     </div>
                     <div class="col-6">
-                        <a asp-controller="Event" asp-action="Create" class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                        <a asp-controller="Event" asp-action="Create"
+                           class="btn btn-outline-success w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                             <i class="bi bi-calendar-plus display-6 mb-2"></i>
                             <span>Create Event</span>
                         </a>
                     </div>
                     <div class="col-6">
-                        <a asp-controller="Category" asp-action="Create" class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                        <a asp-controller="Category" asp-action="Create"
+                           class="btn btn-outline-info w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                             <i class="bi bi-tags display-6 mb-2"></i>
                             <span>Add Category</span>
                         </a>
@@ -127,19 +131,21 @@
                     <div class="col-6">
                         @if (User.IsInRole("Admin"))
                         {
-                            <a asp-controller="Location" asp-action="Create" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <a asp-controller="Location" asp-action="Create"
+                               class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                                 <i class="bi bi-geo-alt display-6 mb-2"></i>
                                 <span>Add Location</span>
                             </a>
                         }
                         else
                         {
-                            <a asp-controller="TicketType" asp-action="Create" class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
+                            <a asp-controller="TicketType" asp-action="Create"
+                               class="btn btn-outline-warning w-100 h-100 d-flex flex-column align-items-center justify-content-center p-3">
                                 <i class="bi bi-ticket-perforated display-6 mb-2"></i>
                                 <span>Add Ticket Variants</span>
                             </a>
                         }
-                       
+
                     </div>
                 </div>
             </div>
@@ -153,7 +159,8 @@
             <div class="card-body">
                 <div class="activity-list">
                     <div class="activity-item d-flex align-items-center mb-3">
-                        <div class="activity-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                        <div
+                            class="activity-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                             <i class="bi bi-person-plus"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -163,7 +170,8 @@
                         <small class="text-muted">2h ago</small>
                     </div>
                     <div class="activity-item d-flex align-items-center mb-3">
-                        <div class="activity-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                        <div
+                            class="activity-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                             <i class="bi bi-calendar-plus"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -173,7 +181,8 @@
                         <small class="text-muted">4h ago</small>
                     </div>
                     <div class="activity-item d-flex align-items-center mb-3">
-                        <div class="activity-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                        <div
+                            class="activity-icon bg-warning text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                             <i class="bi bi-ticket-perforated"></i>
                         </div>
                         <div class="flex-grow-1">
@@ -242,7 +251,7 @@
 @section Scripts {
     <script>
         // Add some interactivity to the dashboard
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Animate stats cards on load
             const statsCards = document.querySelectorAll('.stats-card');
             statsCards.forEach((card, index) => {
@@ -250,7 +259,7 @@
                     card.style.opacity = '0';
                     card.style.transform = 'translateY(20px)';
                     card.style.transition = 'all 0.5s ease';
-                    
+
                     setTimeout(() => {
                         card.style.opacity = '1';
                         card.style.transform = 'translateY(0)';
@@ -261,12 +270,12 @@
             // Add hover effects to quick action buttons
             const quickActions = document.querySelectorAll('.btn-outline-primary, .btn-outline-success, .btn-outline-info, .btn-outline-warning');
             quickActions.forEach(btn => {
-                btn.addEventListener('mouseenter', function() {
+                btn.addEventListener('mouseenter', function () {
                     this.style.transform = 'translateY(-2px)';
                     this.style.boxShadow = '0 4px 15px rgba(0,0,0,0.1)';
                 });
-                
-                btn.addEventListener('mouseleave', function() {
+
+                btn.addEventListener('mouseleave', function () {
                     this.style.transform = 'translateY(0)';
                     this.style.boxShadow = 'none';
                 });

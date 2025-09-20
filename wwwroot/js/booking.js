@@ -1,6 +1,6 @@
 // Booking Page JavaScript
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     initializeSeatSelection();
     updateBookingSummary();
 });
@@ -10,9 +10,9 @@ let totalAmount = 0;
 
 function initializeSeatSelection() {
     const seats = document.querySelectorAll('.seat');
-    
+
     seats.forEach(seat => {
-        seat.addEventListener('click', function() {
+        seat.addEventListener('click', function () {
             toggleSeatSelection(this);
         });
     });
@@ -21,11 +21,11 @@ function initializeSeatSelection() {
 function toggleSeatSelection(seatElement) {
     const seatId = seatElement.getAttribute('data-seat');
     const seatPrice = parseInt(seatElement.getAttribute('data-price'));
-    
+
     if (seatElement.classList.contains('occupied')) {
         return; // Can't select occupied seats
     }
-    
+
     if (seatElement.classList.contains('selected')) {
         // Deselect seat
         seatElement.classList.remove('selected');
@@ -38,7 +38,7 @@ function toggleSeatSelection(seatElement) {
             price: seatPrice
         });
     }
-    
+
     updateBookingSummary();
 }
 
@@ -49,17 +49,17 @@ function updateBookingSummary() {
     const summaryItems = document.getElementById('summaryItems');
     const totalPrice = document.getElementById('totalPrice');
     const proceedBtn = document.getElementById('proceedBtn');
-    
+
     // Clear previous content
     selectedSeatsList.innerHTML = '';
     summaryItems.innerHTML = '';
-    
+
     if (selectedSeats.length > 0) {
         selectedSeatsContainer.style.display = 'block';
         bookingSummary.style.display = 'block';
-        
+
         totalAmount = 0;
-        
+
         selectedSeats.forEach(seat => {
             // Add to selected seats list
             const seatItem = document.createElement('div');
@@ -69,7 +69,7 @@ function updateBookingSummary() {
                 <span class="seat-price">LKR ${seat.price.toLocaleString()}</span>
             `;
             selectedSeatsList.appendChild(seatItem);
-            
+
             // Add to summary
             const summaryItem = document.createElement('div');
             summaryItem.className = 'summary-item';
@@ -78,13 +78,13 @@ function updateBookingSummary() {
                 <span>LKR ${seat.price.toLocaleString()}</span>
             `;
             summaryItems.appendChild(summaryItem);
-            
+
             totalAmount += seat.price;
         });
-        
+
         totalPrice.textContent = `LKR ${totalAmount.toLocaleString()}`;
         proceedBtn.disabled = false;
-        
+
         // Update hidden inputs
         document.getElementById('selectedSeatsInput').value = selectedSeats.map(s => s.id).join(',');
         document.getElementById('totalAmountInput').value = totalAmount;
@@ -96,22 +96,22 @@ function updateBookingSummary() {
 }
 
 // Form submission
-document.getElementById('bookingForm').addEventListener('submit', function(e) {
+document.getElementById('bookingForm').addEventListener('submit', function (e) {
     if (selectedSeats.length === 0) {
         e.preventDefault();
         alert('Please select at least one seat before proceeding.');
         return;
     }
-    
+
     // Add loading state
     const proceedBtn = document.getElementById('proceedBtn');
     const originalText = proceedBtn.innerHTML;
     proceedBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Processing...';
     proceedBtn.disabled = true;
-    
+
     // Store booking data in session storage
     sessionStorage.setItem('selectedSeats', JSON.stringify(selectedSeats));
     sessionStorage.setItem('totalAmount', totalAmount);
-    
+
     // Allow form to submit normally to navigate to payment page
 });

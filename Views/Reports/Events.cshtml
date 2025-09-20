@@ -27,11 +27,13 @@
                 <form method="get" class="row align-items-end">
                     <div class="col-md-2">
                         <label class="form-label">Start Date</label>
-                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="startDate" class="form-control"
+                               value="@Model.StartDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-2">
                         <label class="form-label">End Date</label>
-                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="endDate" class="form-control"
+                               value="@Model.EndDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Event</label>
@@ -135,7 +137,8 @@
                     <div class="status-breakdown">
                         <div class="status-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="status-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-check-circle"></i>
                                 </div>
                                 <div>
@@ -145,12 +148,14 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.ActiveEvents</div>
-                                <small class="text-muted">@((Model.ActiveEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.ActiveEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
                             </div>
                         </div>
                         <div class="status-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="status-icon bg-info text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-calendar-check"></i>
                                 </div>
                                 <div>
@@ -160,12 +165,14 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.CompletedEvents</div>
-                                <small class="text-muted">@((Model.CompletedEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.CompletedEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
                             </div>
                         </div>
                         <div class="status-item d-flex justify-content-between align-items-center mb-3">
                             <div class="d-flex align-items-center">
-                                <div class="status-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="status-icon bg-danger text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-x-circle"></i>
                                 </div>
                                 <div>
@@ -175,7 +182,8 @@
                             </div>
                             <div class="text-end">
                                 <div class="fw-bold">@Model.CancelledEvents</div>
-                                <small class="text-muted">@((Model.CancelledEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
+                                <small
+                                    class="text-muted">@((Model.CancelledEvents * 100.0 / Model.TotalEvents).ToString("F1"))%</small>
                             </div>
                         </div>
                     </div>
@@ -196,7 +204,8 @@
                 <div class="date-summary">
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-calendar-event me-2"></i>Report Period</span>
-                        <span class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
+                        <span
+                            class="fw-semibold">@Model.StartDate.ToString("MMM dd") - @Model.EndDate.ToString("MMM dd, yyyy")</span>
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-clock me-2"></i>Days Covered</span>
@@ -204,7 +213,8 @@
                     </div>
                     <div class="summary-item d-flex justify-content-between align-items-center mb-3">
                         <span><i class="bi bi-graph-up me-2"></i>Events per Day</span>
-                        <span class="fw-semibold">@((Model.TotalEvents / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
+                        <span
+                            class="fw-semibold">@((Model.TotalEvents / Math.Max((Model.EndDate - Model.StartDate).Days + 1, 1)).ToString("F1"))</span>
                     </div>
                 </div>
             </div>
@@ -223,37 +233,39 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
-                            <tr>
-                                <th class="border-0">Event ID</th>
-                                <th class="border-0">Title</th>
-                                <th class="border-0">Start Date</th>
-                                <th class="border-0">End Date</th>
-                                <th class="border-0">Status</th>
-                                <th class="border-0">Description</th>
-                            </tr>
+                        <tr>
+                            <th class="border-0">Event ID</th>
+                            <th class="border-0">Title</th>
+                            <th class="border-0">Start Date</th>
+                            <th class="border-0">End Date</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Description</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var evt in Model.Events)
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="fw-semibold">#@evt.EventID</span>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold">@evt.Title</span>
-                                    </td>
-                                    <td>@evt.StartDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>@evt.EndDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>
-                                        <span class="badge @(evt.Status == "Active" ? "bg-success" : evt.Status == "Completed" ? "bg-info" : "bg-danger")">
+                        @foreach (var evt in Model.Events)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">#@evt.EventID</span>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">@evt.Title</span>
+                                </td>
+                                <td>@evt.StartDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>@evt.EndDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>
+                                        <span
+                                            class="badge @(evt.Status == "Active" ? "bg-success" : evt.Status == "Completed" ? "bg-info" : "bg-danger")">
                                             @evt.Status
                                         </span>
-                                    </td>
-                                    <td>
-                                        <small class="text-muted">@(evt.Description?.Length > 50 ? evt.Description.Substring(0, 50) + "..." : evt.Description)</small>
-                                    </td>
-                                </tr>
-                            }
+                                </td>
+                                <td>
+                                    <small
+                                        class="text-muted">@(evt.Description?.Length > 50 ? evt.Description.Substring(0, 50) + "..." : evt.Description)</small>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -268,23 +280,23 @@
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
             const eventId = document.querySelector('select[name="eventId"]').value;
-            
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '@Url.Action("Export", "Reports")';
-            
+
             const typeInput = document.createElement('input');
             typeInput.type = 'hidden';
             typeInput.name = 'reportType';
             typeInput.value = type;
             form.appendChild(typeInput);
-            
+
             const formatInput = document.createElement('input');
             formatInput.type = 'hidden';
             formatInput.name = 'format';
             formatInput.value = format;
             form.appendChild(formatInput);
-            
+
             if (startDate) {
                 const startInput = document.createElement('input');
                 startInput.type = 'hidden';
@@ -292,7 +304,7 @@
                 startInput.value = startDate;
                 form.appendChild(startInput);
             }
-            
+
             if (endDate) {
                 const endInput = document.createElement('input');
                 endInput.type = 'hidden';
@@ -300,7 +312,7 @@
                 endInput.value = endDate;
                 form.appendChild(endInput);
             }
-            
+
             if (eventId) {
                 const eventInput = document.createElement('input');
                 eventInput.type = 'hidden';
@@ -308,7 +320,7 @@
                 eventInput.value = eventId;
                 form.appendChild(eventInput);
             }
-            
+
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);

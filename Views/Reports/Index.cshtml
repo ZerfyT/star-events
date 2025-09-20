@@ -95,7 +95,8 @@
                                 </div>
                                 <div class="report-content">
                                     <h6>Overall Sales Reports</h6>
-                                    <p class="text-muted">Track total income, payment methods, and financial performance across all events</p>
+                                    <p class="text-muted">Track total income, payment methods, and financial performance
+                                        across all events</p>
                                     <a asp-action="Revenue" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-eye me-1"></i>View Report
                                     </a>
@@ -109,7 +110,8 @@
                                 </div>
                                 <div class="report-content">
                                     <h6>Users Reports</h6>
-                                    <p class="text-muted">Analyze user registrations, roles, and activity across the platform</p>
+                                    <p class="text-muted">Analyze user registrations, roles, and activity across the
+                                        platform</p>
                                     <a asp-action="Users" class="btn btn-outline-info btn-sm">
                                         <i class="bi bi-eye me-1"></i>View Report
                                     </a>
@@ -123,7 +125,8 @@
                                 </div>
                                 <div class="report-content">
                                     <h6>Events Reports</h6>
-                                    <p class="text-muted">Analyze all events performance, attendance, and status across the platform</p>
+                                    <p class="text-muted">Analyze all events performance, attendance, and status across
+                                        the platform</p>
                                     <a asp-action="Events" class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-eye me-1"></i>View Report
                                     </a>
@@ -141,7 +144,8 @@
                                 </div>
                                 <div class="report-content">
                                     <h6>Ticket Sales Reports</h6>
-                                    <p class="text-muted">Track ticket sales, scanning status, and attendance for your events</p>
+                                    <p class="text-muted">Track ticket sales, scanning status, and attendance for your
+                                        events</p>
                                     <a asp-action="TicketSales" class="btn btn-outline-primary btn-sm">
                                         <i class="bi bi-eye me-1"></i>View Report
                                     </a>
@@ -155,7 +159,8 @@
                                 </div>
                                 <div class="report-content">
                                     <h6>Revenue Reports</h6>
-                                    <p class="text-muted">Track income, payment methods, and financial performance for your events</p>
+                                    <p class="text-muted">Track income, payment methods, and financial performance for
+                                        your events</p>
                                     <a asp-action="Revenue" class="btn btn-outline-success btn-sm">
                                         <i class="bi bi-eye me-1"></i>View Report
                                     </a>
@@ -197,14 +202,17 @@
                         @foreach (var booking in Model.RecentBookings.Take(5))
                         {
                             <div class="activity-item d-flex align-items-center mb-3">
-                                <div class="activity-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="activity-icon bg-success text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-ticket-perforated"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="fw-semibold">Booking #@booking.BookingID</div>
-                                    <small class="text-muted">$@booking.TotalAmount.ToString("N2") • @booking.BookingDateTime.ToString("MMM dd, yyyy")</small>
+                                    <small
+                                        class="text-muted">$@booking.TotalAmount.ToString("N2") • @booking.BookingDateTime.ToString("MMM dd, yyyy")</small>
                                 </div>
-                                <span class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                <span
+                                    class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
                                     @booking.Status
                                 </span>
                             </div>
@@ -230,14 +238,17 @@
                         @foreach (var payment in Model.RecentPayments.Take(5))
                         {
                             <div class="activity-item d-flex align-items-center mb-3">
-                                <div class="activity-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                <div
+                                    class="activity-icon bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
                                     <i class="bi bi-credit-card"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <div class="fw-semibold">Payment #@payment.PaymentID</div>
-                                    <small class="text-muted">$@payment.AmountPaid.ToString("N2") • @payment.PaymentMethod</small>
+                                    <small
+                                        class="text-muted">$@payment.AmountPaid.ToString("N2") • @payment.PaymentMethod</small>
                                 </div>
-                                <span class="badge @(payment.PaymentStatus == "Completed" ? "bg-success" : payment.PaymentStatus == "Pending" ? "bg-warning" : "bg-danger")">
+                                <span
+                                    class="badge @(payment.PaymentStatus == "Completed" ? "bg-success" : payment.PaymentStatus == "Pending" ? "bg-warning" : "bg-danger")">
                                     @payment.PaymentStatus
                                 </span>
                             </div>

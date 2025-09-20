@@ -27,11 +27,13 @@
                 <form method="get" class="row align-items-end">
                     <div class="col-md-3">
                         <label class="form-label">Start Date</label>
-                        <input type="date" name="startDate" class="form-control" value="@Model.StartDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="startDate" class="form-control"
+                               value="@Model.StartDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">End Date</label>
-                        <input type="date" name="endDate" class="form-control" value="@Model.EndDate.ToString("yyyy-MM-dd")" />
+                        <input type="date" name="endDate" class="form-control"
+                               value="@Model.EndDate.ToString("yyyy-MM-dd")"/>
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Status</label>
@@ -123,51 +125,55 @@
                 <div class="table-responsive">
                     <table class="table table-hover mb-0">
                         <thead>
-                            <tr>
-                                <th class="border-0">Booking ID</th>
-                                <th class="border-0">User</th>
-                                <th class="border-0">Total Amount</th>
-                                <th class="border-0">Status</th>
-                                <th class="border-0">Booking Date</th>
-                                <th class="border-0">Actions</th>
-                            </tr>
+                        <tr>
+                            <th class="border-0">Booking ID</th>
+                            <th class="border-0">User</th>
+                            <th class="border-0">Total Amount</th>
+                            <th class="border-0">Status</th>
+                            <th class="border-0">Booking Date</th>
+                            <th class="border-0">Actions</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            @foreach (var booking in Model.Bookings)
-                            {
-                                <tr>
-                                    <td>
-                                        <span class="fw-semibold">#@booking.BookingID</span>
-                                    </td>
-                                    <td>
-                                        <div class="d-flex align-items-center">
-                                            <div class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
-                                                @(booking.User?.FirstName?.Substring(0, 1).ToUpper() ?? "U")
-                                            </div>
-                                            <div>
-                                                <div class="fw-semibold">@(booking.User?.FirstName ?? "Unknown") @(booking.User?.LastName ?? "User")</div>
-                                                <small class="text-muted">@(booking.User?.Email ?? "No email")</small>
-                                            </div>
+                        @foreach (var booking in Model.Bookings)
+                        {
+                            <tr>
+                                <td>
+                                    <span class="fw-semibold">#@booking.BookingID</span>
+                                </td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div
+                                            class="avatar-sm bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3">
+                                            @(booking.User?.FirstName?.Substring(0, 1).ToUpper() ?? "U")
                                         </div>
-                                    </td>
-                                    <td>
-                                        <span class="fw-bold text-success">$@booking.TotalAmount.ToString("N2")</span>
-                                    </td>
-                                    <td>
-                                        <span class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
+                                        <div>
+                                            <div
+                                                class="fw-semibold">@(booking.User?.FirstName ?? "Unknown") @(booking.User?.LastName ?? "User")</div>
+                                            <small class="text-muted">@(booking.User?.Email ?? "No email")</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-bold text-success">$@booking.TotalAmount.ToString("N2")</span>
+                                </td>
+                                <td>
+                                        <span
+                                            class="badge @(booking.Status == "Completed" ? "bg-success" : booking.Status == "Pending" ? "bg-warning" : "bg-danger")">
                                             @booking.Status
                                         </span>
-                                    </td>
-                                    <td>@booking.BookingDateTime.ToString("MMM dd, yyyy HH:mm")</td>
-                                    <td>
-                                        <div class="btn-group" role="group">
-                                            <a asp-action="BookingDetails" asp-route-id="@booking.BookingID" class="btn btn-outline-info btn-action" title="View Details">
-                                                <i class="bi bi-eye"></i>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                            }
+                                </td>
+                                <td>@booking.BookingDateTime.ToString("MMM dd, yyyy HH:mm")</td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a asp-action="BookingDetails" asp-route-id="@booking.BookingID"
+                                           class="btn btn-outline-info btn-action" title="View Details">
+                                            <i class="bi bi-eye"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
                         </tbody>
                     </table>
                 </div>
@@ -182,17 +188,17 @@
             const startDate = document.querySelector('input[name="startDate"]').value;
             const endDate = document.querySelector('input[name="endDate"]').value;
             const status = document.querySelector('select[name="status"]').value;
-            
+
             const form = document.createElement('form');
             form.method = 'POST';
             form.action = '@Url.Action("Export", "Payment")';
-            
+
             const typeInput = document.createElement('input');
             typeInput.type = 'hidden';
             typeInput.name = 'exportType';
             typeInput.value = 'bookings';
             form.appendChild(typeInput);
-            
+
             if (startDate) {
                 const startInput = document.createElement('input');
                 startInput.type = 'hidden';
@@ -200,7 +206,7 @@
                 startInput.value = startDate;
                 form.appendChild(startInput);
             }
-            
+
             if (endDate) {
                 const endInput = document.createElement('input');
                 endInput.type = 'hidden';
@@ -208,7 +214,7 @@
                 endInput.value = endDate;
                 form.appendChild(endInput);
             }
-            
+
             if (status) {
                 const statusInput = document.createElement('input');
                 statusInput.type = 'hidden';
@@ -216,7 +222,7 @@
                 statusInput.value = status;
                 form.appendChild(statusInput);
             }
-            
+
             document.body.appendChild(form);
             form.submit();
             document.body.removeChild(form);

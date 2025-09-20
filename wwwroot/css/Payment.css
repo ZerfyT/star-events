@@ -37,15 +37,15 @@ body {
     position: relative;
 }
 
-    .payment-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: linear-gradient(90deg, var(--Alpine_Blue), var(--Alpine_Pink));
-    }
+.payment-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--Alpine_Blue), var(--Alpine_Pink));
+}
 
 .header {
     text-align: center;
@@ -53,18 +53,18 @@ body {
     background: linear-gradient(135deg, rgba(0, 90, 255, 0.05), rgba(253, 75, 199, 0.05));
 }
 
-    .header h1 {
-        color: var(--Alpine_Dark_Blue);
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 8px;
-    }
+.header h1 {
+    color: var(--Alpine_Dark_Blue);
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
 
-    .header p {
-        color: var(--Alpine_Navy);
-        font-size: 16px;
-        opacity: 0.8;
-    }
+.header p {
+    color: var(--Alpine_Navy);
+    font-size: 16px;
+    opacity: 0.8;
+}
 
 .payment-form {
     padding: 30px;
@@ -99,20 +99,20 @@ input {
     transition: all 0.3s ease;
 }
 
-    input:focus {
-        outline: none;
-        border-color: var(--Alpine_Blue);
-        box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
-        transform: translateY(-2px);
-    }
+input:focus {
+    outline: none;
+    border-color: var(--Alpine_Blue);
+    box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
+    transform: translateY(-2px);
+}
 
-    input::placeholder {
-        color: rgba(11, 20, 38, 0.4);
-    }
+input::placeholder {
+    color: rgba(11, 20, 38, 0.4);
+}
 
-    input:valid {
-        border-color: rgba(0, 90, 255, 0.3);
-    }
+input:valid {
+    border-color: rgba(0, 90, 255, 0.3);
+}
 
 .amount-section {
     margin: 30px 0;
@@ -158,14 +158,14 @@ input {
     margin-bottom: 20px;
 }
 
-    .pay-button:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 10px 25px rgba(0, 90, 255, 0.3);
-    }
+.pay-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 90, 255, 0.3);
+}
 
-    .pay-button:active {
-        transform: translateY(0);
-    }
+.pay-button:active {
+    transform: translateY(0);
+}
 
 .security-info {
     display: flex;
@@ -177,9 +177,9 @@ input {
     opacity: 0.8;
 }
 
-    .security-info svg {
-        color: var(--Alpine_Blue);
-    }
+.security-info svg {
+    color: var(--Alpine_Blue);
+}
 
 /* Card number formatting */
 #cardNumber {
@@ -210,9 +210,9 @@ input {
         padding: 30px 20px 15px;
     }
 
-        .header h1 {
-            font-size: 24px;
-        }
+    .header h1 {
+        font-size: 24px;
+    }
 
     .payment-form {
         padding: 20px;
@@ -223,9 +223,9 @@ input {
         gap: 0;
     }
 
-        .form-row .form-group:first-child {
-            margin-bottom: 24px;
-        }
+    .form-row .form-group:first-child {
+        margin-bottom: 24px;
+    }
 
     .amount-section {
         margin: 20px 0;
@@ -242,16 +242,16 @@ input {
     cursor: not-allowed;
 }
 
-    .pay-button.loading::after {
-        content: '';
-        width: 20px;
-        height: 20px;
-        border: 2px solid transparent;
-        border-top: 2px solid var(--White);
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin-left: 10px;
-    }
+.pay-button.loading::after {
+    content: '';
+    width: 20px;
+    height: 20px;
+    border: 2px solid transparent;
+    border-top: 2px solid var(--White);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 10px;
+}
 
 @keyframes spin {
     0% {
@@ -276,10 +276,10 @@ input.error {
     background-color: rgba(255, 68, 68, 0.05);
 }
 
-    input.error:focus {
-        border-color: #ff4444;
-        box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
-    }
+input.error:focus {
+    border-color: #ff4444;
+    box-shadow: 0 0 0 3px rgba(255, 68, 68, 0.1);
+}
 
 /* Promo Code Section */
 .promo-section {

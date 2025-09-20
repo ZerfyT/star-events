@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"]</title>
 
     <!-- Favicon -->
@@ -15,7 +15,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Box Icons -->
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -24,42 +24,42 @@
     <link rel="stylesheet" href="~/css/login.css" asp-append-version="true">
 </head>
 <body>
-    <div class="auth-container">
-        <!-- Left Side - Form -->
-        <div class="left-side">
-            <!-- Brand Logo -->
-            <div class="brand-logo">
-                <div class="logo-icon">
-                    <i class='bx bx-movie-play'></i>
-                </div>
-                <div class="logo-text">TixWave</div>
+<div class="auth-container">
+    <!-- Left Side - Form -->
+    <div class="left-side">
+        <!-- Brand Logo -->
+        <div class="brand-logo">
+            <div class="logo-icon">
+                <i class="bx bx-movie-play"></i>
             </div>
-
-            <!-- Form Container -->
-            <div class="form-container">
-                @RenderBody()
-            </div>
+            <div class="logo-text">TixWave</div>
         </div>
 
-        <!-- Right Side - Image -->
-        <div class="right-side">
-            <img src="~/images/pexels-wendywei-2881201.jpg" alt="TixWave Background" />
-            <div class="overlay-content">
-                <h2 class="overlay-title">@ViewData["OverlayTitle"]</h2>
-                <p class="overlay-subtitle">@ViewData["OverlaySubtitle"]</p>
-                <ul class="overlay-features">
-                    @RenderSection("OverlayFeatures", required: false)
-                </ul>
-            </div>
+        <!-- Form Container -->
+        <div class="form-container">
+            @RenderBody()
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Right Side - Image -->
+    <div class="right-side">
+        <img src="~/images/pexels-wendywei-2881201.jpg" alt="TixWave Background"/>
+        <div class="overlay-content">
+            <h2 class="overlay-title">@ViewData["OverlayTitle"]</h2>
+            <p class="overlay-subtitle">@ViewData["OverlaySubtitle"]</p>
+            <ul class="overlay-features">
+                @RenderSection("OverlayFeatures", false)
+            </ul>
+        </div>
+    </div>
+</div>
 
-    <!-- Custom JavaScript with proper cache busting -->
-    <script src="~/js/login.js" asp-append-version="true"></script>
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
 
-    @await RenderSectionAsync("Scripts", required: false)
+<!-- Custom JavaScript with proper cache busting -->
+<script src="~/js/login.js" asp-append-version="true"></script>
+
+@await RenderSectionAsync("Scripts", false)
 </body>
 </html>

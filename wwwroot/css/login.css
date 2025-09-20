@@ -38,20 +38,20 @@ body {
     overflow-x: hidden;
 }
 
-    /* Racing-inspired animated background */
-    body::before {
-        content: '';
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(45deg, transparent 49%, rgba(0, 90, 255, 0.02) 50%, transparent 51%), linear-gradient(-45deg, transparent 49%, rgba(253, 75, 199, 0.02) 50%, transparent 51%);
-        background-size: 60px 60px;
-        animation: racingStripes 20s linear infinite;
-        z-index: -1;
-        pointer-events: none;
-    }
+/* Racing-inspired animated background */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, transparent 49%, rgba(0, 90, 255, 0.02) 50%, transparent 51%), linear-gradient(-45deg, transparent 49%, rgba(253, 75, 199, 0.02) 50%, transparent 51%);
+    background-size: 60px 60px;
+    animation: racingStripes 20s linear infinite;
+    z-index: -1;
+    pointer-events: none;
+}
 
 @keyframes racingStripes {
     0% {
@@ -104,28 +104,28 @@ body {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-    .logo-icon::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: none;
-        border-radius: 16px;
-        pointer-events: none;
-    }
+.logo-icon::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: none;
+    border-radius: 16px;
+    pointer-events: none;
+}
 
-    .logo-icon:hover {
-        transform: perspective(100px) rotateX(0deg) scale(1.05);
-        box-shadow: 0 15px 50px rgba(0, 90, 255, 0.25);
-    }
+.logo-icon:hover {
+    transform: perspective(100px) rotateX(0deg) scale(1.05);
+    box-shadow: 0 15px 50px rgba(0, 90, 255, 0.25);
+}
 
-    .logo-icon i {
-        font-size: 32px;
-        color: var(--Alpine_Navy);
-        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-    }
+.logo-icon i {
+    font-size: 32px;
+    color: var(--Alpine_Navy);
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
 
 .logo-text {
     font-size: 20px;
@@ -139,17 +139,17 @@ body {
     position: relative;
 }
 
-    .logo-text::after {
-        content: '';
-        position: absolute;
-        bottom: -4px;
-        left: 0;
-        width: 40%;
-        height: 3px;
-        background: var(--Alpine_Pink);
-        border-radius: 2px;
-        animation: logoUnderline 2s ease-in-out infinite alternate;
-    }
+.logo-text::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 40%;
+    height: 3px;
+    background: var(--Alpine_Pink);
+    border-radius: 2px;
+    animation: logoUnderline 2s ease-in-out infinite alternate;
+}
 
 @keyframes logoUnderline {
     0% {
@@ -181,17 +181,17 @@ body {
     position: relative;
 }
 
-    .form-title::after {
-        content: '';
-        position: absolute;
-        bottom: -8px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 80px;
-        height: 4px;
-        background: var(--Alpine_Gradient);
-        border-radius: 2px;
-    }
+.form-title::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--Alpine_Gradient);
+    border-radius: 2px;
+}
 
 .form-subtitle {
     font-size: 16px;
@@ -260,9 +260,9 @@ body {
     gap: 8px;
 }
 
-    .form-group.half {
-        flex: 1;
-    }
+.form-group.half {
+    flex: 1;
+}
 
 .form-label {
     font-weight: 600;
@@ -272,16 +272,16 @@ body {
     position: relative;
 }
 
-    .form-label::after {
-        content: '';
-        position: absolute;
-        bottom: -2px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: var(--Alpine_Blue);
-        transition: width 0.3s ease;
-    }
+.form-label::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--Alpine_Blue);
+    transition: width 0.3s ease;
+}
 
 .form-group:focus-within .form-label::after {
     width: 30px;
@@ -314,23 +314,23 @@ body {
     position: relative;
 }
 
-    .form-control::placeholder {
-        color: rgba(11, 20, 38, 0.4);
-        font-weight: 400;
-    }
+.form-control::placeholder {
+    color: rgba(11, 20, 38, 0.4);
+    font-weight: 400;
+}
 
-    .form-control:focus {
-        outline: none;
-        border-color: var(--Alpine_Blue);
-        box-shadow: 0 0 0 4px var(--Alpine_Blue_Light);
-        transform: translateY(-1px);
-    }
+.form-control:focus {
+    outline: none;
+    border-color: var(--Alpine_Blue);
+    box-shadow: 0 0 0 4px var(--Alpine_Blue_Light);
+    transform: translateY(-1px);
+}
 
-        .form-control:focus + .input-icon,
-        .form-control:not(:placeholder-shown) + .input-icon {
-            color: var(--Alpine_Blue);
-            transform: translateY(-50%) scale(1.1);
-        }
+.form-control:focus + .input-icon,
+.form-control:not(:placeholder-shown) + .input-icon {
+    color: var(--Alpine_Blue);
+    transform: translateY(-50%) scale(1.1);
+}
 
 /* Dropdown specific styling */
 select.form-control {
@@ -342,9 +342,9 @@ select.form-control {
     cursor: pointer;
 }
 
-    select.form-control:focus {
-        background-image: linear-gradient(45deg, transparent 50%, var(--Alpine_Pink) 50%), linear-gradient(135deg, var(--Alpine_Pink) 50%, transparent 50%);
-    }
+select.form-control:focus {
+    background-image: linear-gradient(45deg, transparent 50%, var(--Alpine_Pink) 50%), linear-gradient(135deg, var(--Alpine_Pink) 50%, transparent 50%);
+}
 
 /* Password Toggle */
 .password-toggle {
@@ -362,10 +362,10 @@ select.form-control {
     font-size: 20px;
 }
 
-    .password-toggle:hover {
-        color: var(--Alpine_Blue);
-        background: var(--Alpine_Blue_Light);
-    }
+.password-toggle:hover {
+    color: var(--Alpine_Blue);
+    background: var(--Alpine_Blue_Light);
+}
 
 /* Form Check */
 .form-check {
@@ -413,35 +413,35 @@ select.form-control {
     letter-spacing: 0.5px;
 }
 
-    .submit-btn::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: -100%;
-        width: 100%;
-        height: 100%;
-        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        transition: left 0.5s ease;
-    }
+.submit-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
+}
 
-    .submit-btn:hover::before {
-        left: 100%;
-    }
+.submit-btn:hover::before {
+    left: 100%;
+}
 
-    .submit-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 15px 50px rgba(0, 90, 255, 0.3);
-    }
+.submit-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px rgba(0, 90, 255, 0.3);
+}
 
-    .submit-btn:active {
-        transform: translateY(0);
-        box-shadow: var(--Shadow_Primary);
-    }
+.submit-btn:active {
+    transform: translateY(0);
+    box-shadow: var(--Shadow_Primary);
+}
 
-    .submit-btn i {
-        font-size: 18px;
-        filter: drop-shadow(0 1px 2px rgba(0,0,0,0.1));
-    }
+.submit-btn i {
+    font-size: 18px;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+}
 
 /* Form Links */
 .form-links {
@@ -451,33 +451,33 @@ select.form-control {
     color: rgba(11, 20, 38, 0.7);
 }
 
-    .form-links a {
-        color: var(--Alpine_Blue);
-        text-decoration: none;
-        font-weight: 600;
-        margin-left: 8px;
-        position: relative;
-        transition: color 0.3s ease;
-    }
+.form-links a {
+    color: var(--Alpine_Blue);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 8px;
+    position: relative;
+    transition: color 0.3s ease;
+}
 
-        .form-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -2px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--Alpine_Pink);
-            transition: width 0.3s ease;
-        }
+.form-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--Alpine_Pink);
+    transition: width 0.3s ease;
+}
 
-        .form-links a:hover {
-            color: var(--Alpine_Pink);
-        }
+.form-links a:hover {
+    color: var(--Alpine_Pink);
+}
 
-            .form-links a:hover::after {
-                width: 100%;
-            }
+.form-links a:hover::after {
+    width: 100%;
+}
 
 /* Right Side - Image */
 .right-side {
@@ -490,28 +490,28 @@ select.form-control {
     overflow: hidden;
 }
 
-    .right-side::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: radial-gradient(circle at 30% 20%, rgba(255,255,255,0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(253, 75, 199, 0.2) 0%, transparent 50%);
-        z-index: 1;
-    }
+.right-side::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(253, 75, 199, 0.2) 0%, transparent 50%);
+    z-index: 1;
+}
 
-    .right-side img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        filter: brightness(0.8) contrast(1.1);
-        transition: transform 0.3s ease;
-    }
+.right-side img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.8) contrast(1.1);
+    transition: transform 0.3s ease;
+}
 
-    .right-side:hover img {
-        transform: scale(1.05);
-    }
+.right-side:hover img {
+    transform: scale(1.05);
+}
 
 .overlay-content {
     position: absolute;
@@ -548,22 +548,22 @@ select.form-control {
     text-align: left;
 }
 
-    .overlay-features li {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        margin-bottom: 16px;
-        font-weight: 500;
-    }
+.overlay-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    font-weight: 500;
+}
 
-    .overlay-features i {
-        font-size: 20px;
-        color: var(--Alpine_Pink);
-        background: rgba(253, 75, 199, 0.2);
-        padding: 6px;
-        border-radius: 50%;
-        flex-shrink: 0;
-    }
+.overlay-features i {
+    font-size: 20px;
+    color: var(--Alpine_Pink);
+    background: rgba(253, 75, 199, 0.2);
+    padding: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
 
 /* Validation Errors */
 .text-danger {
@@ -638,9 +638,9 @@ select.form-control {
         height: 48px;
     }
 
-        .logo-icon i {
-            font-size: 24px;
-        }
+    .logo-icon i {
+        font-size: 24px;
+    }
 }
 
 @media (max-width: 480px) {

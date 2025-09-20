@@ -28,14 +28,14 @@
             <div class="card-body">
                 <form asp-action="Create">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="FirstName" class="form-label">
                                     <i class="bi bi-person me-1"></i>First Name
                                 </label>
-                                <input asp-for="FirstName" class="form-control" placeholder="Enter first name" />
+                                <input asp-for="FirstName" class="form-control" placeholder="Enter first name"/>
                                 <span asp-validation-for="FirstName" class="text-danger"></span>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                                 <label asp-for="LastName" class="form-label">
                                     <i class="bi bi-person me-1"></i>Last Name
                                 </label>
-                                <input asp-for="LastName" class="form-control" placeholder="Enter last name" />
+                                <input asp-for="LastName" class="form-control" placeholder="Enter last name"/>
                                 <span asp-validation-for="LastName" class="text-danger"></span>
                             </div>
                         </div>
@@ -54,13 +54,14 @@
                         <label asp-for="Email" class="form-label">
                             <i class="bi bi-envelope me-1"></i>Email Address
                         </label>
-                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter email address" />
+                        <input asp-for="Email" type="email" class="form-control" placeholder="Enter email address"/>
                         <span asp-validation-for="Email" class="text-danger"></span>
                     </div>
 
                     <div class="alert alert-info">
                         <i class="bi bi-info-circle me-2"></i>
-                        <strong>Password Information:</strong> A secure password will be automatically generated and sent to the user's email address.
+                        <strong>Password Information:</strong> A secure password will be automatically generated and
+                        sent to the user's email address.
                     </div>
 
                     <div class="form-group">
@@ -71,14 +72,15 @@
                             <option value="">Select a role</option>
                         </select>
                         <span asp-validation-for="SelectedRole" class="text-danger"></span>
-                        <small class="form-text text-muted">Choose the appropriate role for this user (only one role can be assigned)</small>
+                        <small class="form-text text-muted">Choose the appropriate role for this user (only one role can
+                            be assigned)</small>
                     </div>
 
                     <div class="form-group">
                         <label asp-for="ContactNo" class="form-label">
                             <i class="bi bi-telephone me-1"></i>Contact Number
                         </label>
-                        <input asp-for="ContactNo" class="form-control" placeholder="Enter contact number" />
+                        <input asp-for="ContactNo" class="form-control" placeholder="Enter contact number"/>
                         <span asp-validation-for="ContactNo" class="text-danger"></span>
                     </div>
 
@@ -86,7 +88,8 @@
                         <label asp-for="Address" class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>Address
                         </label>
-                        <textarea asp-for="Address" class="form-control" rows="3" placeholder="Enter address"></textarea>
+                        <textarea asp-for="Address" class="form-control" rows="3"
+                                  placeholder="Enter address"></textarea>
                         <span asp-validation-for="Address" class="text-danger"></span>
                     </div>
 
@@ -107,5 +110,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

@@ -50,14 +50,18 @@
 
             <!-- Navigation Pills - Thinner -->
             <nav class="nav-pills d-none d-md-flex">
-                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")" href="@Url.Action("Index", "Home")">Home</a>
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Index" && ViewContext.RouteData.Values["Controller"]?.ToString() == "Home" ? "active" : "")"
+                   href="@Url.Action("Index", "Home")">Home</a>
                 <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Events</a>
                 <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Trending Now</a>
-                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")" href="@Url.Action("Dashboard", "Home")">My Bookings</a>
+                <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")"
+                   href="@Url.Action("Dashboard", "Home")">My Bookings</a>
                 @if (User.IsInRole("Admin") || User.IsInRole("EventOrganizer"))
                 {
-                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRScanner" ? "active" : "")" href="@Url.Action("QRScanner", "Home")">Scanner</a>
-                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRTest" ? "active" : "")" href="@Url.Action("QRTest", "Home")">QR Test</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRScanner" ? "active" : "")"
+                       href="@Url.Action("QRScanner", "Home")">Scanner</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRTest" ? "active" : "")"
+                       href="@Url.Action("QRTest", "Home")">QR Test</a>
                 }
             </nav>
 
@@ -82,7 +86,7 @@
 @{
     var currentController = ViewContext.RouteData.Values["Controller"]?.ToString();
     var currentAction = ViewContext.RouteData.Values["Action"]?.ToString();
-    var hideFooter = (currentController == "Home" && (currentAction == "SelectSeats" || currentAction == "Payment"));
+    var hideFooter = currentController == "Home" && (currentAction == "SelectSeats" || currentAction == "Payment");
 }
 
 @if (!hideFooter)
@@ -124,7 +128,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <!-- Bottom Section -->
             <div class="footer-bottom align-items-center">
                 <div class="footer-copyright">

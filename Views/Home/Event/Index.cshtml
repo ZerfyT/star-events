@@ -1,4 +1,4 @@
-@model star_events.Models.Event
+@model Event
 
 @{
     ViewData["Title"] = Model.Title;
@@ -19,7 +19,7 @@
             }
             <div class="hero-overlay"></div>
         </div>
-        
+
         <div class="hero-content">
             <div class="container">
                 <div class="row">
@@ -31,9 +31,9 @@
                                 <span>@Model.Category.Name</span>
                             }
                         </div>
-                        
+
                         <h1 class="event-title">@Model.Title</h1>
-                        
+
                         <div class="event-meta">
                             <div class="meta-item">
                                 <i class="bi bi-calendar3"></i>
@@ -134,7 +134,8 @@
                         </h3>
                     </div>
 
-                    <form id="ticketForm" action="@Url.Action("SelectSeats", "Home", new { id = Model.EventID })" method="get">
+                    <form id="ticketForm" action="@Url.Action("SelectSeats", "Home", new { id = Model.EventID })"
+                          method="get">
                         <div class="ticket-types">
                             <!-- VIP Tickets -->
                             <div class="ticket-type">
@@ -146,9 +147,12 @@
                                 <div class="ticket-quantity">
                                     <label>Quantity:</label>
                                     <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('vip')">-</button>
-                                        <input type="number" id="vip-qty" name="vipQuantity" value="0" min="0" max="8" readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('vip')">+</button>
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('vip')">-
+                                        </button>
+                                        <input type="number" id="vip-qty" name="vipQuantity" value="0" min="0" max="8"
+                                               readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('vip')">+
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -163,9 +167,12 @@
                                 <div class="ticket-quantity">
                                     <label>Quantity:</label>
                                     <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('standard')">-</button>
-                                        <input type="number" id="standard-qty" name="standardQuantity" value="0" min="0" max="8" readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('standard')">+</button>
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('standard')">-
+                                        </button>
+                                        <input type="number" id="standard-qty" name="standardQuantity" value="0" min="0"
+                                               max="8" readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('standard')">+
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -180,9 +187,12 @@
                                 <div class="ticket-quantity">
                                     <label>Quantity:</label>
                                     <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('economy')">-</button>
-                                        <input type="number" id="economy-qty" name="economyQuantity" value="0" min="0" max="8" readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('economy')">+</button>
+                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('economy')">-
+                                        </button>
+                                        <input type="number" id="economy-qty" name="economyQuantity" value="0" min="0"
+                                               max="8" readonly>
+                                        <button type="button" class="qty-btn" onclick="increaseQuantity('economy')">+
+                                        </button>
                                     </div>
                                 </div>
                             </div>

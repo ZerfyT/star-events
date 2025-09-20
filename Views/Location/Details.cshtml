@@ -1,4 +1,4 @@
-@model star_events.Models.Location
+@model Location
 
 @{
     ViewData["Title"] = "Venue Details";
@@ -25,7 +25,7 @@
                         @Html.DisplayFor(model => model.Name)
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-geo-alt"></i> @Html.DisplayNameFor(model => model.Address)
@@ -34,7 +34,7 @@
                         @Html.DisplayFor(model => model.Address)
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-geo"></i> @Html.DisplayNameFor(model => model.City)
@@ -43,7 +43,7 @@
                         @Html.DisplayFor(model => model.City)
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-people"></i> @Html.DisplayNameFor(model => model.Capacity)
@@ -54,7 +54,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="mt-3">
             <a asp-action="Edit" asp-route-id="@Model?.LocationID" class="btn btn-primary">
                 <i class="bi bi-pencil"></i> Edit Venue

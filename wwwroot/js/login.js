@@ -446,7 +446,7 @@ function handleFormResponse(success, message, redirectUrl = null) {
     }
 
     // Scroll to top to show alert
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({top: 0, behavior: 'smooth'});
 }
 
 // Auto-hide alerts after 5 seconds

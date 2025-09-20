@@ -1,4 +1,4 @@
-@model star_events.Models.ApplicationUser
+@model ApplicationUser
 
 @{
     ViewData["Title"] = "User Details";
@@ -28,7 +28,8 @@
             <div class="card-body">
                 <div class="row mb-4">
                     <div class="col-md-3 text-center">
-                        <div class="avatar-lg bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
+                        <div
+                            class="avatar-lg bg-primary text-white rounded-circle d-flex align-items-center justify-content-center mx-auto mb-3">
                             @Model.FirstName.Substring(0, 1).ToUpper()
                         </div>
                         <h5 class="mb-0">@Model.FirstName @Model.LastName</h5>
@@ -49,7 +50,8 @@
                                     <div class="detail-label">
                                         <i class="bi bi-telephone me-2"></i>Contact Number
                                     </div>
-                                    <div class="detail-value">@(string.IsNullOrEmpty(Model.ContactNo) ? "Not provided" : Model.ContactNo)</div>
+                                    <div
+                                        class="detail-value">@(string.IsNullOrEmpty(Model.ContactNo) ? "Not provided" : Model.ContactNo)</div>
                                 </div>
                             </div>
                         </div>
@@ -60,7 +62,8 @@
                     <div class="detail-label">
                         <i class="bi bi-geo-alt me-2"></i>Address
                     </div>
-                    <div class="detail-value">@(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)</div>
+                    <div
+                        class="detail-value">@(string.IsNullOrEmpty(Model.Address) ? "Not provided" : Model.Address)</div>
                 </div>
 
                 <div class="detail-item">

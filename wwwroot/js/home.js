@@ -64,6 +64,7 @@
             carouselInner.innerHTML += slideHTML;
         });
     }
+
     generateCarouselHTML();
 
     // 3. COMBINED SEARCH, SORT, AND VIEW ALL FUNCTIONALITY
@@ -110,7 +111,11 @@
     let currentLocationFilter = 'all';
     let currentCategoryFilter = 'all';
 
-    console.log('All events with status:', allEvents.map(e => ({ name: e.name, status: e.status, statusOriginal: e.statusOriginal })));
+    console.log('All events with status:', allEvents.map(e => ({
+        name: e.name,
+        status: e.status,
+        statusOriginal: e.statusOriginal
+    })));
 
     // Initialize View All Button
     if (viewAllBtn) {
@@ -124,7 +129,7 @@
     // Search functionality
     if (searchInput) {
         let searchTimeout;
-        searchInput.addEventListener('input', function() {
+        searchInput.addEventListener('input', function () {
             clearTimeout(searchTimeout);
             searchTimeout = setTimeout(() => {
                 currentSearchTerm = this.value.toLowerCase().trim();
@@ -135,13 +140,13 @@
         });
 
         // Add search suggestions on focus
-        searchInput.addEventListener('focus', function() {
+        searchInput.addEventListener('focus', function () {
             if (!this.value) {
                 this.placeholder = 'Search by event name, type, organizer, or venue...';
             }
         });
 
-        searchInput.addEventListener('blur', function() {
+        searchInput.addEventListener('blur', function () {
             if (!this.value) {
                 this.placeholder = 'Search events by name, type, or organizer...';
             }
@@ -150,7 +155,7 @@
 
     // Clear search
     if (clearSearch) {
-        clearSearch.addEventListener('click', function() {
+        clearSearch.addEventListener('click', function () {
             searchInput.value = '';
             currentSearchTerm = '';
             updateClearButton();
@@ -161,7 +166,7 @@
 
     // Sort functionality
     if (sortSelect) {
-        sortSelect.addEventListener('change', function() {
+        sortSelect.addEventListener('change', function () {
             currentSortValue = this.value;
             console.log('Sort changed to:', currentSortValue);
             applyFiltersAndDisplay();
@@ -170,7 +175,7 @@
 
     // Status filter - FIXED
     if (statusFilter) {
-        statusFilter.addEventListener('change', function() {
+        statusFilter.addEventListener('change', function () {
             currentStatusFilter = this.value; // Keep original case
             console.log('Status filter changed to:', currentStatusFilter);
             applyFiltersAndDisplay();
@@ -179,7 +184,7 @@
 
     // Location filter
     if (locationFilter) {
-        locationFilter.addEventListener('change', function() {
+        locationFilter.addEventListener('change', function () {
             currentLocationFilter = this.value;
             console.log('Location filter changed to:', currentLocationFilter);
             applyFiltersAndDisplay();
@@ -188,7 +193,7 @@
 
     // Category filter
     if (categoryFilter) {
-        categoryFilter.addEventListener('change', function() {
+        categoryFilter.addEventListener('change', function () {
             currentCategoryFilter = this.value;
             console.log('Category filter changed to:', currentCategoryFilter);
             applyFiltersAndDisplay();
@@ -197,7 +202,7 @@
 
     // Reset filters
     if (resetFilters) {
-        resetFilters.addEventListener('click', function() {
+        resetFilters.addEventListener('click', function () {
             searchInput.value = '';
             sortSelect.value = 'default';
             statusFilter.value = 'all';
@@ -216,7 +221,7 @@
 
     // View All functionality
     if (viewAllBtn) {
-        viewAllBtn.addEventListener('click', function(e) {
+        viewAllBtn.addEventListener('click', function (e) {
             e.preventDefault();
             console.log(`View All clicked. Currently showing all: ${isShowingAll}`);
 
@@ -236,7 +241,7 @@
         if (resultsCount) {
             const visibleEvents = document.querySelectorAll('.event-card:not([style*="display: none"])').length;
             const totalEvents = allEvents.length;
-            
+
             if (currentSearchTerm || currentStatusFilter !== 'all') {
                 resultsCount.textContent = `Showing ${visibleEvents} of ${totalEvents} events`;
             } else {
@@ -411,7 +416,7 @@
     applyFiltersAndDisplay();
 
     // Keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
+    document.addEventListener('keydown', function (e) {
         if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
             e.preventDefault();
             searchInput?.focus();
@@ -468,34 +473,34 @@ function deleteEvent(eventId) {
                 },
                 body: formData
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire({
-                        title: 'Deleted!',
-                        text: data.message,
-                        icon: 'success',
-                        timer: 2000,
-                        showConfirmButton: false,
-                        background: '#0B1426',
-                        color: '#FFFFFF',
-                        iconColor: '#FD4BC7'
-                    });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: data.message,
+                            icon: 'success',
+                            timer: 2000,
+                            showConfirmButton: false,
+                            background: '#0B1426',
+                            color: '#FFFFFF',
+                            iconColor: '#FD4BC7'
+                        });
 
-                    const eventCard = document.querySelector(`[data-event-id="${eventId}"]`).closest('.col-lg-4');
-                    eventCard.style.transition = 'all 0.5s ease';
-                    eventCard.style.opacity = '0';
-                    eventCard.style.transform = 'scale(0.8) translateY(-20px)';
+                        const eventCard = document.querySelector(`[data-event-id="${eventId}"]`).closest('.col-lg-4');
+                        eventCard.style.transition = 'all 0.5s ease';
+                        eventCard.style.opacity = '0';
+                        eventCard.style.transform = 'scale(0.8) translateY(-20px)';
 
-                    setTimeout(() => {
-                        eventCard.remove();
-                        const remainingEvents = document.querySelectorAll('.event-card');
-                        if (remainingEvents.length === 0) {
-                            showNoEventsMessage();
-                        }
-                    }, 500);
-                }
-            });
+                        setTimeout(() => {
+                            eventCard.remove();
+                            const remainingEvents = document.querySelectorAll('.event-card');
+                            if (remainingEvents.length === 0) {
+                                showNoEventsMessage();
+                            }
+                        }, 500);
+                    }
+                });
         }
     });
 }
@@ -522,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (userDropdownBtn && userDropdownMenu) {
         // Toggle dropdown on button click
-        userDropdownBtn.addEventListener('click', function(e) {
+        userDropdownBtn.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             toggleDropdown();
@@ -530,7 +535,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Toggle dropdown on avatar click
         if (userAvatar) {
-            userAvatar.addEventListener('click', function(e) {
+            userAvatar.addEventListener('click', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
                 toggleDropdown();
@@ -538,7 +543,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         // Close dropdown when clicking outside
-        document.addEventListener('click', function(e) {
+        document.addEventListener('click', function (e) {
             if (!userDropdownMenu.contains(e.target) &&
                 !userDropdownBtn.contains(e.target) &&
                 (!userAvatar || !userAvatar.contains(e.target))) {
@@ -547,14 +552,14 @@ document.addEventListener('DOMContentLoaded', function () {
         });
 
         // Close dropdown on escape key
-        document.addEventListener('keydown', function(e) {
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeDropdown();
             }
         });
 
         // Prevent dropdown from closing when clicking inside it
-        userDropdownMenu.addEventListener('click', function(e) {
+        userDropdownMenu.addEventListener('click', function (e) {
             e.stopPropagation();
         });
 
@@ -598,7 +603,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Handle logout form submission with confirmation
     const logoutForm = document.querySelector('.logout-form');
     if (logoutForm) {
-        logoutForm.addEventListener('submit', function(e) {
+        logoutForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Optional: Add confirmation dialog
@@ -610,16 +615,16 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 // Add click handlers for dropdown menu items (customize as needed)
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const dropdownItems = document.querySelectorAll('.dropdown-item:not(.logout-item)');
 
     dropdownItems.forEach(item => {
-        item.addEventListener('click', function(e) {
+        item.addEventListener('click', function (e) {
             e.preventDefault();
             const text = this.querySelector('span').textContent;
 
             // Handle different menu items
-            switch(text) {
+            switch (text) {
                 case 'My Profile':
                     // Redirect to profile page
                     console.log('Navigate to profile');

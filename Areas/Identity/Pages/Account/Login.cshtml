@@ -1,5 +1,5 @@
 ﻿@page
-@model star_events.Areas.Identity.Pages.Account.LoginModel
+@model LoginModel
 @{
     ViewData["Title"] = "Login - TixWave";
     Layout = "_AuthLayout";
@@ -54,12 +54,13 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Input.Username, new { @class = "form-label" })
         <div class="position-relative">
-            <i class='bx bx-user input-icon'></i>
-            @Html.TextBoxFor(m => m.Input.Username, new {
+            <i class="bx bx-user input-icon"></i>
+            @Html.TextBoxFor(m => m.Input.Username, new
+            {
                 @class = "form-control",
-                @placeholder = "Enter your username or email",
-                @autocomplete = "username",
-                @required = "required"
+                placeholder = "Enter your username or email",
+                autocomplete = "username",
+                required = "required"
             })
         </div>
         @Html.ValidationMessageFor(m => m.Input.Username, "", new { @class = "text-danger" })
@@ -69,15 +70,16 @@
     <div class="form-group">
         @Html.LabelFor(m => m.Input.Password, new { @class = "form-label" })
         <div class="position-relative">
-            <i class='bx bx-lock-alt input-icon'></i>
-            @Html.PasswordFor(m => m.Input.Password, new {
+            <i class="bx bx-lock-alt input-icon"></i>
+            @Html.PasswordFor(m => m.Input.Password, new
+            {
                 @class = "form-control",
-                @placeholder = "Enter your password",
-                @autocomplete = "current-password",
-                @required = "required"
+                placeholder = "Enter your password",
+                autocomplete = "current-password",
+                required = "required"
             })
             <button type="button" class="password-toggle" title="Show password">
-                <i class='bx bx-hide'></i>
+                <i class="bx bx-hide"></i>
             </button>
         </div>
         @Html.ValidationMessageFor(m => m.Input.Password, "", new { @class = "text-danger" })
@@ -96,7 +98,7 @@
 
     <!-- Submit Button -->
     <button type="submit" class="submit-btn">
-        <i class='bx bx-log-in'></i>
+        <i class="bx bx-log-in"></i>
         Sign In
     </button>
 </form>
@@ -108,15 +110,15 @@
 
 @section OverlayFeatures {
     <li>
-        <i class='bx bx-check'></i>
+        <i class="bx bx-check"></i>
         <span>Instant booking confirmation</span>
     </li>
     <li>
-        <i class='bx bx-check'></i>
+        <i class="bx bx-check"></i>
         <span>Secure payment processing</span>
     </li>
     <li>
-        <i class='bx bx-check'></i>
+        <i class="bx bx-check"></i>
         <span>24/7 customer support</span>
     </li>
 }

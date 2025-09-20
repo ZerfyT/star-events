@@ -4,8 +4,7 @@ using star_events.Data;
 using star_events.Models;
 using star_events.Repository.Interfaces;
 using star_events.Repository.Services;
-using Microsoft.AspNetCore.Http.Metadata;
-using Microsoft.AspNetCore.Routing;
+using star_events.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,9 +43,9 @@ builder.Services.AddScoped<IBookingRepository, BookingRepository>();
 builder.Services.AddScoped<DbInitializer>();
 
 // Add custom services
-builder.Services.AddScoped<star_events.Services.IPasswordService, star_events.Services.PasswordService>();
-builder.Services.AddScoped<star_events.Services.IPdfReportService, star_events.Services.PdfReportService>();
-builder.Services.AddScoped<star_events.Services.IEmailService, star_events.Services.EmailService>();
+builder.Services.AddScoped<IPasswordService, PasswordService>();
+builder.Services.AddScoped<IPdfReportService, PdfReportService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 builder.Services.AddRazorPages();
 

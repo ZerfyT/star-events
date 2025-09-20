@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Edit User";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    var user = ViewBag.User as star_events.Models.ApplicationUser;
+    var user = ViewBag.User as ApplicationUser;
 }
 
 <div class="page-header">
@@ -30,15 +30,16 @@
                 <!-- User Information Form -->
                 <form asp-action="Edit">
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    <input type="hidden" asp-for="UserId" />
-                    
+                    <input type="hidden" asp-for="UserId"/>
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label class="form-label">
                                     <i class="bi bi-person me-1"></i>First Name
                                 </label>
-                                <input name="FirstName" value="@user?.FirstName" class="form-control" placeholder="Enter first name" />
+                                <input name="FirstName" value="@user?.FirstName" class="form-control"
+                                       placeholder="Enter first name"/>
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -46,7 +47,8 @@
                                 <label class="form-label">
                                     <i class="bi bi-person me-1"></i>Last Name
                                 </label>
-                                <input name="LastName" value="@user?.LastName" class="form-control" placeholder="Enter last name" />
+                                <input name="LastName" value="@user?.LastName" class="form-control"
+                                       placeholder="Enter last name"/>
                             </div>
                         </div>
                     </div>
@@ -55,28 +57,32 @@
                         <label class="form-label">
                             <i class="bi bi-envelope me-1"></i>Email Address
                         </label>
-                        <input name="Email" value="@user?.Email" type="email" class="form-control" placeholder="Enter email address" />
+                        <input name="Email" value="@user?.Email" type="email" class="form-control"
+                               placeholder="Enter email address"/>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-telephone me-1"></i>Contact Number
                         </label>
-                        <input name="ContactNo" value="@user?.ContactNo" class="form-control" placeholder="Enter contact number" />
+                        <input name="ContactNo" value="@user?.ContactNo" class="form-control"
+                               placeholder="Enter contact number"/>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-geo-alt me-1"></i>Address
                         </label>
-                        <textarea name="Address" class="form-control" rows="3" placeholder="Enter address">@user?.Address</textarea>
+                        <textarea name="Address" class="form-control" rows="3"
+                                  placeholder="Enter address">@user?.Address</textarea>
                     </div>
 
                     <div class="form-group">
                         <label class="form-label">
                             <i class="bi bi-star me-1"></i>Loyalty Points
                         </label>
-                        <input name="LoyaltyPoints" value="@user?.LoyaltyPoints" type="number" class="form-control" placeholder="Enter loyalty points" />
+                        <input name="LoyaltyPoints" value="@user?.LoyaltyPoints" type="number" class="form-control"
+                               placeholder="Enter loyalty points"/>
                         <small class="form-text text-muted">Current loyalty points for this user</small>
                     </div>
 
@@ -99,18 +105,19 @@
 
                 <!-- Role Management Form -->
                 <form asp-action="ManageRoles">
-                    <input type="hidden" name="userId" value="@Model.UserId" />
-                    
+                    <input type="hidden" name="userId" value="@Model.UserId"/>
+
                     <h5><i class="bi bi-shield-check me-2"></i>Role Management</h5>
                     <p class="text-muted">Select a role for this user (only one role can be assigned)</p>
-                    
+
                     <div class="row">
-                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        @for (var i = 0; i < Model.Roles.Count; i++)
                         {
                             <div class="col-md-6 mb-3">
                                 <div class="form-check">
-                                    <input type="hidden" asp-for="@Model.Roles[i].RoleName" />
-                                    <input asp-for="@Model.Roles[i].IsSelected" class="form-check-input" type="radio" name="SelectedRole" value="@Model.Roles[i].RoleName" />
+                                    <input type="hidden" asp-for="@Model.Roles[i].RoleName"/>
+                                    <input asp-for="@Model.Roles[i].IsSelected" class="form-check-input" type="radio"
+                                           name="SelectedRole" value="@Model.Roles[i].RoleName"/>
                                     <label asp-for="@Model.Roles[i].IsSelected" class="form-check-label">
                                         @Model.Roles[i].RoleName
                                     </label>
@@ -131,5 +138,5 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
 }

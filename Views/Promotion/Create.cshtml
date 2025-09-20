@@ -1,4 +1,4 @@
-@model star_events.Models.Promotion
+@model Promotion
 
 @{
     ViewData["Title"] = "Create Promotion";
@@ -19,7 +19,7 @@
             <div class="card-body">
                 <form asp-action="Create" class="needs-validation" novalidate>
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
-                    
+
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
@@ -37,7 +37,8 @@
                                 <label asp-for="PromoCode" class="form-label">
                                     <i class="bi bi-tag"></i> Promo Code <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="PromoCode" class="form-control" placeholder="e.g., SAVE20, EARLYBIRD" required />
+                                <input asp-for="PromoCode" class="form-control" placeholder="e.g., SAVE20, EARLYBIRD"
+                                       required/>
                                 <div class="form-text">Enter a unique promotional code</div>
                                 <span asp-validation-for="PromoCode" class="text-danger"></span>
                             </div>
@@ -61,10 +62,12 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label asp-for="DiscountValue" class="form-label">
-                                    <i class="bi bi-currency-dollar"></i> Discount Value <span class="text-danger">*</span>
+                                    <i class="bi bi-currency-dollar"></i> Discount Value <span
+                                        class="text-danger">*</span>
                                 </label>
                                 <div class="input-group">
-                                    <input asp-for="DiscountValue" class="form-control" type="number" step="0.01" min="0" placeholder="0.00" required />
+                                    <input asp-for="DiscountValue" class="form-control" type="number" step="0.01"
+                                           min="0" placeholder="0.00" required/>
                                     <span class="input-group-text" id="discountUnit">%</span>
                                 </div>
                                 <div class="form-text">Enter the discount amount</div>
@@ -79,7 +82,7 @@
                                 <label asp-for="StartDate" class="form-label">
                                     <i class="bi bi-calendar-plus"></i> Start Date <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="StartDate" class="form-control" type="datetime-local" required />
+                                <input asp-for="StartDate" class="form-control" type="datetime-local" required/>
                                 <span asp-validation-for="StartDate" class="text-danger"></span>
                             </div>
                         </div>
@@ -88,7 +91,7 @@
                                 <label asp-for="EndDate" class="form-label">
                                     <i class="bi bi-calendar-x"></i> End Date <span class="text-danger">*</span>
                                 </label>
-                                <input asp-for="EndDate" class="form-control" type="datetime-local" required />
+                                <input asp-for="EndDate" class="form-control" type="datetime-local" required/>
                                 <span asp-validation-for="EndDate" class="text-danger"></span>
                             </div>
                         </div>
@@ -98,7 +101,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <div class="form-check form-switch">
-                                    <input class="form-check-input" type="checkbox" asp-for="IsActive" id="isActive" />
+                                    <input class="form-check-input" type="checkbox" asp-for="IsActive" id="isActive"/>
                                     <label class="form-check-label" for="isActive">
                                         <i class="bi bi-toggle-on"></i> Active Promotion
                                     </label>
@@ -123,14 +126,14 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
     <script>
         // Update discount unit based on discount type
-        document.getElementById('DiscountType').addEventListener('change', function() {
+        document.getElementById('DiscountType').addEventListener('change', function () {
             const discountType = this.value;
             const unitSpan = document.getElementById('discountUnit');
             const valueInput = document.querySelector('input[name="DiscountValue"]');
-            
+
             if (discountType === 'Percentage') {
                 unitSpan.textContent = '%';
                 valueInput.max = 100;
@@ -146,10 +149,10 @@
         });
 
         // Validate end date is after start date
-        document.getElementById('EndDate').addEventListener('change', function() {
+        document.getElementById('EndDate').addEventListener('change', function () {
             const startDate = new Date(document.getElementById('StartDate').value);
             const endDate = new Date(this.value);
-            
+
             if (endDate <= startDate) {
                 this.setCustomValidity('End date must be after start date');
             } else {
@@ -158,7 +161,7 @@
         });
 
         // Set default start date to now
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const now = new Date();
             now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
             document.getElementById('StartDate').value = now.toISOString().slice(0, 16);

@@ -187,12 +187,12 @@
 
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
-    
+
     <script>
         let ticketData = null;
         let qrCodeValue = null;
 
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Get ticket ID from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const ticketId = urlParams.get('ticketId');
@@ -257,18 +257,18 @@
             document.getElementById('eventImage').setAttribute('src', ticketData.booking.event.imagePath);
             document.getElementById('eventLocation').textContent = ticketData.booking.event.location.name;
             document.getElementById('eventCategory').textContent = ticketData.booking.event.category.name;
-            
+
             // Format event date and time
             const startDate = new Date(ticketData.booking.event.startDateTime);
             const endDate = new Date(ticketData.booking.event.endDateTime);
-            document.getElementById('eventDateTime').textContent = 
+            document.getElementById('eventDateTime').textContent =
                 `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}`;
 
             // Ticket details
             document.getElementById('ticketId').textContent = `#${ticketData.ticketId}`;
             document.getElementById('ticketType').textContent = ticketData.ticketType.name;
             document.getElementById('bookingId').textContent = `#${ticketData.booking.bookingId}`;
-            
+
             const bookingDate = new Date(ticketData.booking.bookingDateTime);
             document.getElementById('bookingDate').textContent = bookingDate.toLocaleString();
 
@@ -286,14 +286,14 @@
             }
 
             // Customer details
-            document.getElementById('customerName').textContent = 
+            document.getElementById('customerName').textContent =
                 `${ticketData.booking.user.firstName} ${ticketData.booking.user.lastName}`;
             document.getElementById('customerEmail').textContent = ticketData.booking.user.email;
 
             // Payment details
             document.getElementById('ticketPrice').textContent = `$ ${ticketData.ticketType.price.toLocaleString()}`;
             document.getElementById('totalPaid').textContent = `$ ${ticketData.booking.totalAmount.toLocaleString()}`;
-            
+
             if (ticketData.booking.payments && ticketData.booking.payments.length > 0) {
                 const payment = ticketData.booking.payments[0];
                 document.getElementById('paymentMethod').textContent = payment.paymentMethod;
@@ -308,7 +308,7 @@
         function generateQRCode() {
             const canvas = document.getElementById('qrCodeCanvas');
             const qrData = qrCodeValue || ticketData.qrCodeValue;
-            
+
             if (qrData) {
                 QRCode.toCanvas(canvas, qrData, {
                     width: 300,
@@ -329,7 +329,7 @@
         }
 
         // Download QR code
-        document.getElementById('downloadQRBtn').addEventListener('click', function() {
+        document.getElementById('downloadQRBtn').addEventListener('click', function () {
             const canvas = document.getElementById('qrCodeCanvas');
             const link = document.createElement('a');
             link.download = `ticket-${ticketData.ticketId}-qr.png`;

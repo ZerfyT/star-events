@@ -1,4 +1,4 @@
-@model star_events.Models.Category
+@model Category
 
 @{
     ViewData["Title"] = "Category Details";
@@ -25,7 +25,7 @@
                         @Html.DisplayFor(model => model.Name)
                     </div>
                 </div>
-                
+
                 <div class="detail-item">
                     <div class="detail-label">
                         <i class="bi bi-text-paragraph"></i> @Html.DisplayNameFor(model => model.Description)
@@ -36,7 +36,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="mt-3">
             <a asp-action="Edit" asp-route-id="@Model?.CategoryID" class="btn btn-primary">
                 <i class="bi bi-pencil"></i> Edit Category

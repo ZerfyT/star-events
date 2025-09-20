@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     console.log('Profile page loaded');
 
     // Initialize form handlers
@@ -19,16 +19,16 @@ function initializeProfileForm() {
         phoneNumber: document.getElementById('phoneNumber').value
     };
 
-    profileForm.addEventListener('submit', async function(e) {
+    profileForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         const submitBtn = this.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
+
         // Show loading state
         submitBtn.classList.add('loading');
         submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Updating...';
-        
+
         try {
             const formData = new FormData(this);
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
@@ -43,7 +43,7 @@ function initializeProfileForm() {
             });
 
             const result = await response.json();
-            
+
             if (result.success) {
                 showAlert('success', result.message);
                 // Update original values after successful update
@@ -67,7 +67,7 @@ function initializeProfileForm() {
     });
 
     // Reset function
-    window.resetProfileForm = function() {
+    window.resetProfileForm = function () {
         document.getElementById('firstName').value = originalValues.firstName;
         document.getElementById('lastName').value = originalValues.lastName;
         document.getElementById('email').value = originalValues.email;
@@ -80,25 +80,25 @@ function initializePasswordForm() {
     const passwordForm = document.getElementById('passwordForm');
     if (!passwordForm) return;
 
-    passwordForm.addEventListener('submit', async function(e) {
+    passwordForm.addEventListener('submit', async function (e) {
         e.preventDefault();
-        
+
         const newPassword = document.getElementById('newPassword').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
-        
+
         // Validate password confirmation
         if (newPassword !== confirmPassword) {
             showAlert('danger', 'New password and confirm password do not match.');
             return;
         }
-        
+
         const submitBtn = this.querySelector('button[type="submit"]');
         const originalText = submitBtn.innerHTML;
-        
+
         // Show loading state
         submitBtn.classList.add('loading');
         submitBtn.innerHTML = '<i class="bx bx-loader-alt bx-spin"></i> Changing...';
-        
+
         try {
             const formData = new FormData(this);
             const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
@@ -113,7 +113,7 @@ function initializePasswordForm() {
             });
 
             const result = await response.json();
-            
+
             if (result.success) {
                 showAlert('success', result.message);
                 resetPasswordForm();
@@ -131,7 +131,7 @@ function initializePasswordForm() {
     });
 
     // Reset function
-    window.resetPasswordForm = function() {
+    window.resetPasswordForm = function () {
         document.getElementById('currentPassword').value = '';
         document.getElementById('newPassword').value = '';
         document.getElementById('confirmPassword').value = '';
@@ -144,7 +144,7 @@ function initializePasswordStrength() {
     const newPasswordInput = document.getElementById('newPassword');
     if (!newPasswordInput) return;
 
-    newPasswordInput.addEventListener('input', function() {
+    newPasswordInput.addEventListener('input', function () {
         updatePasswordStrength(this.value);
     });
 }
@@ -152,12 +152,12 @@ function initializePasswordStrength() {
 function updatePasswordStrength(password) {
     const strengthFill = document.getElementById('strengthFill');
     const strengthText = document.getElementById('strengthText');
-    
+
     if (!strengthFill || !strengthText) return;
 
     // Reset classes
     strengthFill.className = 'strength-fill';
-    
+
     if (!password) {
         strengthText.textContent = 'Enter a password';
         return;
@@ -217,21 +217,21 @@ function updatePasswordStrength(password) {
 function showAlert(type, message) {
     // Remove existing alerts
     clearAlerts();
-    
+
     const alertDiv = document.createElement('div');
     alertDiv.className = `alert alert-${type}`;
-    
+
     const icon = type === 'success' ? 'bx-check-circle' : 'bx-error-circle';
     alertDiv.innerHTML = `
         <i class='bx ${icon}'></i>
         <span>${message}</span>
     `;
-    
+
     // Insert at the top of the active tab content
     const activeTab = document.querySelector('.tab-pane.active');
     if (activeTab) {
         activeTab.insertBefore(alertDiv, activeTab.firstChild);
-        
+
         // Auto-remove after 5 seconds
         setTimeout(() => {
             if (alertDiv.parentNode) {
@@ -247,11 +247,11 @@ function clearAlerts() {
 }
 
 // Tab switching with smooth transitions
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const tabButtons = document.querySelectorAll('[data-bs-toggle="tab"]');
-    
+
     tabButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             // Clear any existing alerts when switching tabs
             clearAlerts();
         });
@@ -262,7 +262,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function validateForm(form) {
     const requiredFields = form.querySelectorAll('[required]');
     let isValid = true;
-    
+
     requiredFields.forEach(field => {
         if (!field.value.trim()) {
             field.classList.add('is-invalid');
@@ -271,7 +271,7 @@ function validateForm(form) {
             field.classList.remove('is-invalid');
         }
     });
-    
+
     return isValid;
 }
 

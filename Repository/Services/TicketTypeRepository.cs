@@ -9,7 +9,6 @@ public class TicketTypeRepository : GenericRepository<TicketType>, ITicketTypeRe
 {
     public TicketTypeRepository(ApplicationDbContext context) : base(context)
     {
-        
     }
 
     public override IEnumerable<TicketType> GetAll()

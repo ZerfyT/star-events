@@ -1,221 +1,229 @@
 @using System.Net
-@model IEnumerable<star_events.Models.Event>
+@model IEnumerable<Event>
 @{
     ViewData["Title"] = "TixWave - Your Ticket to Every Experience";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-    <div id="videoCarousel" class="carousel slide" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <!-- This will be populated by JavaScript -->
-        </div>
-
-        <!-- Carousel controls -->
-        <button class="carousel-control-prev custom-control" type="button" data-bs-target="#videoCarousel" data-bs-slide="prev">
-            <i class="bx bx-left-arrow-alt"></i>
-        </button>
-        <button class="carousel-control-next custom-control" type="button" data-bs-target="#videoCarousel" data-bs-slide="next">
-            <i class="bx bx-right-arrow-alt"></i>
-        </button>
+<div id="videoCarousel" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        <!-- This will be populated by JavaScript -->
     </div>
 
-    <!-- Add this search and sort section AFTER the carousel and BEFORE the event-section -->
-    <div class="search-sort-container">
-        <div class="search-section">
-            <div class="search-wrapper">
-                <i class='bx bx-search search-icon'></i>
-                <input type="text" id="searchInput" placeholder="Search events by name, type, or organizer..." class="search-input">
-                <button type="button" id="clearSearch" class="clear-search" style="display: none;">
-                    <i class="bi bi-x"></i>
-                </button>
-            </div>
-        </div>
+    <!-- Carousel controls -->
+    <button class="carousel-control-prev custom-control" type="button" data-bs-target="#videoCarousel"
+            data-bs-slide="prev">
+        <i class="bx bx-left-arrow-alt"></i>
+    </button>
+    <button class="carousel-control-next custom-control" type="button" data-bs-target="#videoCarousel"
+            data-bs-slide="next">
+        <i class="bx bx-right-arrow-alt"></i>
+    </button>
+</div>
 
-        <div class="sort-section">
-            <div class="sort-wrapper">
-                <label for="sortSelect" class="sort-label">
-                    <i class="bi bi-funnel"></i>
-                    Sort by:
-                </label>
-                <select id="sortSelect" class="sort-select">
-                    <option value="default">Default</option>
-                    <option value="name-asc">Name (A-Z)</option>
-                    <option value="name-desc">Name (Z-A)</option>
-                    <option value="date-asc">Date (Earliest)</option>
-                    <option value="date-desc">Date (Latest)</option>
-                    <option value="type-asc">Type (A-Z)</option>
-                    <option value="status-asc">Status</option>
-                </select>
-            </div>
-
-            <div class="filter-wrapper">
-                <label for="statusFilter" class="filter-label">
-                    <i class="bi bi-filter"></i>
-                    Status:
-                </label>
-                <select id="statusFilter" class="status-filter">
-                    <option value="all">All Events</option>
-                    <option value="Upcoming">Upcoming</option>
-                    <option value="Ongoing">Ongoing</option>
-                    <option value="Completed">Completed</option>
-                    <option value="Cancelled">Cancelled</option>
-                </select>
-            </div>
-
-            <div class="filter-wrapper">
-                <label for="locationFilter" class="filter-label">
-                    <i class="bi bi-geo-alt"></i>
-                    Location:
-                </label>
-                <select id="locationFilter" class="location-filter">
-                    <option value="all">All Locations</option>
-                    @if (ViewBag.Locations != null)
-                    {
-                        @foreach (var location in ViewBag.Locations)
-                        {
-                            <option value="@location.LocationID">@location.Name</option>
-                        }
-                    }
-                </select>
-            </div>
-
-            <div class="filter-wrapper">
-                <label for="categoryFilter" class="filter-label">
-                    <i class="bi bi-tags"></i>
-                    Category:
-                </label>
-                <select id="categoryFilter" class="category-filter">
-                    <option value="all">All Categories</option>
-                    @if (ViewBag.Categories != null)
-                    {
-                        @foreach (var category in ViewBag.Categories)
-                        {
-                            <option value="@category.CategoryID">@category.Name</option>
-                        }
-                    }
-                </select>
-            </div>
+<!-- Add this search and sort section AFTER the carousel and BEFORE the event-section -->
+<div class="search-sort-container">
+    <div class="search-section">
+        <div class="search-wrapper">
+            <i class="bx bx-search search-icon"></i>
+            <input type="text" id="searchInput" placeholder="Search events by name, type, or organizer..."
+                   class="search-input">
+            <button type="button" id="clearSearch" class="clear-search" style="display: none;">
+                <i class="bi bi-x"></i>
+            </button>
         </div>
     </div>
 
-    <!-- Results info -->
-    <div class="results-info">
-        <span id="resultsCount">Showing all events</span>
-        <button type="button" id="resetFilters" class="reset-filters" style="display: none;">
-            <i class="bi bi-arrow-clockwise"></i>
-            Reset Filters
-        </button>
-    </div>
-
-    <!-- No results message (hidden by default) -->
-    <div id="noResults" class="no-results" style="display: none;">
-        <div class="no-results-content">
-            <i class="bi bi-search"></i>
-            <h3>No events found</h3>
-            <p>Try adjusting your search terms or filters to find what you're looking for.</p>
+    <div class="sort-section">
+        <div class="sort-wrapper">
+            <label for="sortSelect" class="sort-label">
+                <i class="bi bi-funnel"></i>
+                Sort by:
+            </label>
+            <select id="sortSelect" class="sort-select">
+                <option value="default">Default</option>
+                <option value="name-asc">Name (A-Z)</option>
+                <option value="name-desc">Name (Z-A)</option>
+                <option value="date-asc">Date (Earliest)</option>
+                <option value="date-desc">Date (Latest)</option>
+                <option value="type-asc">Type (A-Z)</option>
+                <option value="status-asc">Status</option>
+            </select>
         </div>
-    </div>
 
-    <!-- Main Content -->
-<div class="container mt-5">
-        <!--Event Section-->
-        <div class="event-section" id="event-section">
-            <div class="event-top">
-                <div class="event-title">Events</div>
-                <div class="event-actions">
-                    <a href="#" class="btn-view-all-fixed">
-                        <span>View All</span>
-                        <i class='bx bx-right-arrow-alt'></i>
-                    </a>
-                </div>
-            </div>
+        <div class="filter-wrapper">
+            <label for="statusFilter" class="filter-label">
+                <i class="bi bi-filter"></i>
+                Status:
+            </label>
+            <select id="statusFilter" class="status-filter">
+                <option value="all">All Events</option>
+                <option value="Upcoming">Upcoming</option>
+                <option value="Ongoing">Ongoing</option>
+                <option value="Completed">Completed</option>
+                <option value="Cancelled">Cancelled</option>
+            </select>
+        </div>
 
-            <div class="events-container">
-                @if (Model != null && Model.Any())
+        <div class="filter-wrapper">
+            <label for="locationFilter" class="filter-label">
+                <i class="bi bi-geo-alt"></i>
+                Location:
+            </label>
+            <select id="locationFilter" class="location-filter">
+                <option value="all">All Locations</option>
+                @if (ViewBag.Locations != null)
                 {
-                    <div class="row g-4">
-                        @foreach (var eventItem in Model)
-                        {
-                            <div class="col-lg-4 col-md-6 col-sm-12">
-                            <div class="event-card" data-event-id="@eventItem.EventID" data-location-id="@eventItem.LocationID" data-category-id="@eventItem.CategoryID">
-                                    <!-- Alpine F1 Style Delete Button -->
-                                <button type="button" class="alpine-delete-btn" onclick="deleteEvent('@eventItem.EventID')" title="Delete Event">
-                                        <i class='bx bx-trash'></i>
-                                    </button>
+                    @foreach (var location in ViewBag.Locations)
+                    {
+                        <option value="@location.LocationID">@location.Name</option>
+                    }
+                }
+            </select>
+        </div>
 
-                                    <!-- Event Image -->
-                                    <div class="event-image">
-                                        <img src="@(eventItem.AllImagePaths.FirstOrDefault() ?? $"https://placehold.co/600x400/EEE/31343C?text={WebUtility.UrlEncode(eventItem.Title)}")" alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
-                                        <div class="event-status @(eventItem.Status.ToLower())">
-                                            @eventItem.Status
+        <div class="filter-wrapper">
+            <label for="categoryFilter" class="filter-label">
+                <i class="bi bi-tags"></i>
+                Category:
+            </label>
+            <select id="categoryFilter" class="category-filter">
+                <option value="all">All Categories</option>
+                @if (ViewBag.Categories != null)
+                {
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.CategoryID">@category.Name</option>
+                    }
+                }
+            </select>
+        </div>
+    </div>
+</div>
+
+<!-- Results info -->
+<div class="results-info">
+    <span id="resultsCount">Showing all events</span>
+    <button type="button" id="resetFilters" class="reset-filters" style="display: none;">
+        <i class="bi bi-arrow-clockwise"></i>
+        Reset Filters
+    </button>
+</div>
+
+<!-- No results message (hidden by default) -->
+<div id="noResults" class="no-results" style="display: none;">
+    <div class="no-results-content">
+        <i class="bi bi-search"></i>
+        <h3>No events found</h3>
+        <p>Try adjusting your search terms or filters to find what you're looking for.</p>
+    </div>
+</div>
+
+<!-- Main Content -->
+<div class="container mt-5">
+    <!--Event Section-->
+    <div class="event-section" id="event-section">
+        <div class="event-top">
+            <div class="event-title">Events</div>
+            <div class="event-actions">
+                <a href="#" class="btn-view-all-fixed">
+                    <span>View All</span>
+                    <i class="bx bx-right-arrow-alt"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="events-container">
+            @if (Model != null && Model.Any())
+            {
+                <div class="row g-4">
+                    @foreach (var eventItem in Model)
+                    {
+                        <div class="col-lg-4 col-md-6 col-sm-12">
+                            <div class="event-card" data-event-id="@eventItem.EventID"
+                                 data-location-id="@eventItem.LocationID" data-category-id="@eventItem.CategoryID">
+                                <!-- Alpine F1 Style Delete Button -->
+                                <button type="button" class="alpine-delete-btn"
+                                        onclick="deleteEvent('@eventItem.EventID')" title="Delete Event">
+                                    <i class='bx bx-trash'></i>
+                                </button>
+
+                                <!-- Event Image -->
+                                <div class="event-image">
+                                    <img
+                                        src="@(eventItem.AllImagePaths.FirstOrDefault() ?? $"https://placehold.co/600x400/EEE/31343C?text={WebUtility.UrlEncode(eventItem.Title)}")"
+                                        alt="@eventItem.Title" onerror="this.src='/images/event-placeholder.jpg'">
+                                    <div class="event-status @(eventItem.Status.ToLower())">
+                                        @eventItem.Status
+                                    </div>
+                                </div>
+
+                                <!-- Event Content -->
+                                <div class="event-content">
+                                    <div class="event-type">@eventItem.EventType</div>
+                                    <h3 class="event-name">@eventItem.Title</h3>
+                                    <p class="event-organizer">
+                                        <i class='bx bx-user'></i>
+                                        @eventItem.OrganizerName
+                                    </p>
+                                    <div class="event-details">
+                                        <div class="event-venue">
+                                            <i class='bx bx-map'></i>
+                                            <span>@eventItem.Venue</span>
+                                            <small>(@eventItem.Venue_Type)</small>
+                                        </div>
+                                        <div class="event-date">
+                                            <i class='bx bx-calendar'></i>
+                                            <span>@eventItem.StartDate.ToString("MMM dd, yyyy")</span>
+                                        </div>
+                                        @if (eventItem.StartDate.Date != eventItem.EndDate.Date)
+                                        {
+                                            <div class="event-date-end">
+                                                <i class='bx bx-calendar-check'></i>
+                                                <span>@eventItem.EndDate.ToString("MMM dd, yyyy")</span>
+                                            </div>
+                                        }
+                                        <div class="event-duration">
+                                            <i class='bx bx-time'></i>
+                                            <span>@eventItem.Allocated_Duration minutes</span>
                                         </div>
                                     </div>
 
-                                    <!-- Event Content -->
-                                    <div class="event-content">
-                                        <div class="event-type">@eventItem.EventType</div>
-                                        <h3 class="event-name">@eventItem.Title</h3>
-                                        <p class="event-organizer">
-                                            <i class='bx bx-user'></i>
-                                            @eventItem.OrganizerName
-                                        </p>
-                                        <div class="event-details">
-                                            <div class="event-venue">
-                                                <i class='bx bx-map'></i>
-                                                <span>@eventItem.Venue</span>
-                                                <small>(@eventItem.Venue_Type)</small>
-                                            </div>
-                                            <div class="event-date">
-                                                <i class='bx bx-calendar'></i>
-                                                <span>@eventItem.StartDate.ToString("MMM dd, yyyy")</span>
-                                            </div>
-                                            @if (eventItem.StartDate.Date != eventItem.EndDate.Date)
-                                            {
-                                                <div class="event-date-end">
-                                                    <i class='bx bx-calendar-check'></i>
-                                                    <span>@eventItem.EndDate.ToString("MMM dd, yyyy")</span>
-                                                </div>
-                                            }
-                                            <div class="event-duration">
-                                                <i class='bx bx-time'></i>
-                                                <span>@eventItem.Allocated_Duration minutes</span>
-                                            </div>
+                                    <!-- Action Buttons -->
+                                    <div class="event-actions">
+                                        <div class="event-actions-left">
+                                            <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })"
+                                               class="btn-book-now">
+                                                <span>Book Now</span>
+                                                <i class='bx bx-ticket'></i>
+                                            </a>
                                         </div>
-
-                                        <!-- Action Buttons -->
-                                        <div class="event-actions">
-                                            <div class="event-actions-left">
-                                            <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })" class="btn-book-now">
-                                                    <span>Book Now</span>
-                                                    <i class='bx bx-ticket'></i>
-                                                </a>
-                                            </div>
-                                            <div class="event-actions-right">
-                                                <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })" class="btn-view-details">
-                                                    <i class='bx bx-info-circle'></i>
-                                                </a>
-                                            </div>
+                                        <div class="event-actions-right">
+                                            <a href="@Url.Action("Event", "Home", new { id = eventItem.EventID })"
+                                               class="btn-view-details">
+                                                <i class='bx bx-info-circle'></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="no-events">
-                        <div class="no-events-content">
-                            <i class='bx bx-calendar-x'></i>
-                            <h3>No Events Available</h3>
-                            <p>There are currently no events to display. Check back later for exciting events!</p>
-                            <a href="@Url.Action("AddEvent", "Home")" class="btn-add-first-event">Add First Event<i class='bx bx-plus'></i></a>
                         </div>
-                    </div>
-                }
-            </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="no-events">
+                    <div class="no-events-content">
+                        <i class='bx bx-calendar-x'></i>
+                        <h3>No Events Available</h3>
+                        <p>There are currently no events to display. Check back later for exciting events!</p>
+                        <a href="@Url.Action("AddEvent", "Home")" class="btn-add-first-event">Add First Event<i
+                                class='bx bx-plus'></i></a>
                     </div>
                 </div>
-
-@section Scripts {
-    <script src="~/js/home.js"></script>
-}
+            }
+        </div>
+    </div>
+</div>
+                
