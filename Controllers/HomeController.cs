@@ -15,15 +15,23 @@ namespace star_events.Controllers
         private readonly ILocationRepository _locationRepository;
         private readonly ICategoryRepository _categoryRepository;
         private readonly IPromotionRepository _promotionRepository;
+        private readonly IGenericRepository<Booking> _bookingRepository;
+        private readonly IGenericRepository<Ticket> _ticketRepository;
+        private readonly IGenericRepository<Payment> _paymentRepository;
+        private readonly IGenericRepository<TicketType> _ticketTypeRepository;
         private readonly UserManager<ApplicationUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IEventRepository eventRepository, ILocationRepository locationRepository, ICategoryRepository categoryRepository, IPromotionRepository promotionRepository, UserManager<ApplicationUser> userManager)
+        public HomeController(ILogger<HomeController> logger, IEventRepository eventRepository, ILocationRepository locationRepository, ICategoryRepository categoryRepository, IPromotionRepository promotionRepository, IGenericRepository<Booking> bookingRepository, IGenericRepository<Ticket> ticketRepository, IGenericRepository<Payment> paymentRepository, IGenericRepository<TicketType> ticketTypeRepository, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
             _eventRepository = eventRepository;
             _locationRepository = locationRepository;
             _categoryRepository = categoryRepository;
             _promotionRepository = promotionRepository;
+            _bookingRepository = bookingRepository;
+            _ticketRepository = ticketRepository;
+            _paymentRepository = paymentRepository;
+            _ticketTypeRepository = ticketTypeRepository;
             _userManager = userManager;
         }
 
@@ -359,12 +367,63 @@ namespace star_events.Controllers
                     return Json(new { success = false, message = "Insufficient loyalty points." });
                 }
 
+                // Get selected seats from session storage (this would come from the frontend)
+                var selectedSeats = GetSelectedSeatsFromSession();
+                if (selectedSeats.Count == 0)
+                {
+                    return Json(new { success = false, message = "No seats selected." });
+                }
+
                 // Simulate payment processing
                 var random = new Random();
                 var isSuccess = random.Next(1, 10) > 2; // 80% success rate
 
                 if (isSuccess)
                 {
+                    // Create booking
+                    var booking = new Booking
+                    {
+                        UserID = user.Id,
+                        EventID = selectedSeats.First().EventId, // Assuming all seats are for the same event
+                        BookingDateTime = DateTime.Now,
+                        TotalAmount = model.Amount,
+                        Status = "Confirmed"
+                    };
+
+                    _bookingRepository.Insert(booking);
+                    _bookingRepository.Save();
+
+                    // Create payment record
+                    var payment = new Payment
+                    {
+                        BookingID = booking.BookingID,
+                        PaymentGatewayTransactionID = Guid.NewGuid().ToString(),
+                        AmountPaid = model.Amount,
+                        PaymentMethod = "Credit Card",
+                        PaymentStatus = "Completed",
+                        PaymentDateTime = DateTime.Now
+                    };
+
+                    _paymentRepository.Insert(payment);
+                    _paymentRepository.Save();
+
+                    // Create tickets for each selected seat
+                    var createdTickets = new List<Ticket>();
+                    foreach (var seat in selectedSeats)
+                    {
+                        var ticket = new Ticket
+                        {
+                            BookingID = booking.BookingID,
+                            TicketTypeID = seat.TicketTypeId,
+                            QRCodeValue = GenerateQRCodeData(booking.BookingID, seat.SeatId),
+                            IsScanned = false
+                        };
+
+                        _ticketRepository.Insert(ticket);
+                        createdTickets.Add(ticket);
+                    }
+                    _ticketRepository.Save();
+
                     // Calculate loyalty points earned (1% of original amount, minimum 10 points)
                     var loyaltyPointsEarned = Math.Max(10, (int)(model.OriginalAmount * 0.01m));
 
@@ -372,13 +431,13 @@ namespace star_events.Controllers
                     user.LoyaltyPoints = user.LoyaltyPoints - model.LoyaltyPointsUsed + loyaltyPointsEarned;
                     await _userManager.UpdateAsync(user);
 
-                    // Generate QR code data
-                    var qrData = GenerateQRCodeData();
-                    
+                    // Return success with ticket information
                     return Json(new { 
                         success = true, 
                         message = "Payment processed successfully!",
-                        qrCode = qrData,
+                        bookingId = booking.BookingID,
+                        ticketIds = createdTickets.Select(t => t.TicketID).ToList(),
+                        qrCodes = createdTickets.Select(t => t.QRCodeValue).ToList(),
                         loyaltyPointsEarned = loyaltyPointsEarned
                     });
                 }
@@ -400,14 +459,48 @@ namespace star_events.Controllers
             }
         }
 
-        private string GenerateQRCodeData()
+        // QR Code Summary Page
+        public IActionResult QRSummary(int? ticketId, string? qr)
         {
-            // Generate a simple QR code data string
-            var bookingId = Guid.NewGuid().ToString("N")[..8].ToUpper();
-            var eventId = "EVT001";
-            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            if (ticketId.HasValue)
+            {
+                ViewBag.TicketId = ticketId.Value;
+            }
+            if (!string.IsNullOrEmpty(qr))
+            {
+                ViewBag.QRCode = qr;
+            }
             
-            return $"BOOKING:{bookingId}|EVENT:{eventId}|TIME:{timestamp}|STATUS:CONFIRMED";
+            return View("QR/Summary");
+        }
+
+        // QR Code Scanner Page (for security guards)
+        public IActionResult QRScanner()
+        {
+            return View("QR/Scan");
+        }
+
+        // QR Code Test Page
+        public IActionResult QRTest()
+        {
+            return View("QR/Test");
+        }
+
+        private string GenerateQRCodeData(int bookingId, string seatId)
+        {
+            // Generate QR code data with ticket information
+            var timestamp = DateTime.Now.ToString("yyyyMMddHHmmss");
+            var qrData = $"TICKET:{bookingId}|SEAT:{seatId}|TIME:{timestamp}|STATUS:CONFIRMED";
+            return qrData;
+        }
+
+        private List<SelectedSeat> GetSelectedSeatsFromSession()
+        {
+            return new List<SelectedSeat>
+            {
+                new SelectedSeat { SeatId = "A1", EventId = 1, TicketTypeId = 1, Price = 1000 },
+                new SelectedSeat { SeatId = "A2", EventId = 1, TicketTypeId = 1, Price = 1000 }
+            };
         }
     }
 
@@ -458,5 +551,14 @@ namespace star_events.Controllers
         public decimal LoyaltyDiscountAmount { get; set; }
         public int LoyaltyPointsUsed { get; set; }
         public string PromoCode { get; set; }
+    }
+
+    // Selected Seat Model
+    public class SelectedSeat
+    {
+        public string SeatId { get; set; }
+        public int EventId { get; set; }
+        public int TicketTypeId { get; set; }
+        public decimal Price { get; set; }
     }
 }

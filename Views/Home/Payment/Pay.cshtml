@@ -430,9 +430,16 @@
                     document.querySelector('.toast-header i').className = 'bi bi-check-circle-fill text-success me-2';
                     paymentToast.show();
                     
+                    // Store ticket information in session storage
+                    if (result.ticketIds && result.ticketIds.length > 0) {
+                        sessionStorage.setItem('createdTicketIds', JSON.stringify(result.ticketIds));
+                        sessionStorage.setItem('createdQRCodes', JSON.stringify(result.qrCodes));
+                        sessionStorage.setItem('bookingId', result.bookingId);
+                    }
+                    
                     // Generate and show QR codes
                     setTimeout(() => {
-                        generateQRCodes(result.qrCode);
+                        generateQRCodes(result.qrCodes || [result.qrCode]);
                         showQRCodeModal();
                     }, 1500);
                     
@@ -457,12 +464,13 @@
         });
 
         // Generate QR codes
-        function generateQRCodes(qrData) {
+        function generateQRCodes(qrCodes) {
             const container = document.getElementById('qrCodesContainer');
             container.innerHTML = '';
             
             // Get selected seats from session storage
             const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
+            const ticketIds = JSON.parse(sessionStorage.getItem('createdTicketIds') || '[]');
             
             if (selectedSeats.length === 0) {
                 container.innerHTML = '<p class="text-muted">No seats selected</p>';
@@ -479,8 +487,12 @@
                         <div class="qr-info">
                             <h6>Seat ${seat.id}</h6>
                             <p class="text-muted small">Price: LKR ${seat.price.toLocaleString()}</p>
+                            <p class="text-muted small">Ticket ID: #${ticketIds[index] || 'N/A'}</p>
                             <button class="btn btn-sm btn-outline-primary" onclick="downloadQR('qr-seat-${index}', 'Seat-${seat.id}')">
                                 <i class="bi bi-download"></i> Download
+                            </button>
+                            <button class="btn btn-sm btn-outline-success ms-2" onclick="viewTicketSummary(${ticketIds[index]})">
+                                <i class="bi bi-eye"></i> View Details
                             </button>
                         </div>
                     </div>
@@ -489,9 +501,9 @@
                 
                 // Generate QR code
                 const canvas = document.getElementById(`qr-seat-${index}`);
-                const ticketData = `${qrData}|SEAT:${seat.id}|PRICE:${seat.price}`;
+                const qrData = qrCodes[index] || qrCodes[0]; // Use specific QR code or fallback to first
                 
-                QRCode.toCanvas(canvas, ticketData, {
+                QRCode.toCanvas(canvas, qrData, {
                     width: 150,
                     height: 150,
                     margin: 2,
@@ -537,6 +549,11 @@
                 }, index * 500); // Stagger downloads
             });
         });
+
+        // View ticket summary
+        function viewTicketSummary(ticketId) {
+            window.open(`/Home/QRSummary?ticketId=${ticketId}`, '_blank');
+        }
 
         // Redirect to dashboard when modal is closed
         document.getElementById('qrCodeModal').addEventListener('hidden.bs.modal', function() {

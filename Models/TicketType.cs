@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace star_events.Models
 {
@@ -24,7 +25,8 @@ namespace star_events.Models
         public int AvailableQuantity { get; set; }
 
         // Navigation properties
-        public Event Event { get; set; } 
-        public ICollection<Ticket> Tickets { get; set; }
+        [ForeignKey("EventID")]
+        public virtual Event? Event { get; set; } 
+        public virtual ICollection<Ticket>? Tickets { get; set; }
     }
 }

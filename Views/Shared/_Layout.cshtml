@@ -54,6 +54,11 @@
                 <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Events</a>
                 <a class="nav-link" href="@Url.Action("Index", "Home")#event-section">Trending Now</a>
                 <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "Dashboard" ? "active" : "")" href="@Url.Action("Dashboard", "Home")">My Bookings</a>
+                @if (User.IsInRole("Admin") || User.IsInRole("EventOrganizer"))
+                {
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRScanner" ? "active" : "")" href="@Url.Action("QRScanner", "Home")">Scanner</a>
+                    <a class="nav-link @(ViewContext.RouteData.Values["Action"]?.ToString() == "QRTest" ? "active" : "")" href="@Url.Action("QRTest", "Home")">QR Test</a>
+                }
             </nav>
 
             <!-- Right Side - Add Button + Actions -->

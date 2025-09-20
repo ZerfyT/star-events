@@ -1,0 +1,183 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "QR Code Test";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/QRSummary.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}
+
+<div class="qr-summary-container">
+    <div class="summary-card">
+        <div class="summary-header">
+            <div class="header-icon">
+                <i class="bi bi-qr-code"></i>
+            </div>
+            <h1>QR Code Test</h1>
+            <p class="header-subtitle">Test the QR code functionality</p>
+        </div>
+
+        <div class="ticket-content">
+            <!-- Test QR Codes Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-qr-code"></i>
+                    <h3>Test QR Codes</h3>
+                </div>
+                <div class="section-content">
+                    <div class="test-qr-codes">
+                        <div class="test-item">
+                            <h5>Valid Ticket (Not Scanned)</h5>
+                            <div class="qr-code-display">
+                                <div class="qr-code-container">
+                                    <canvas id="qr1" class="qr-canvas"></canvas>
+                                </div>
+                                <div class="qr-info">
+                                    <p class="qr-description">This QR code represents a valid, unscanned ticket</p>
+                                    <button onclick="testQR('TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED')" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Test This QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="test-item">
+                            <h5>Already Scanned Ticket</h5>
+                            <div class="qr-code-display">
+                                <div class="qr-code-container">
+                                    <canvas id="qr2" class="qr-canvas"></canvas>
+                                </div>
+                                <div class="qr-info">
+                                    <p class="qr-description">This QR code represents an already scanned ticket</p>
+                                    <button onclick="testQR('TICKET:2|SEAT:B2|TIME:20250101120000|STATUS:CONFIRMED')" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Test This QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="test-item">
+                            <h5>Invalid QR Code</h5>
+                            <div class="qr-code-display">
+                                <div class="qr-code-container">
+                                    <canvas id="qr3" class="qr-canvas"></canvas>
+                                </div>
+                                <div class="qr-info">
+                                    <p class="qr-description">This QR code is invalid or expired</p>
+                                    <button onclick="testQR('INVALID:QR:CODE')" class="btn btn-outline-primary">
+                                        <i class="bi bi-eye"></i> Test This QR Code
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Instructions Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-info-circle"></i>
+                    <h3>How to Test</h3>
+                </div>
+                <div class="section-content">
+                    <div class="instructions">
+                        <ol>
+                            <li>Click on any "Test This QR Code" button above</li>
+                            <li>This will open the QR summary page in a new tab</li>
+                            <li>You can also use the <a href="/Home/QRScanner">Security Scanner</a> to test scanning functionality</li>
+                            <li>The scanner allows both manual QR code input and camera scanning</li>
+                        </ol>
+                        
+                        <div class="alert alert-info">
+                            <i class="bi bi-info-circle"></i>
+                            <strong>Note:</strong> These are test QR codes. In a real application, QR codes would be generated during the payment process and contain actual ticket information.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Endpoints Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-code-slash"></i>
+                    <h3>API Endpoints</h3>
+                </div>
+                <div class="section-content">
+                    <div class="api-endpoints">
+                        <div class="endpoint-item">
+                            <h6>GET /api/qr/ticket/{ticketId}</h6>
+                            <p>Get ticket details by ticket ID</p>
+                            <code>Example: /api/qr/ticket/1</code>
+                        </div>
+                        
+                        <div class="endpoint-item">
+                            <h6>GET /api/qr/validate/{qrCode}</h6>
+                            <p>Validate a QR code</p>
+                            <code>Example: /api/qr/validate/TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED</code>
+                        </div>
+                        
+                        <div class="endpoint-item">
+                            <h6>POST /api/qr/scan/{ticketId}</h6>
+                            <p>Mark a ticket as scanned</p>
+                            <code>Example: POST /api/qr/scan/1</code>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate test QR codes
+            generateTestQRCodes();
+        });
+
+        function generateTestQRCodes() {
+            const qrData1 = 'TICKET:1|SEAT:A1|TIME:20250101120000|STATUS:CONFIRMED';
+            const qrData2 = 'TICKET:2|SEAT:B2|TIME:20250101120000|STATUS:CONFIRMED';
+            const qrData3 = 'INVALID:QR:CODE';
+
+            QRCode.toCanvas(document.getElementById('qr1'), qrData1, {
+                width: 150,
+                height: 150,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+
+            QRCode.toCanvas(document.getElementById('qr2'), qrData2, {
+                width: 150,
+                height: 150,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+
+            QRCode.toCanvas(document.getElementById('qr3'), qrData3, {
+                width: 150,
+                height: 150,
+                margin: 2,
+                color: {
+                    dark: '#000000',
+                    light: '#FFFFFF'
+                }
+            });
+        }
+
+        function testQR(qrCode) {
+            // Open the QR summary page with the QR code
+            window.open(`/Home/QRSummary?qr=${encodeURIComponent(qrCode)}`, '_blank');
+        }
+    </script>
+}

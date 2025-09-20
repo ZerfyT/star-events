@@ -1,0 +1,340 @@
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Ticket Summary";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/QRSummary.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+}
+
+<div class="qr-summary-container">
+    <div class="summary-card">
+        <div class="summary-header">
+            <div class="header-icon">
+                <i class="bi bi-ticket-perforated"></i>
+            </div>
+            <h1>Ticket Summary</h1>
+            <p class="header-subtitle">Your event ticket details</p>
+        </div>
+
+        <div id="loadingSpinner" class="loading-spinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-3">Loading ticket details...</p>
+        </div>
+
+        <div id="ticketContent" class="ticket-content" style="display: none;">
+            <!-- Event Details Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-calendar-event"></i>
+                    <h3>Event Details</h3>
+                </div>
+                <div class="section-content">
+                    <div class="event-info">
+                        <div class="event-image">
+                            <img id="eventImage" src="" alt="Event Image" class="img-fluid">
+                        </div>
+                        <div class="event-details">
+                            <h4 id="eventTitle" class="event-title"></h4>
+                            <p id="eventDescription" class="event-description"></p>
+                            <div class="event-meta">
+                                <div class="meta-item">
+                                    <i class="bi bi-geo-alt"></i>
+                                    <span id="eventLocation"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="bi bi-tag"></i>
+                                    <span id="eventCategory"></span>
+                                </div>
+                                <div class="meta-item">
+                                    <i class="bi bi-clock"></i>
+                                    <span id="eventDateTime"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Ticket Details Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-ticket"></i>
+                    <h3>Ticket Details</h3>
+                </div>
+                <div class="section-content">
+                    <div class="ticket-info">
+                        <div class="ticket-badge">
+                            <span id="ticketStatus" class="status-badge"></span>
+                        </div>
+                        <div class="ticket-details-grid">
+                            <div class="detail-item">
+                                <label>Ticket ID</label>
+                                <span id="ticketId" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Ticket Type</label>
+                                <span id="ticketType" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Booking ID</label>
+                                <span id="bookingId" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Booking Date</label>
+                                <span id="bookingDate" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item" id="scannedInfo" style="display: none;">
+                                <label>Scanned At</label>
+                                <span id="scannedAt" class="detail-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Customer Details Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-person"></i>
+                    <h3>Customer Details</h3>
+                </div>
+                <div class="section-content">
+                    <div class="customer-info">
+                        <div class="customer-details-grid">
+                            <div class="detail-item">
+                                <label>Name</label>
+                                <span id="customerName" class="detail-value"></span>
+                            </div>
+                            <div class="detail-item">
+                                <label>Email</label>
+                                <span id="customerEmail" class="detail-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Payment Details Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-credit-card"></i>
+                    <h3>Payment Details</h3>
+                </div>
+                <div class="section-content">
+                    <div class="payment-info">
+                        <div class="payment-summary">
+                            <div class="amount-breakdown">
+                                <div class="amount-row">
+                                    <span class="amount-label">Ticket Price:</span>
+                                    <span id="ticketPrice" class="amount-value"></span>
+                                </div>
+                                <div class="amount-row">
+                                    <span class="amount-label">Total Paid:</span>
+                                    <span id="totalPaid" class="amount-value total"></span>
+                                </div>
+                            </div>
+                            <div class="payment-method">
+                                <label>Payment Method:</label>
+                                <span id="paymentMethod" class="detail-value"></span>
+                            </div>
+                            <div class="payment-date">
+                                <label>Payment Date:</label>
+                                <span id="paymentDate" class="detail-value"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- QR Code Section -->
+            <div class="summary-section">
+                <div class="section-header">
+                    <i class="bi bi-qr-code"></i>
+                    <h3>QR Code</h3>
+                </div>
+                <div class="section-content">
+                    <div class="qr-code-display">
+                        <div class="qr-code-container">
+                            <canvas id="qrCodeCanvas" class="qr-canvas"></canvas>
+                        </div>
+                        <div class="qr-info">
+                            <p class="qr-description">Present this QR code at the event entrance</p>
+                            @* <button id="downloadQRBtn" class="btn btn-outline-primary"> *@
+                            @*     <i class="bi bi-download"></i> Download QR Code *@
+                            @* </button> *@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorContent" class="error-content" style="display: none;">
+            <div class="error-icon">
+                <i class="bi bi-exclamation-triangle"></i>
+            </div>
+            <h3>Ticket Not Found</h3>
+            <p id="errorMessage">The ticket you're looking for could not be found.</p>
+            <button onclick="window.location.href='/'" class="btn btn-primary">
+                <i class="bi bi-house"></i> Go to Home
+            </button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
+    
+    <script>
+        let ticketData = null;
+        let qrCodeValue = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get ticket ID from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const ticketId = urlParams.get('ticketId');
+            const qrCode = urlParams.get('qr');
+            console.log(ticketId);
+
+            if (ticketId) {
+                loadTicketDetails(ticketId);
+            } else if (qrCode) {
+                qrCodeValue = qrCode;
+                validateAndLoadTicket(qrCode);
+            } else {
+                showError('No ticket information provided');
+            }
+        });
+
+        async function loadTicketDetails(ticketId) {
+            try {
+                const response = await fetch(`/api/qr/ticket/${ticketId}`);
+                const result = await response.json();
+                console.log(result);
+
+                if (result.success) {
+                    ticketData = result.ticket;
+                    displayTicketDetails();
+                } else {
+                    showError(result.message);
+                }
+            } catch (error) {
+                console.error('Error loading ticket details:', error);
+                showError('Failed to load ticket details');
+            }
+        }
+
+        async function validateAndLoadTicket(qrCode) {
+            try {
+                const response = await fetch(`/api/qr/validate/${encodeURIComponent(qrCode)}`);
+                const result = await response.json();
+
+                if (result.success && result.isValid) {
+                    // Load full ticket details using the ticket ID
+                    await loadTicketDetails(result.ticket.ticketId);
+                } else {
+                    showError(result.message || 'Invalid QR code');
+                }
+            } catch (error) {
+                console.error('Error validating QR code:', error);
+                showError('Failed to validate QR code');
+            }
+        }
+
+        function displayTicketDetails() {
+            if (!ticketData) return;
+
+            // Hide loading spinner
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('ticketContent').style.display = 'block';
+
+            // Event details
+            document.getElementById('eventTitle').textContent = ticketData.booking.event.title;
+            document.getElementById('eventDescription').textContent = ticketData.booking.event.description;
+            document.getElementById('eventImage').setAttribute('src', ticketData.booking.event.imagePath);
+            document.getElementById('eventLocation').textContent = ticketData.booking.event.location.name;
+            document.getElementById('eventCategory').textContent = ticketData.booking.event.category.name;
+            
+            // Format event date and time
+            const startDate = new Date(ticketData.booking.event.startDateTime);
+            const endDate = new Date(ticketData.booking.event.endDateTime);
+            document.getElementById('eventDateTime').textContent = 
+                `${startDate.toLocaleDateString()} ${startDate.toLocaleTimeString()} - ${endDate.toLocaleTimeString()}`;
+
+            // Ticket details
+            document.getElementById('ticketId').textContent = `#${ticketData.ticketId}`;
+            document.getElementById('ticketType').textContent = ticketData.ticketType.name;
+            document.getElementById('bookingId').textContent = `#${ticketData.booking.bookingId}`;
+            
+            const bookingDate = new Date(ticketData.booking.bookingDateTime);
+            document.getElementById('bookingDate').textContent = bookingDate.toLocaleString();
+
+            // Ticket status
+            const statusBadge = document.getElementById('ticketStatus');
+            if (ticketData.isScanned) {
+                statusBadge.textContent = 'Scanned';
+                statusBadge.className = 'status-badge scanned';
+                document.getElementById('scannedInfo').style.display = 'block';
+                const scannedDate = new Date(ticketData.scannedAt);
+                document.getElementById('scannedAt').textContent = scannedDate.toLocaleString();
+            } else {
+                statusBadge.textContent = 'Valid';
+                statusBadge.className = 'status-badge valid';
+            }
+
+            // Customer details
+            document.getElementById('customerName').textContent = 
+                `${ticketData.booking.user.firstName} ${ticketData.booking.user.lastName}`;
+            document.getElementById('customerEmail').textContent = ticketData.booking.user.email;
+
+            // Payment details
+            document.getElementById('ticketPrice').textContent = `$ ${ticketData.ticketType.price.toLocaleString()}`;
+            document.getElementById('totalPaid').textContent = `$ ${ticketData.booking.totalAmount.toLocaleString()}`;
+            
+            if (ticketData.booking.payments && ticketData.booking.payments.length > 0) {
+                const payment = ticketData.booking.payments[0];
+                document.getElementById('paymentMethod').textContent = payment.paymentMethod;
+                const paymentDate = new Date(payment.paymentDate);
+                document.getElementById('paymentDate').textContent = paymentDate.toLocaleString();
+            }
+
+            // Generate QR code
+            generateQRCode();
+        }
+
+        function generateQRCode() {
+            const canvas = document.getElementById('qrCodeCanvas');
+            const qrData = qrCodeValue || ticketData.qrCodeValue;
+            
+            if (qrData) {
+                QRCode.toCanvas(canvas, qrData, {
+                    width: 300,
+                    height: 300,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
+            }
+        }
+
+        function showError(message) {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('errorContent').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+
+        // Download QR code
+        document.getElementById('downloadQRBtn').addEventListener('click', function() {
+            const canvas = document.getElementById('qrCodeCanvas');
+            const link = document.createElement('a');
+            link.download = `ticket-${ticketData.ticketId}-qr.png`;
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    </script>
+}
