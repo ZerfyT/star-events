@@ -9,22 +9,22 @@ namespace star_events.Controllers;
 
 public class HomeController : Controller
 {
-    private readonly IGenericRepository<Booking> _bookingRepository;
+    private readonly IBookingRepository _bookingRepository;
     private readonly ICategoryRepository _categoryRepository;
     private readonly IEventRepository _eventRepository;
     private readonly ILocationRepository _locationRepository;
     private readonly ILogger<HomeController> _logger;
-    private readonly IGenericRepository<Payment> _paymentRepository;
+    private readonly IPaymentRepository _paymentRepository;
     private readonly IPromotionRepository _promotionRepository;
-    private readonly IGenericRepository<Ticket> _ticketRepository;
-    private readonly IGenericRepository<TicketType> _ticketTypeRepository;
+    private readonly ITicketRepository _ticketRepository;
+    private readonly ITicketTypeRepository _ticketTypeRepository;
     private readonly UserManager<ApplicationUser> _userManager;
 
     public HomeController(ILogger<HomeController> logger, IEventRepository eventRepository,
         ILocationRepository locationRepository, ICategoryRepository categoryRepository,
-        IPromotionRepository promotionRepository, IGenericRepository<Booking> bookingRepository,
-        IGenericRepository<Ticket> ticketRepository, IGenericRepository<Payment> paymentRepository,
-        IGenericRepository<TicketType> ticketTypeRepository, UserManager<ApplicationUser> userManager)
+        IPromotionRepository promotionRepository, IBookingRepository bookingRepository,
+        ITicketRepository ticketRepository, IPaymentRepository paymentRepository,
+        ITicketTypeRepository ticketTypeRepository, UserManager<ApplicationUser> userManager)
     {
         _logger = logger;
         _eventRepository = eventRepository;

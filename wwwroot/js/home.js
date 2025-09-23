@@ -78,17 +78,32 @@
     const resetFilters = document.getElementById('resetFilters');
     const noResults = document.getElementById('noResults');
     const viewAllBtn = document.querySelector('.btn-view-all-fixed');
+    
+    const dateRangeFilter = document.getElementById('dateRangeFilter');
+    const startDate = document.getElementById('startDate');
+    const endDate = document.getElementById('endDate');
+    const applyDateRange = document.getElementById('applyDateRange');
+    const clearDateRange = document.getElementById('clearDateRange');
 
     const INITIAL_DISPLAY_COUNT = 6;
     let isShowingAll = false;
 
-    // Get all event cards - IMPROVED STATUS DETECTION
     let allEvents = Array.from(document.querySelectorAll('.event-card')).map(card => {
         const parentCol = card.closest('.col-lg-4');
         const statusElement = card.querySelector('.event-status');
         const statusText = statusElement ? statusElement.textContent.trim() : '';
 
         console.log('Event status found:', statusText); // Debug log
+
+        const dateText = card.querySelector('.event-date span')?.textContent || '';
+        let eventDate = null;
+        if (dateText) {
+            try {
+                eventDate = new Date(dateText);
+            } catch (e) {
+                console.warn('Could not parse date:', dateText);
+            }
+        }
 
         return {
             element: parentCol,
@@ -97,7 +112,8 @@
             organizer: card.querySelector('.event-organizer')?.textContent?.replace(/^\s*[^\s]+\s*/, '').toLowerCase() || '', // Remove icon and get text
             status: statusText.toLowerCase(), // Store lowercase for comparison
             statusOriginal: statusText, // Store original for debugging
-            date: card.querySelector('.event-date span')?.textContent || '',
+            date: dateText,
+            dateObject: eventDate,
             venue: card.querySelector('.event-venue span')?.textContent?.toLowerCase() || '',
             locationId: card.getAttribute('data-location-id') || '',
             categoryId: card.getAttribute('data-category-id') || '',
@@ -110,6 +126,7 @@
     let currentStatusFilter = 'all';
     let currentLocationFilter = 'all';
     let currentCategoryFilter = 'all';
+    let currentDateRange = { start: null, end: null };
 
     console.log('All events with status:', allEvents.map(e => ({
         name: e.name,
@@ -169,6 +186,18 @@
         sortSelect.addEventListener('change', function () {
             currentSortValue = this.value;
             console.log('Sort changed to:', currentSortValue);
+            
+            if (dateRangeFilter) {
+                if (this.value === 'date-range') {
+                    dateRangeFilter.style.display = 'flex';
+                } else {
+                    dateRangeFilter.style.display = 'none';
+                    currentDateRange = { start: null, end: null };
+                    if (startDate) startDate.value = '';
+                    if (endDate) endDate.value = '';
+                }
+            }
+            
             applyFiltersAndDisplay();
         });
     }
@@ -200,6 +229,42 @@
         });
     }
 
+    // Date range functionality
+    if (applyDateRange) {
+        applyDateRange.addEventListener('click', function () {
+            const startValue = startDate ? startDate.value : '';
+            const endValue = endDate ? endDate.value : '';
+            
+            if (!startValue || !endValue) {
+                alert('Please select both start and end dates.');
+                return;
+            }
+            
+            if (new Date(startValue) > new Date(endValue)) {
+                alert('Start date cannot be later than end date.');
+                return;
+            }
+            
+            currentDateRange = { 
+                start: new Date(startValue), 
+                end: new Date(endValue) 
+            };
+            
+            console.log('Date range applied:', currentDateRange);
+            applyFiltersAndDisplay();
+        });
+    }
+
+    if (clearDateRange) {
+        clearDateRange.addEventListener('click', function () {
+            currentDateRange = { start: null, end: null };
+            if (startDate) startDate.value = '';
+            if (endDate) endDate.value = '';
+            console.log('Date range cleared');
+            applyFiltersAndDisplay();
+        });
+    }
+
     // Reset filters
     if (resetFilters) {
         resetFilters.addEventListener('click', function () {
@@ -208,11 +273,16 @@
             statusFilter.value = 'all';
             locationFilter.value = 'all';
             categoryFilter.value = 'all';
+            if (startDate) startDate.value = '';
+            if (endDate) endDate.value = '';
+            if (dateRangeFilter) dateRangeFilter.style.display = 'none';
+            
             currentSearchTerm = '';
             currentSortValue = 'default';
             currentStatusFilter = 'all';
             currentLocationFilter = 'all';
             currentCategoryFilter = 'all';
+            currentDateRange = { start: null, end: null };
             isShowingAll = false;
             updateClearButton();
             applyFiltersAndDisplay();
@@ -275,7 +345,6 @@
             sort: currentSortValue
         });
 
-        // Step 1: Filter events based on search, status, location, and category
         let filteredEvents = allEvents.filter(event => {
             const matchesSearch = !currentSearchTerm ||
                 event.name.includes(currentSearchTerm) ||
@@ -301,15 +370,22 @@
                 matchesCategory = event.categoryId === currentCategoryFilter;
             }
 
-            console.log(`Event: ${event.name}, Status: "${event.status}", Location: "${event.locationId}", Category: "${event.categoryId}", Match: ${matchesSearch && matchesStatus && matchesLocation && matchesCategory}`);
+            // Date range filter
+            let matchesDateRange = true;
+            if (currentDateRange.start && currentDateRange.end && event.dateObject) {
+                matchesDateRange = event.dateObject >= currentDateRange.start && 
+                                 event.dateObject <= currentDateRange.end;
+            }
 
-            return matchesSearch && matchesStatus && matchesLocation && matchesCategory;
+            console.log(`Event: ${event.name}, Status: "${event.status}", Location: "${event.locationId}", Category: "${event.categoryId}", Date: "${event.date}", DateRange: ${matchesDateRange}, Match: ${matchesSearch && matchesStatus && matchesLocation && matchesCategory && matchesDateRange}`);
+
+            return matchesSearch && matchesStatus && matchesLocation && matchesCategory && matchesDateRange;
         });
 
         console.log(`Filtered ${filteredEvents.length} events from ${allEvents.length} total`);
 
-        // Step 2: Sort the filtered events
-        if (currentSortValue !== 'default') {
+
+        if (currentSortValue !== 'default' && currentSortValue !== 'date-range') {
             filteredEvents.sort((a, b) => {
                 switch (currentSortValue) {
                     case 'name-asc':
@@ -321,8 +397,14 @@
                     case 'status-asc':
                         return a.status.localeCompare(b.status);
                     case 'date-asc':
+                        if (a.dateObject && b.dateObject) {
+                            return a.dateObject - b.dateObject;
+                        }
                         return a.date.localeCompare(b.date);
                     case 'date-desc':
+                        if (a.dateObject && b.dateObject) {
+                            return b.dateObject - a.dateObject;
+                        }
                         return b.date.localeCompare(a.date);
                     default:
                         return a.originalOrder - b.originalOrder;
@@ -335,7 +417,7 @@
 
         // Step 3: Apply View All logic (only if no active search/filter)
         let eventsToShow = filteredEvents;
-        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all';
+        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all' || (currentDateRange.start && currentDateRange.end);
 
         if (!hasActiveFilters && !isShowingAll) {
             // Show only first 6 events when no filters and not showing all
@@ -389,7 +471,7 @@
         const totalEvents = allEvents.length;
         let message = '';
 
-        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all' || currentSortValue !== 'default';
+        const hasActiveFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentLocationFilter !== 'all' || currentCategoryFilter !== 'all' || currentSortValue !== 'default' || (currentDateRange.start && currentDateRange.end);
 
         if (hasActiveFilters) {
             message = `Showing ${showingCount} of ${totalEvents} events`;

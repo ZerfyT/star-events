@@ -46,9 +46,35 @@
                 <option value="name-desc">Name (Z-A)</option>
                 <option value="date-asc">Date (Earliest)</option>
                 <option value="date-desc">Date (Latest)</option>
+                <option value="date-range">Custom Date Range</option>
                 <option value="type-asc">Type (A-Z)</option>
                 <option value="status-asc">Status</option>
             </select>
+        </div>
+
+        <div id="dateRangeFilter" class="date-range-filter" style="display: none;">
+            <div class="date-range-wrapper">
+                <label for="startDate" class="date-label">
+                    <i class="bi bi-calendar-event"></i>
+                    From:
+                </label>
+                <input type="date" id="startDate" class="date-input">
+            </div>
+            <div class="date-range-wrapper">
+                <label for="endDate" class="date-label">
+                    <i class="bi bi-calendar-check"></i>
+                    To:
+                </label>
+                <input type="date" id="endDate" class="date-input">
+            </div>
+            <button type="button" id="applyDateRange" class="btn-apply-date-range">
+                <i class="bi bi-check"></i>
+                Apply
+            </button>
+            <button type="button" id="clearDateRange" class="d-none btn-clear-date-range">
+                <i class="bi bi-x"></i>
+                Clear
+            </button>
         </div>
 
         <div class="filter-wrapper">

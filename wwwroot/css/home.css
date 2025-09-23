@@ -485,6 +485,108 @@
     transition: all 0.3s ease;
 }
 
+/* DATE RANGE FILTER STYLES */
+.date-range-filter {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    padding: 16px 20px;
+    border-radius: 20px;
+    border: 2px solid rgba(0, 90, 255, 0.1);
+    margin-top: 12px;
+    flex-wrap: wrap;
+    transition: all 0.3s ease;
+}
+
+.date-range-filter:hover {
+    background: var(--White);
+    border-color: rgba(0, 90, 255, 0.2);
+    box-shadow: 0 4px 16px rgba(0, 90, 255, 0.1);
+}
+
+.date-range-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.date-label {
+    font-family: var(--body-font);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--Alpine_Dark_Blue);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.date-label i {
+    color: var(--Alpine_Blue);
+    font-size: 16px;
+}
+
+.date-input {
+    padding: 8px 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-family: var(--body-font);
+    font-size: 14px;
+    color: var(--Alpine_Dark_Blue);
+    background: var(--White);
+    transition: all 0.3s ease;
+    min-width: 140px;
+}
+
+.date-input:focus {
+    outline: none;
+    border-color: var(--Alpine_Blue);
+    box-shadow: 0 0 0 3px rgba(0, 90, 255, 0.1);
+}
+
+.date-input:hover {
+    border-color: rgba(0, 90, 255, 0.3);
+}
+
+.btn-apply-date-range,
+.btn-clear-date-range {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-family: var(--body-font);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.btn-apply-date-range {
+    background: var(--Alpine_Blue);
+    color: var(--White);
+}
+
+.btn-apply-date-range:hover {
+    background: #0047cc;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 90, 255, 0.3);
+}
+
+.btn-clear-date-range {
+    background: #6c757d;
+    color: var(--White);
+}
+
+.btn-clear-date-range:hover {
+    background: #5a6268;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
 .sort-wrapper:hover,
 .filter-wrapper:hover {
     background: var(--White);
@@ -671,6 +773,28 @@
         text-align: center;
     }
 
+    .date-range-filter {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+        padding: 16px;
+    }
+
+    .date-range-wrapper {
+        justify-content: space-between;
+    }
+
+    .date-input {
+        min-width: 120px;
+        flex: 1;
+    }
+
+    .btn-apply-date-range,
+    .btn-clear-date-range {
+        width: 100%;
+        justify-content: center;
+    }
+
     .results-info {
         flex-direction: column;
         gap: 12px;
@@ -700,6 +824,27 @@
 
     .sort-label,
     .filter-label {
+        font-size: 13px;
+    }
+
+    .date-range-filter {
+        padding: 12px;
+        gap: 10px;
+    }
+
+    .date-label {
+        font-size: 13px;
+    }
+
+    .date-input {
+        min-width: 100px;
+        padding: 6px 10px;
+        font-size: 13px;
+    }
+
+    .btn-apply-date-range,
+    .btn-clear-date-range {
+        padding: 6px 12px;
         font-size: 13px;
     }
 
@@ -966,7 +1111,8 @@
 }
 
 /* FIXED View All Button - Proper Capsule Design */
-.btn-view-all-fixed {
+.btn-view-all-fixed,
+#applyDateRange{
     display: inline-flex;
     align-items: center;
     gap: 8px;
