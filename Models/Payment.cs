@@ -7,7 +7,7 @@ public class Payment
 {
     [Key] public int PaymentID { get; set; }
 
-    [Required] [ForeignKey("Booking")] public int BookingID { get; set; }
+    [Required] public int BookingID { get; set; }
 
     [Required]
     [StringLength(100)]

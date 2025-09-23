@@ -11,21 +11,21 @@ namespace star_events.Controllers;
 [Authorize]
 public class ReportsController : Controller
 {
-    private readonly IGenericRepository<Booking> _bookingRepository;
-    private readonly IGenericRepository<Event> _eventRepository;
-    private readonly IGenericRepository<Payment> _paymentRepository;
+    private readonly IBookingRepository _bookingRepository;
+    private readonly IEventRepository _eventRepository;
+    private readonly IPaymentRepository _paymentRepository;
     private readonly IPdfReportService _pdfReportService;
-    private readonly IGenericRepository<Ticket> _ticketRepository;
-    private readonly IGenericRepository<TicketType> _ticketTypeRepository;
+    private readonly ITicketRepository _ticketRepository;
+    private readonly ITicketTypeRepository _ticketTypeRepository;
     private readonly IUserRepository _userRepository;
 
     public ReportsController(
         IUserRepository userRepository,
-        IGenericRepository<Event> eventRepository,
-        IGenericRepository<Booking> bookingRepository,
-        IGenericRepository<Payment> paymentRepository,
-        IGenericRepository<Ticket> ticketRepository,
-        IGenericRepository<TicketType> ticketTypeRepository,
+        IEventRepository eventRepository,
+        IBookingRepository bookingRepository,
+        IPaymentRepository paymentRepository,
+        ITicketRepository ticketRepository,
+        ITicketTypeRepository ticketTypeRepository,
         IPdfReportService pdfReportService)
     {
         _userRepository = userRepository;
@@ -132,8 +132,7 @@ public class ReportsController : Controller
                 .Select(e => e.EventID)
                 .ToList();
 
-            allPayments = allPayments.Where(p => p.Booking?.Tickets?.Any(t =>
-                t.TicketType != null && organizerEventIds.Contains(t.TicketType.EventID)) == true).ToList();
+            allPayments = allPayments.Where(p => p.Booking?.Event.EventID == eventId).ToList();
         }
 
         // Apply date filters
@@ -145,8 +144,7 @@ public class ReportsController : Controller
 
         // Apply event filter
         if (eventId.HasValue)
-            allPayments = allPayments.Where(p => p.Booking?.Tickets?.Any(t =>
-                t.TicketType != null && t.TicketType.EventID == eventId.Value) == true).ToList();
+            allPayments = allPayments.Where(p => p.Booking?.Event.EventID == eventId.Value).ToList();
 
         var payments = allPayments;
 
@@ -271,8 +269,9 @@ public class ReportsController : Controller
             .ToList();
 
         // Get all tickets for organizer's events first
+        var allTicketsTmp = _ticketRepository.GetAll();
         var allTickets = _ticketRepository.GetAll()
-            .Where(t => t.TicketType != null && organizerEventIds.Contains(t.TicketType.EventID))
+            .Where(t => organizerEventIds.Contains(t.Booking.Event.EventID))
             .ToList();
 
         // Apply date filters with null checks
@@ -284,7 +283,7 @@ public class ReportsController : Controller
 
         // Apply event filter
         if (eventId.HasValue)
-            allTickets = allTickets.Where(t => t.TicketType != null && t.TicketType.EventID == eventId.Value).ToList();
+            allTickets = allTickets.Where(t => t.Booking.Event.EventID == eventId.Value).ToList();
 
         // Get available events for filter dropdown
         var availableEvents = _eventRepository.GetAll()

@@ -7,9 +7,9 @@ public class Ticket
 {
     [Key] public int TicketID { get; set; }
 
-    [Required] [ForeignKey("Booking")] public int BookingID { get; set; }
+    [Required] public int BookingID { get; set; }
 
-    [Required] [ForeignKey("TicketType")] public int TicketTypeID { get; set; }
+    [Required] public int TicketTypeID { get; set; }
 
     [StringLength(255)]
     [Display(Name = "QR Code")]
