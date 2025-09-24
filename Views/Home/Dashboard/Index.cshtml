@@ -44,6 +44,250 @@
             border-radius: 10px;
             border-left: 4px solid var(--primary-color);
         }
+
+        /* Search and Filter Styles */
+        .search-filter-container {
+            margin-top: 2rem;
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .search-wrapper {
+            position: relative;
+            max-width: 500px;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 20px 12px 50px;
+            border: 2px solid #e1e5e9;
+            border-radius: 25px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #f8f9fa;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #007bff;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6c757d;
+            pointer-events: none;
+        }
+
+        .clear-search {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6c757d;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .clear-search:hover {
+            background: #e9ecef;
+            color: #495057;
+        }
+
+        .filter-sort-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .filter-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .status-filter, .sort-select, .date-range-filter {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            min-width: 150px;
+            transition: all 0.3s ease;
+        }
+
+        .status-filter:focus, .sort-select:focus, .date-range-filter:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .custom-date-range {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: center;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-top: 1rem;
+            border: 1px solid #e1e5e9;
+        }
+
+        .date-range-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .date-label {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-weight: 500;
+            color: #495057;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .date-input {
+            padding: 8px 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            background: white;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .date-input:focus {
+            outline: none;
+            border-color: #007bff;
+            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+        }
+
+        .btn-apply-date-range, .btn-clear-date-range {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-apply-date-range {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-apply-date-range:hover {
+            background: #218838;
+        }
+
+        .btn-clear-date-range {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-clear-date-range:hover {
+            background: #c82333;
+        }
+
+        .btn-reset-filters {
+            padding: 8px 16px;
+            border: 2px solid #6c757d;
+            border-radius: 8px;
+            background: white;
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .btn-reset-filters:hover {
+            background: #6c757d;
+            color: white;
+        }
+
+        .results-info {
+            text-align: right;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .results-count {
+            font-size: 14px;
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .search-filter-container {
+                padding: 1rem;
+            }
+            
+            .filter-sort-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filter-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+            
+            .status-filter, .sort-select, .date-range-filter {
+                min-width: auto;
+                width: 100%;
+            }
+            
+            .custom-date-range {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .date-range-wrapper {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 0.5rem;
+            }
+        }
     </style>
 }
 
@@ -52,19 +296,112 @@
     <div class="header">
         <div class="header-content">
             <h1 class="page-title">Booking History</h1>
-            <div class="search-section">
-                <div class="search-bar">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2"
-                              stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                    <input type="text" placeholder="Search your bookings..." class="search-input">
+            
+            <!-- Search and Filter Section -->
+            <div class="search-filter-container">
+                <!-- Search Section -->
+                <div class="search-section">
+                    <div class="search-wrapper">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z" stroke="currentColor" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input type="text" id="bookingSearchInput" placeholder="Search by event name, location, or booking ID..." class="search-input">
+                        <button type="button" id="clearBookingSearch" class="clear-search" style="display: none;">
+                            <i class="bi bi-x"></i>
+                        </button>
+                    </div>
                 </div>
-                <div class="filter-buttons">
-                    <button class="filter-btn active">All</button>
-                    <button class="filter-btn">Completed</button>
-                    <button class="filter-btn">Pending</button>
-                    <button class="filter-btn">Cancelled</button>
+
+                <!-- Filter and Sort Section -->
+                <div class="filter-sort-section">
+                    <!-- Status Filter -->
+                    <div class="filter-wrapper">
+                        <label for="statusFilter" class="filter-label">
+                            <i class="bi bi-filter"></i>
+                            Status:
+                        </label>
+                        <select id="statusFilter" class="status-filter">
+                            <option value="all">All Bookings</option>
+                            <option value="Confirmed">Confirmed</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Cancelled">Cancelled</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+
+                    <!-- Sort Options -->
+                    <div class="filter-wrapper">
+                        <label for="sortSelect" class="filter-label">
+                            <i class="bi bi-funnel"></i>
+                            Sort by:
+                        </label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="default">Default</option>
+                            <option value="date-desc">Date (Latest)</option>
+                            <option value="date-asc">Date (Earliest)</option>
+                            <option value="event-name-asc">Event Name (A-Z)</option>
+                            <option value="event-name-desc">Event Name (Z-A)</option>
+                            <option value="amount-desc">Amount (Highest)</option>
+                            <option value="amount-asc">Amount (Lowest)</option>
+                            <option value="status">Status</option>
+                        </select>
+                    </div>
+
+                    <!-- Date Range Filter -->
+                    <div class="filter-wrapper">
+                        <label for="dateRangeFilter" class="filter-label">
+                            <i class="bi bi-calendar-event"></i>
+                            Date Range:
+                        </label>
+                        <select id="dateRangeFilter" class="date-range-filter">
+                            <option value="all">All Dates</option>
+                            <option value="today">Today</option>
+                            <option value="this-week">This Week</option>
+                            <option value="this-month">This Month</option>
+                            <option value="last-3-months">Last 3 Months</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom Date Range -->
+                    <div id="customDateRange" class="custom-date-range" style="display: none;">
+                        <div class="date-range-wrapper">
+                            <label for="startDate" class="date-label">
+                                <i class="bi bi-calendar-event"></i>
+                                From:
+                            </label>
+                            <input type="date" id="startDate" class="date-input">
+                        </div>
+                        <div class="date-range-wrapper">
+                            <label for="endDate" class="date-label">
+                                <i class="bi bi-calendar-check"></i>
+                                To:
+                            </label>
+                            <input type="date" id="endDate" class="date-input">
+                        </div>
+                        <button type="button" id="applyDateRange" class="btn-apply-date-range">
+                            <i class="bi bi-check"></i>
+                            Apply
+                        </button>
+                        <button type="button" id="clearDateRange" class="btn-clear-date-range" style="display: none;">
+                            <i class="bi bi-x"></i>
+                            Clear
+                        </button>
+                    </div>
+
+                    <!-- Reset Filters -->
+                    <div class="filter-wrapper">
+                        <button type="button" id="resetBookingFilters" class="btn-reset-filters">
+                            <i class="bi bi-arrow-clockwise"></i>
+                            Reset
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Results Count -->
+                <div class="results-info">
+                    <span id="bookingResultsCount" class="results-count">Loading...</span>
                 </div>
             </div>
         </div>
@@ -72,182 +409,32 @@
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Today Section -->
-        <div class="date-group">
-            <div class="date-header">
-                <h2 class="date-title">Today</h2>
-                <span class="date-subtitle">September 18, 2025</span>
+        <!-- Loading Spinner -->
+        <div id="loadingSpinner" class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
             </div>
+            <p class="mt-3">Loading your booking history...</p>
+        </div>
 
-            <div class="booking-card">
-                <div class="booking-main">
-                    <div class="booking-time">2:30 PM</div>
-                    <div class="booking-details">
-                        <h3 class="event-name">Summer Music Festival 2025</h3>
-                        <div class="booking-meta">
-                            <span class="booking-id">Booking #BK001234</span>
-                            <span class="seat-info">Seats: A12, A13, A14</span>
-                            <span class="amount">LKR 15,000</span>
-                        </div>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span>September 18, 2025</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-geo-alt"></i>
-                                <span>Colombo Convention Centre</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-ticket-perforated"></i>
-                                <span>3 VIP Tickets</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="booking-status">
-                        <span class="status-badge confirmed">Confirmed</span>
-                    </div>
-                </div>
-                <div class="booking-actions">
-                    <button class="action-btn primary"
-                            onclick="viewTickets('BK001234', 'Summer Music Festival 2025', ['A12', 'A13', 'A14'], 'VIP', 5000)">
-                        View Tickets
-                    </button>
-                    <button class="action-btn secondary" onclick="downloadPDF('BK001234')">Download PDF</button>
-                </div>
+        <!-- No Bookings Message -->
+        <div id="noBookingsMessage" class="text-center py-5" style="display: none;">
+            <div class="empty-state">
+                <i class="bi bi-calendar-x" style="font-size: 4rem; color: #ccc;"></i>
+                <h3 class="mt-3">No bookings found</h3>
+                <p class="text-muted">You haven't made any bookings yet.</p>
+                <a href="/" class="btn btn-primary">Browse Events</a>
             </div>
         </div>
 
-        <!-- Yesterday Section -->
-        <div class="date-group">
-            <div class="date-header">
-                <h2 class="date-title">Yesterday</h2>
-                <span class="date-subtitle">September 17, 2025</span>
-            </div>
-
-            <div class="booking-card">
-                <div class="booking-main">
-                    <div class="booking-time">7:45 PM</div>
-                    <div class="booking-details">
-                        <h3 class="event-name">Tech Conference 2025</h3>
-                        <div class="booking-meta">
-                            <span class="booking-id">Booking #BK001230</span>
-                            <span class="seat-info">Seats: B05, B06</span>
-                            <span class="amount">LKR 8,000</span>
-                        </div>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span>September 17, 2025</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-geo-alt"></i>
-                                <span>BMICH, Colombo</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-ticket-perforated"></i>
-                                <span>2 Standard Tickets</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="booking-status">
-                        <span class="status-badge completed">Completed</span>
-                    </div>
-                </div>
-                <div class="booking-actions">
-                    <button class="action-btn primary"
-                            onclick="viewTickets('BK001230', 'Tech Conference 2025', ['B05', 'B06'], 'Standard', 4000)">
-                        View Tickets
-                    </button>
-                    <button class="action-btn secondary" onclick="downloadPDF('BK001230')">Download PDF</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- This Week Section -->
-        <div class="date-group">
-            <div class="date-header">
-                <h2 class="date-title">This Week</h2>
-                <span class="date-subtitle">September 15 - 16, 2025</span>
-            </div>
-
-            <div class="booking-card">
-                <div class="booking-main">
-                    <div class="booking-time">6:00 PM</div>
-                    <div class="booking-details">
-                        <h3 class="event-name">Broadway Show: The Lion King</h3>
-                        <div class="booking-meta">
-                            <span class="booking-id">Booking #BK001225</span>
-                            <span class="seat-info">Seats: C10, C11</span>
-                            <span class="amount">LKR 6,000</span>
-                        </div>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span>September 15, 2025</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-geo-alt"></i>
-                                <span>Nelum Pokuna Theatre</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-ticket-perforated"></i>
-                                <span>2 Economy Tickets</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="booking-status">
-                        <span class="status-badge cancelled">Cancelled</span>
-                    </div>
-                </div>
-                <div class="booking-actions">
-                    <button class="action-btn primary" onclick="requestRefund('BK001225')">Request Refund</button>
-                    <button class="action-btn secondary" onclick="viewDetails('BK001225')">View Details</button>
-                </div>
-            </div>
-
-            <div class="booking-card">
-                <div class="booking-main">
-                    <div class="booking-time">3:15 PM</div>
-                    <div class="booking-details">
-                        <h3 class="event-name">Art Gallery Opening</h3>
-                        <div class="booking-meta">
-                            <span class="booking-id">Booking #BK001220</span>
-                            <span class="seat-info">General Admission</span>
-                            <span class="amount">LKR 2,500</span>
-                        </div>
-                        <div class="event-details">
-                            <div class="detail-item">
-                                <i class="bi bi-calendar3"></i>
-                                <span>September 16, 2025</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-geo-alt"></i>
-                                <span>National Art Gallery</span>
-                            </div>
-                            <div class="detail-item">
-                                <i class="bi bi-ticket-perforated"></i>
-                                <span>1 General Ticket</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="booking-status">
-                        <span class="status-badge completed">Completed</span>
-                    </div>
-                </div>
-                <div class="booking-actions">
-                    <button class="action-btn primary"
-                            onclick="viewTickets('BK001220', 'Art Gallery Opening', ['GA001'], 'General', 2500)">View
-                        Tickets
-                    </button>
-                    <button class="action-btn secondary" onclick="downloadPDF('BK001220')">Download PDF</button>
-                </div>
-            </div>
+        <!-- Bookings Container -->
+        <div id="bookingsContainer">
+            <!-- Bookings will be dynamically loaded here -->
         </div>
 
         <!-- Load More Button -->
-        <div class="load-more-container">
-            <button class="load-more-btn">
+        <div class="load-more-container" id="loadMoreContainer" style="display: none;">
+            <button class="load-more-btn" id="loadMoreBtn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
                     <path d="M12 5v14m-7-7h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                           stroke-linejoin="round"/>
@@ -302,21 +489,510 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.js"></script>
     <script>
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function () {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-            });
+        let allBookings = [];
+        let filteredBookings = [];
+        
+        // Search and filter state
+        let currentSearchTerm = '';
+        let currentStatusFilter = 'all';
+        let currentSortValue = 'default';
+        let currentDateRange = 'all';
+        let customDateRange = { start: null, end: null };
+
+        // Load dashboard data on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            loadDashboardData();
+            initializeSearchAndFilters();
+            initializeEventListeners();
         });
 
-        // Search functionality
-        document.querySelector('.search-input').addEventListener('input', function () {
-            // Add search logic here
-            console.log('Searching for:', this.value);
-        });
+        async function loadDashboardData() {
+            try {
+                const response = await fetch('/Home/GetDashboardData');
+                const result = await response.json();
+
+                if (result.success) {
+                    allBookings = result.bookings.map(booking => ({
+                        ...booking,
+                        searchText: `${booking.eventTitle} ${booking.eventLocation} ${booking.bookingId}`.toLowerCase(),
+                        bookingDate: new Date(booking.bookingDateTime),
+                        eventDate: new Date(booking.eventDate)
+                    }));
+                    applyFiltersAndDisplay();
+                } else {
+                    showNoBookingsMessage();
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showNoBookingsMessage();
+            } finally {
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
+        }
+
+        function initializeSearchAndFilters() {
+            const searchInput = document.getElementById('bookingSearchInput');
+            const clearSearch = document.getElementById('clearBookingSearch');
+            const statusFilter = document.getElementById('statusFilter');
+            const sortSelect = document.getElementById('sortSelect');
+            const dateRangeFilter = document.getElementById('dateRangeFilter');
+            const customDateRange = document.getElementById('customDateRange');
+            const startDate = document.getElementById('startDate');
+            const endDate = document.getElementById('endDate');
+            const applyDateRange = document.getElementById('applyDateRange');
+            const clearDateRange = document.getElementById('clearDateRange');
+            const resetFilters = document.getElementById('resetBookingFilters');
+
+            // Search functionality
+            if (searchInput) {
+                let searchTimeout;
+                searchInput.addEventListener('input', function () {
+                    clearTimeout(searchTimeout);
+                    searchTimeout = setTimeout(() => {
+                        currentSearchTerm = this.value.toLowerCase().trim();
+                        updateClearButton();
+                        applyFiltersAndDisplay();
+                    }, 300);
+                });
+            }
+
+            // Clear search
+            if (clearSearch) {
+                clearSearch.addEventListener('click', function () {
+                    searchInput.value = '';
+                    currentSearchTerm = '';
+                    updateClearButton();
+                    applyFiltersAndDisplay();
+                    searchInput.focus();
+                });
+            }
+
+            // Status filter
+            if (statusFilter) {
+                statusFilter.addEventListener('change', function () {
+                    currentStatusFilter = this.value;
+                    applyFiltersAndDisplay();
+                });
+            }
+
+            // Sort functionality
+            if (sortSelect) {
+                sortSelect.addEventListener('change', function () {
+                    currentSortValue = this.value;
+                    applyFiltersAndDisplay();
+                });
+            }
+
+            // Date range filter
+            if (dateRangeFilter) {
+                dateRangeFilter.addEventListener('change', function () {
+                    currentDateRange = this.value;
+                    
+                    if (this.value === 'custom') {
+                        customDateRange.style.display = 'flex';
+                    } else {
+                        customDateRange.style.display = 'none';
+                        customDateRange.start = null;
+                        customDateRange.end = null;
+                        if (startDate) startDate.value = '';
+                        if (endDate) endDate.value = '';
+                    }
+                    
+                    applyFiltersAndDisplay();
+                });
+            }
+
+            // Apply custom date range
+            if (applyDateRange) {
+                applyDateRange.addEventListener('click', function () {
+                    const startValue = startDate ? startDate.value : '';
+                    const endValue = endDate ? endDate.value : '';
+                    
+                    if (!startValue || !endValue) {
+                        alert('Please select both start and end dates.');
+                        return;
+                    }
+                    
+                    if (new Date(startValue) > new Date(endValue)) {
+                        alert('Start date cannot be later than end date.');
+                        return;
+                    }
+                    
+                    customDateRange.start = new Date(startValue);
+                    customDateRange.end = new Date(endValue);
+                    applyFiltersAndDisplay();
+                    clearDateRange.style.display = 'inline-block';
+                });
+            }
+
+            // Clear custom date range
+            if (clearDateRange) {
+                clearDateRange.addEventListener('click', function () {
+                    customDateRange.start = null;
+                    customDateRange.end = null;
+                    if (startDate) startDate.value = '';
+                    if (endDate) endDate.value = '';
+                    this.style.display = 'none';
+                    applyFiltersAndDisplay();
+                });
+            }
+
+            // Reset filters
+            if (resetFilters) {
+                resetFilters.addEventListener('click', function () {
+                    // Reset all form elements
+                    if (searchInput) searchInput.value = '';
+                    if (statusFilter) statusFilter.value = 'all';
+                    if (sortSelect) sortSelect.value = 'default';
+                    if (dateRangeFilter) dateRangeFilter.value = 'all';
+                    if (customDateRange) customDateRange.style.display = 'none';
+                    if (startDate) startDate.value = '';
+                    if (endDate) endDate.value = '';
+                    if (clearDateRange) clearDateRange.style.display = 'none';
+                    
+                    // Reset state
+                    currentSearchTerm = '';
+                    currentStatusFilter = 'all';
+                    currentSortValue = 'default';
+                    currentDateRange = 'all';
+                    customDateRange.start = null;
+                    customDateRange.end = null;
+                    
+                    updateClearButton();
+                    applyFiltersAndDisplay();
+                });
+            }
+        }
+
+        function updateClearButton() {
+            const clearSearch = document.getElementById('clearBookingSearch');
+            if (clearSearch) {
+                clearSearch.style.display = currentSearchTerm ? 'block' : 'none';
+            }
+        }
+
+        function applyFiltersAndDisplay() {
+            console.log('Applying filters:', {
+                search: currentSearchTerm,
+                status: currentStatusFilter,
+                sort: currentSortValue,
+                dateRange: currentDateRange,
+                customRange: customDateRange
+            });
+
+            // Filter bookings
+            filteredBookings = allBookings.filter(booking => {
+                // Search filter
+                const matchesSearch = !currentSearchTerm || booking.searchText.includes(currentSearchTerm);
+
+                // Status filter
+                const matchesStatus = currentStatusFilter === 'all' || 
+                    booking.status.toLowerCase() === currentStatusFilter.toLowerCase();
+
+                // Date range filter
+                let matchesDateRange = true;
+                if (currentDateRange !== 'all') {
+                    const today = new Date();
+                    const bookingDate = booking.bookingDate;
+                    
+                    switch (currentDateRange) {
+                        case 'today':
+                            matchesDateRange = isSameDay(bookingDate, today);
+                            break;
+                        case 'this-week':
+                            const weekStart = new Date(today);
+                            weekStart.setDate(today.getDate() - today.getDay());
+                            weekStart.setHours(0, 0, 0, 0);
+                            matchesDateRange = bookingDate >= weekStart;
+                            break;
+                        case 'this-month':
+                            matchesDateRange = bookingDate.getMonth() === today.getMonth() && 
+                                             bookingDate.getFullYear() === today.getFullYear();
+                            break;
+                        case 'last-3-months':
+                            const threeMonthsAgo = new Date(today);
+                            threeMonthsAgo.setMonth(today.getMonth() - 3);
+                            matchesDateRange = bookingDate >= threeMonthsAgo;
+                            break;
+                        case 'custom':
+                            matchesDateRange = customDateRange.start && customDateRange.end &&
+                                bookingDate >= customDateRange.start && bookingDate <= customDateRange.end;
+                            break;
+                    }
+                }
+
+                return matchesSearch && matchesStatus && matchesDateRange;
+            });
+
+            // Sort bookings
+            if (currentSortValue !== 'default') {
+                filteredBookings.sort((a, b) => {
+                    switch (currentSortValue) {
+                        case 'date-desc':
+                            return b.bookingDate - a.bookingDate;
+                        case 'date-asc':
+                            return a.bookingDate - b.bookingDate;
+                        case 'event-name-asc':
+                            return a.eventTitle.localeCompare(b.eventTitle);
+                        case 'event-name-desc':
+                            return b.eventTitle.localeCompare(a.eventTitle);
+                        case 'amount-desc':
+                            return b.totalAmount - a.totalAmount;
+                        case 'amount-asc':
+                            return a.totalAmount - b.totalAmount;
+                        case 'status':
+                            return a.status.localeCompare(b.status);
+                        default:
+                            return 0;
+                    }
+                });
+            }
+
+            console.log(`Filtered ${filteredBookings.length} bookings from ${allBookings.length} total`);
+            updateResultsCount();
+            displayBookings(filteredBookings);
+        }
+
+        function updateResultsCount() {
+            const resultsCount = document.getElementById('bookingResultsCount');
+            if (resultsCount) {
+                const hasFilters = currentSearchTerm || currentStatusFilter !== 'all' || currentDateRange !== 'all';
+                if (hasFilters) {
+                    resultsCount.textContent = `Showing ${filteredBookings.length} of ${allBookings.length} bookings`;
+                } else {
+                    resultsCount.textContent = `Showing all ${allBookings.length} bookings`;
+                }
+            }
+        }
+
+        function isSameDay(date1, date2) {
+            return date1.getDate() === date2.getDate() &&
+                   date1.getMonth() === date2.getMonth() &&
+                   date1.getFullYear() === date2.getFullYear();
+        }
+
+        function displayBookings(bookings) {
+            const container = document.getElementById('bookingsContainer');
+            
+            if (bookings.length === 0) {
+                showNoBookingsMessage();
+                return;
+            }
+
+            // Group bookings by date
+            const groupedBookings = groupBookingsByDate(bookings);
+            
+            container.innerHTML = '';
+            
+            Object.keys(groupedBookings).forEach(dateKey => {
+                const dateGroup = createDateGroup(dateKey, groupedBookings[dateKey]);
+                container.appendChild(dateGroup);
+            });
+
+            // Show load more button if there are more bookings
+            if (allBookings.length > 20) {
+                document.getElementById('loadMoreContainer').style.display = 'block';
+            }
+        }
+
+        function groupBookingsByDate(bookings) {
+            const today = new Date();
+            const yesterday = new Date(today);
+            yesterday.setDate(yesterday.getDate() - 1);
+            
+            const groups = {
+                today: [],
+                yesterday: [],
+                thisWeek: [],
+                older: []
+            };
+
+            bookings.forEach(booking => {
+                const bookingDate = new Date(booking.bookingDateTime);
+                const bookingDateOnly = new Date(bookingDate.getFullYear(), bookingDate.getMonth(), bookingDate.getDate());
+                const todayOnly = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+                const yesterdayOnly = new Date(yesterday.getFullYear(), yesterday.getMonth(), yesterday.getDate());
+
+                if (bookingDateOnly.getTime() === todayOnly.getTime()) {
+                    groups.today.push(booking);
+                } else if (bookingDateOnly.getTime() === yesterdayOnly.getTime()) {
+                    groups.yesterday.push(booking);
+                } else if (bookingDate > yesterday) {
+                    groups.thisWeek.push(booking);
+                } else {
+                    groups.older.push(booking);
+                }
+            });
+
+            return groups;
+        }
+
+        function createDateGroup(dateKey, bookings) {
+            const dateGroup = document.createElement('div');
+            dateGroup.className = 'date-group';
+
+            const dateTitles = {
+                today: 'Today',
+                yesterday: 'Yesterday',
+                thisWeek: 'This Week',
+                older: 'Previous Bookings'
+            };
+
+            const dateSubtitles = {
+                today: new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                yesterday: new Date(Date.now() - 86400000).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }),
+                thisWeek: 'Recent bookings',
+                older: 'Older bookings'
+            };
+
+            dateGroup.innerHTML = `
+                <div class="date-header">
+                    <h2 class="date-title">${dateTitles[dateKey]}</h2>
+                    <span class="date-subtitle">${dateSubtitles[dateKey]}</span>
+                </div>
+            `;
+
+            bookings.forEach(booking => {
+                const bookingCard = createBookingCard(booking);
+                dateGroup.appendChild(bookingCard);
+            });
+
+            return dateGroup;
+        }
+
+        function createBookingCard(booking) {
+            const card = document.createElement('div');
+            card.className = 'booking-card';
+
+            const bookingTime = new Date(booking.bookingDateTime).toLocaleTimeString('en-US', { 
+                hour: 'numeric', 
+                minute: '2-digit',
+                hour12: true 
+            });
+
+            const eventDate = new Date(booking.eventDate).toLocaleDateString('en-US', { 
+                weekday: 'long', 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+
+            const statusClass = booking.status.toLowerCase();
+            const statusText = booking.status;
+
+            // Create seat summary
+            const seatSummary = booking.tickets.map(ticket => `${ticket.ticketType}`).join(', ');
+            const uniqueTicketTypes = [...new Set(booking.tickets.map(t => t.ticketType))];
+
+            card.innerHTML = `
+                <div class="booking-main">
+                    <div class="booking-time">${bookingTime}</div>
+                    <div class="booking-details">
+                        <h3 class="event-name">${booking.eventTitle}</h3>
+                        <div class="booking-meta">
+                            <span class="booking-id">Booking #BK${booking.bookingId.toString().padStart(6, '0')}</span>
+                            <span class="seat-info">${booking.ticketCount} ticket(s) - ${uniqueTicketTypes.join(', ')}</span>
+                            <span class="amount">LKR ${booking.totalAmount.toLocaleString()}</span>
+                        </div>
+                        <div class="event-details">
+                            <div class="detail-item">
+                                <i class="bi bi-calendar3"></i>
+                                <span>${eventDate}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="bi bi-geo-alt"></i>
+                                <span>${booking.eventLocation}</span>
+                            </div>
+                            <div class="detail-item">
+                                <i class="bi bi-tag"></i>
+                                <span>${booking.categoryName}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="booking-status">
+                        <span class="status-badge ${statusClass}">${statusText}</span>
+                    </div>
+                </div>
+                <div class="booking-actions">
+                    <button class="action-btn primary" onclick="viewTicketsFromBooking(${booking.bookingId})">
+                        View Tickets
+                    </button>
+                    <button class="action-btn secondary" onclick="downloadPDF(${booking.bookingId})">
+                        Download PDF
+                    </button>
+                </div>
+            `;
+
+            return card;
+        }
+
+        function showNoBookingsMessage() {
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('noBookingsMessage').style.display = 'block';
+        }
+
+        function initializeEventListeners() {
+            // Filter functionality
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    const filter = this.textContent.toLowerCase();
+                    filterBookings(filter);
+                });
+            });
+
+            // Search functionality
+            document.querySelector('.search-input').addEventListener('input', function () {
+                searchBookings(this.value);
+            });
+
+            // Load more functionality
+            document.getElementById('loadMoreBtn').addEventListener('click', function () {
+                // Implement load more functionality if needed
+                console.log('Load more clicked');
+            });
+        }
+
+        function filterBookings(filter) {
+            if (filter === 'all') {
+                filteredBookings = [...allBookings];
+            } else {
+                filteredBookings = allBookings.filter(booking => 
+                    booking.status.toLowerCase() === filter
+                );
+            }
+            displayBookings(filteredBookings);
+        }
+
+        function searchBookings(searchTerm) {
+            if (!searchTerm.trim()) {
+                filteredBookings = [...allBookings];
+            } else {
+                filteredBookings = allBookings.filter(booking => 
+                    booking.eventTitle.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    booking.eventLocation.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    booking.bookingId.toString().includes(searchTerm)
+                );
+            }
+            displayBookings(filteredBookings);
+        }
 
         // View Tickets Modal Functions
+        function viewTicketsFromBooking(bookingId) {
+            const booking = allBookings.find(b => b.bookingId === bookingId);
+            if (booking) {
+                viewTickets(
+                    `BK${booking.bookingId.toString().padStart(6, '0')}`, 
+                    booking.eventTitle, 
+                    booking.tickets.map(t => `Ticket-${t.ticketId}`),
+                    booking.tickets[0].ticketType,
+                    booking.tickets[0].price
+                );
+            }
+        }
+
         function viewTickets(bookingId, eventName, seats, ticketType, price) {
             // Update modal content
             document.getElementById('modalEventName').textContent = eventName;
@@ -342,7 +1018,7 @@
                     <div class="qr-code-wrapper d-inline-block">
                         <canvas id="modal-qr-${index}" class="qr-canvas mb-2"></canvas>
                         <div class="qr-info">
-                            <h6>Seat ${seat}</h6>
+                            <h6>${seat}</h6>
                             <p class="text-muted small">${ticketType} - LKR ${price.toLocaleString()}</p>
                             <button class="btn btn-sm btn-outline-primary" onclick="downloadTicketQR('modal-qr-${index}', '${seat}-${ticketType}')">
                                 <i class="bi bi-download"></i> Download
@@ -356,13 +1032,16 @@
                 const canvas = document.getElementById(`modal-qr-${index}`);
                 const ticketData = `BOOKING:${bookingId}|EVENT:${eventName}|SEAT:${seat}|TYPE:${ticketType}|PRICE:${price}`;
 
-                // Simple QR code generation (you can replace with actual QR library)
-                generateSimpleQR(canvas, ticketData);
+                QRCode.toCanvas(canvas, ticketData, {
+                    width: 150,
+                    height: 150,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
             });
-        }
-
-        function generateSimpleQR(canvas, data) {
-            QRCode.toCanvas(canvas, data);
         }
 
         function downloadTicketQR(canvasId, filename) {

@@ -51,10 +51,13 @@ public class BookingRepository : GenericRepository<Booking>, IBookingRepository
     {
         return _context.Bookings
             .Include(b => b.User)
+            .Include(b => b.Event)
+                .ThenInclude(e => e.Location)
+            .Include(b => b.Event)
+                .ThenInclude(e => e.Category)
             .Include(b => b.Promotion)
             .Include(b => b.Tickets)
-            .ThenInclude(t => t.TicketType)
-            .ThenInclude(tt => tt.Event)
+                .ThenInclude(t => t.TicketType)
             .Include(b => b.Payments)
             .Where(b => b.UserID == userId)
             .ToList();

@@ -134,68 +134,67 @@
                         </h3>
                     </div>
 
-                    <form id="ticketForm" action="@Url.Action("SelectSeats", "Home", new { id = Model.EventID })"
-                          method="get">
+                    <form id="ticketForm">
+                        <input type="hidden" id="eventId" value="@Model.EventID" />
                         <div class="ticket-types">
-                            <!-- VIP Tickets -->
-                            <div class="ticket-type">
-                                <div class="ticket-header">
-                                    <h4>VIP</h4>
-                                    <span class="ticket-price">LKR 5,000</span>
-                                </div>
-                                <p class="ticket-description">Premium seating with exclusive amenities</p>
-                                <div class="ticket-quantity">
-                                    <label>Quantity:</label>
-                                    <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('vip')">-
-                                        </button>
-                                        <input type="number" id="vip-qty" name="vipQuantity" value="0" min="0" max="8"
-                                               readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('vip')">+
-                                        </button>
+                            @{
+                                var ticketTypes = ViewBag.TicketTypes as List<star_events.Models.TicketType>;
+                            }
+                            @if (ticketTypes != null && ticketTypes.Any())
+                            {
+                                @foreach (var ticketType in ticketTypes)
+                                {
+                                    var ticketTypeId = ticketType.TicketTypeID.ToString().ToLower();
+                                    var ticketTypeName = ticketType.Name.ToLower().Replace(" ", "");
+                                    
+                                    <div class="ticket-type">
+                                        <div class="ticket-header">
+                                            <h4>@ticketType.Name</h4>
+                                            <span class="ticket-price">LKR @ticketType.Price.ToString("N0")</span>
+                                        </div>
+                                        <p class="ticket-description">
+                                            @if (ticketType.Name.ToLower().Contains("vip"))
+                                            {
+                                                <text>Premium seating with exclusive amenities</text>
+                                            }
+                                            else if (ticketType.Name.ToLower().Contains("standard"))
+                                            {
+                                                <text>Great view with standard amenities</text>
+                                            }
+                                            else if (ticketType.Name.ToLower().Contains("economy"))
+                                            {
+                                                <text>Affordable seating option</text>
+                                            }
+                                            else
+                                            {
+                                                <text>Standard event ticket</text>
+                                            }
+                                        </p>
+                                        <div class="ticket-availability">
+                                            <small class="text-muted">
+                                                @ticketType.AvailableQuantity of @ticketType.TotalQuantity available
+                                            </small>
+                                        </div>
+                                        <div class="ticket-quantity">
+                                            <label>Quantity:</label>
+                                            <div class="quantity-controls">
+                                                <button type="button" class="qty-btn" onclick="decreaseQuantity('@ticketTypeName')">-</button>
+                                                <input type="number" id="@ticketTypeName-qty" name="ticketTypeNameQuantity" 
+                                                       value="0" min="0" max="@Math.Min(ticketType.AvailableQuantity, 8)" readonly>
+                                                <button type="button" class="qty-btn" onclick="increaseQuantity('@ticketTypeName')">+</button>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="@ticketTypeName-id" value="@ticketType.TicketTypeID" />
+                                        <input type="hidden" id="@ticketTypeName-price" value="@ticketType.Price" />
                                     </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="alert alert-info">
+                                    <p>No ticket types available for this event.</p>
                                 </div>
-                            </div>
-
-                            <!-- Standard Tickets -->
-                            <div class="ticket-type">
-                                <div class="ticket-header">
-                                    <h4>Standard</h4>
-                                    <span class="ticket-price">LKR 4,000</span>
-                                </div>
-                                <p class="ticket-description">Great view with standard amenities</p>
-                                <div class="ticket-quantity">
-                                    <label>Quantity:</label>
-                                    <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('standard')">-
-                                        </button>
-                                        <input type="number" id="standard-qty" name="standardQuantity" value="0" min="0"
-                                               max="8" readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('standard')">+
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Economy Tickets -->
-                            <div class="ticket-type">
-                                <div class="ticket-header">
-                                    <h4>Economy</h4>
-                                    <span class="ticket-price">LKR 3,000</span>
-                                </div>
-                                <p class="ticket-description">Affordable seating option</p>
-                                <div class="ticket-quantity">
-                                    <label>Quantity:</label>
-                                    <div class="quantity-controls">
-                                        <button type="button" class="qty-btn" onclick="decreaseQuantity('economy')">-
-                                        </button>
-                                        <input type="number" id="economy-qty" name="economyQuantity" value="0" min="0"
-                                               max="8" readonly>
-                                        <button type="button" class="qty-btn" onclick="increaseQuantity('economy')">+
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            }
                         </div>
 
                         <div class="ticket-summary" id="ticketSummary" style="display: none;">
@@ -210,7 +209,7 @@
                         </div>
 
                         <div class="ticket-actions">
-                            <button type="submit" class="btn btn-primary btn-book" id="selectSeatsBtn" disabled>
+                            <button type="button" class="btn btn-primary btn-book" id="selectSeatsBtn" disabled>
                                 <i class="bi bi-arrow-right"></i>
                                 Select Seats
                             </button>
@@ -227,4 +226,100 @@
 </div>
 
 <!-- Include the event JavaScript -->
-<script src="~/js/event.js"></script>
+<script>
+    // Global variables for ticket management
+    let selectedTickets = [];
+    let totalAmount = 0;
+
+    // Initialize event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('selectSeatsBtn').addEventListener('click', proceedToSeatSelection);
+        updateTicketSummary();
+    });
+
+    function increaseQuantity(ticketTypeName) {
+        const qtyInput = document.getElementById(`${ticketTypeName}-qty`);
+        const maxQty = parseInt(qtyInput.getAttribute('max'));
+        const currentQty = parseInt(qtyInput.value);
+        
+        if (currentQty < maxQty) {
+            qtyInput.value = currentQty + 1;
+            updateTicketSummary();
+        }
+    }
+
+    function decreaseQuantity(ticketTypeName) {
+        const qtyInput = document.getElementById(`${ticketTypeName}-qty`);
+        const currentQty = parseInt(qtyInput.value);
+        
+        if (currentQty > 0) {
+            qtyInput.value = currentQty - 1;
+            updateTicketSummary();
+        }
+    }
+
+    function updateTicketSummary() {
+        const ticketTypes = document.querySelectorAll('.ticket-type');
+        selectedTickets = [];
+        totalAmount = 0;
+
+        ticketTypes.forEach(ticketType => {
+            const qtyInput = ticketType.querySelector('input[type="number"]');
+            const quantity = parseInt(qtyInput.value);
+            
+            if (quantity > 0) {
+                const ticketTypeName = qtyInput.id.replace('-qty', '');
+                const ticketTypeId = document.getElementById(`${ticketTypeName}-id`).value;
+                const price = parseFloat(document.getElementById(`${ticketTypeName}-price`).value);
+                const name = ticketType.querySelector('h4').textContent;
+
+                selectedTickets.push({
+                    ticketTypeId: parseInt(ticketTypeId),
+                    name: name,
+                    price: price,
+                    quantity: quantity
+                });
+
+                totalAmount += price * quantity;
+            }
+        });
+
+        // Update summary display
+        const summaryContainer = document.getElementById('ticketSummary');
+        const summaryItems = document.getElementById('summaryItems');
+        const totalPriceElement = document.getElementById('totalPrice');
+        const selectSeatsBtn = document.getElementById('selectSeatsBtn');
+
+        if (selectedTickets.length > 0) {
+            summaryContainer.style.display = 'block';
+            summaryItems.innerHTML = selectedTickets.map(ticket => `
+                <div class="summary-item">
+                    <span>${ticket.name} x${ticket.quantity}</span>
+                    <span>LKR ${(ticket.price * ticket.quantity).toLocaleString()}</span>
+                </div>
+            `).join('');
+            totalPriceElement.textContent = `LKR ${totalAmount.toLocaleString()}`;
+            selectSeatsBtn.disabled = false;
+        } else {
+            summaryContainer.style.display = 'none';
+            selectSeatsBtn.disabled = true;
+        }
+    }
+
+    function proceedToSeatSelection() {
+        if (selectedTickets.length === 0) {
+            alert('Please select at least one ticket type.');
+            return;
+        }
+
+        // Store selected tickets in session storage
+        sessionStorage.setItem('selectedTickets', JSON.stringify(selectedTickets));
+        sessionStorage.setItem('totalAmount', totalAmount.toString());
+        sessionStorage.setItem('eventId', document.getElementById('eventId').value);
+
+        // Navigate to seat selection page
+        const eventId = document.getElementById('eventId').value;
+        const selectedTicketsJson = encodeURIComponent(JSON.stringify(selectedTickets));
+        window.location.href = `/Home/SelectSeats?id=${eventId}&selectedTickets=${selectedTicketsJson}`;
+    }
+</script>

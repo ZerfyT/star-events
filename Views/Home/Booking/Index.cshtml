@@ -72,11 +72,18 @@
                     </h3>
                 </div>
 
-                <!-- FIXED: Changed form action to Payment -->
-                <form id="bookingForm" action="@Url.Action("Payment", "Home")" method="get" class="booking-form">
-                    <input type="hidden" name="eventId" value="@Model.EventID"/>
-                    <input type="hidden" name="selectedSeats" id="selectedSeatsInput"/>
-                    <input type="hidden" name="totalAmount" id="totalAmountInput"/>
+                <!-- Ticket Summary -->
+                <div class="ticket-summary-section" id="ticketSummarySection">
+                    <h4>Selected Tickets</h4>
+                    <div id="selectedTicketsList" class="selected-tickets-list">
+                        <!-- Selected tickets will be displayed here -->
+                    </div>
+                    <div class="total-amount">
+                        <strong>Total: <span id="bookingTotalAmount">LKR 0</span></strong>
+                    </div>
+                </div>
+
+                <!-- Booking Panel (No Form Needed) -->
 
                     <div class="seat-selection-container">
                         <div class="screen-indicator">
@@ -183,7 +190,7 @@
                     </div>
 
                     <div class="booking-actions">
-                        <button type="submit" class="btn btn-book" id="proceedBtn" disabled>
+                        <button type="button" class="btn btn-book" id="proceedBtn" disabled onclick="proceedToPayment()">
                             <i class="bi bi-credit-card"></i>
                             Proceed to Payment
                         </button>
@@ -192,11 +199,175 @@
                             <span>Your booking is secured with SSL encryption</span>
                         </div>
                     </div>
-                </form>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Include the booking JavaScript -->
-<script src="~/js/booking.js"></script>
+<script>
+    // Global variables
+    let selectedTickets = [];
+    let selectedSeats = [];
+    let totalAmount = 0;
+    let eventId = 0;
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+        loadSelectedTickets();
+        initializeSeatSelection();
+        updateBookingSummary();
+    });
+
+    function loadSelectedTickets() {
+        // Get selected tickets from URL parameters or session storage
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedTicketsParam = urlParams.get('selectedTickets');
+        
+        if (selectedTicketsParam) {
+            try {
+                selectedTickets = JSON.parse(decodeURIComponent(selectedTicketsParam));
+            } catch (e) {
+                console.error('Error parsing selected tickets:', e);
+                selectedTickets = JSON.parse(sessionStorage.getItem('selectedTickets') || '[]');
+            }
+        } else {
+            selectedTickets = JSON.parse(sessionStorage.getItem('selectedTickets') || '[]');
+        }
+
+        totalAmount = parseFloat(sessionStorage.getItem('totalAmount') || '0');
+        eventId = parseInt(sessionStorage.getItem('eventId') || '0');
+
+        // Display selected tickets
+        displaySelectedTickets();
+    }
+
+    function displaySelectedTickets() {
+        const container = document.getElementById('selectedTicketsList');
+        const totalAmountElement = document.getElementById('bookingTotalAmount');
+        
+        if (selectedTickets.length === 0) {
+            container.innerHTML = '<p class="text-muted">No tickets selected</p>';
+            return;
+        }
+
+        container.innerHTML = selectedTickets.map(ticket => `
+            <div class="selected-ticket-item">
+                <span class="ticket-name">${ticket.name}</span>
+                <span class="ticket-quantity">x${ticket.quantity}</span>
+                <span class="ticket-price">LKR ${(ticket.price * ticket.quantity).toLocaleString()}</span>
+            </div>
+        `).join('');
+
+        totalAmountElement.textContent = `LKR ${totalAmount.toLocaleString()}`;
+    }
+
+    function initializeSeatSelection() {
+        // Add click event listeners to seats
+        document.querySelectorAll('.seat').forEach(seat => {
+            seat.addEventListener('click', function() {
+                if (this.classList.contains('occupied')) return;
+                
+                this.classList.toggle('selected');
+                updateSelectedSeats();
+            });
+        });
+    }
+
+    function updateSelectedSeats() {
+        selectedSeats = [];
+        const selectedSeatElements = document.querySelectorAll('.seat.selected');
+        
+        selectedSeatElements.forEach(seat => {
+            const seatId = seat.getAttribute('data-seat');
+            const price = parseFloat(seat.getAttribute('data-price'));
+            
+            // Find matching ticket type based on price
+            let ticketTypeId = 1; // Default
+            selectedTickets.forEach(ticket => {
+                if (ticket.price === price) {
+                    ticketTypeId = ticket.ticketTypeId;
+                }
+            });
+
+            selectedSeats.push({
+                seatId: seatId,
+                eventId: eventId,
+                ticketTypeId: ticketTypeId,
+                price: price
+            });
+        });
+
+        updateBookingSummary();
+    }
+
+    function updateBookingSummary() {
+        const proceedBtn = document.getElementById('proceedBtn');
+        const selectedSeatsContainer = document.getElementById('selectedSeatsContainer');
+        const selectedSeatsListElement = document.getElementById('selectedSeatsList');
+        const bookingSummary = document.getElementById('bookingSummary');
+        const summaryItems = document.getElementById('summaryItems');
+        const totalPriceElement = document.getElementById('totalPrice');
+
+        // Update selected seats display
+        if (selectedSeats.length > 0) {
+            selectedSeatsContainer.style.display = 'block';
+            selectedSeatsListElement.innerHTML = selectedSeats.map(seat => `
+                <div class="selected-seat-item">
+                    <span class="seat-id">${seat.seatId}</span>
+                    <span class="seat-price">LKR ${seat.price.toLocaleString()}</span>
+                </div>
+            `).join('');
+
+            bookingSummary.style.display = 'block';
+            
+            // Calculate total with seat prices
+            const seatTotal = selectedSeats.reduce((sum, seat) => sum + seat.price, 0);
+            summaryItems.innerHTML = `
+                <div class="summary-item">
+                    <span>Selected Seats (${selectedSeats.length})</span>
+                    <span>LKR ${seatTotal.toLocaleString()}</span>
+                </div>
+            `;
+            totalPriceElement.textContent = `LKR ${seatTotal.toLocaleString()}`;
+
+            proceedBtn.disabled = false;
+        } else {
+            selectedSeatsContainer.style.display = 'none';
+            bookingSummary.style.display = 'none';
+            proceedBtn.disabled = true;
+        }
+
+        // Debug logging
+        console.log('Updated booking data:');
+        console.log('SelectedSeats:', JSON.stringify(selectedSeats));
+        console.log('SelectedTickets:', JSON.stringify(selectedTickets));
+        console.log('TotalAmount:', selectedSeats.length > 0 ? 
+            selectedSeats.reduce((sum, seat) => sum + seat.price, 0) : totalAmount);
+    }
+
+    // Function to proceed to payment with URL parameters
+    function proceedToPayment() {
+        if (selectedSeats.length === 0) {
+            alert('Please select at least one seat.');
+            return;
+        }
+
+        // Prepare URL parameters
+        const eventId = @Model.EventID;
+        const selectedSeatsJson = encodeURIComponent(JSON.stringify(selectedSeats));
+        const selectedTicketsJson = encodeURIComponent(JSON.stringify(selectedTickets));
+        const totalAmount = selectedSeats.reduce((sum, seat) => sum + seat.price, 0);
+
+        // Debug: Log URL parameters
+        console.log('Proceeding to payment with URL parameters:');
+        console.log('EventId:', eventId);
+        console.log('SelectedSeats:', selectedSeatsJson);
+        console.log('SelectedTickets:', selectedTicketsJson);
+        console.log('TotalAmount:', totalAmount);
+
+        // Navigate to payment page with URL parameters
+        const paymentUrl = `/Home/Payment?eventId=${eventId}&selectedSeats=${selectedSeatsJson}&selectedTickets=${selectedTicketsJson}&totalAmount=${totalAmount}`;
+        window.location.href = paymentUrl;
+    }
+</script>

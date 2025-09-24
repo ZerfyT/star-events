@@ -187,23 +187,23 @@
         let loyaltyPointsToUse = 0;
         let availableLoyaltyPoints = 0;
 
-        // Load booking data from session storage
+        // Load booking data from server session
         document.addEventListener('DOMContentLoaded', function () {
-            const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
-            const totalAmount = sessionStorage.getItem('totalAmount') || '0';
+            // Get booking data from ViewBag
+            const bookingData = @Html.Raw(Json.Serialize(ViewBag.BookingData));
+            
+            if (!bookingData || !bookingData.selectedSeats || bookingData.selectedSeats.length === 0) {
+                alert('No booking data found. Please start the booking process again.');
+                window.location.href = '/';
+                return;
+            }
 
             // Set original amount
-            originalAmount = parseInt(totalAmount);
+            originalAmount = bookingData.totalAmount || 0;
 
             // Update the amount displays
             document.getElementById('subtotalAmount').textContent = `LKR ${originalAmount.toLocaleString()}`;
             document.getElementById('totalAmount').textContent = `LKR ${originalAmount.toLocaleString()}`;
-
-            // If no booking data, redirect back to home
-            if (selectedSeats.length === 0) {
-                alert('No booking data found. Please start the booking process again.');
-                window.location.href = '/';
-            }
 
             // Load user loyalty points
             loadUserLoyaltyPoints();
@@ -407,16 +407,29 @@
                 // Get form data
                 const formData = new FormData(this);
                 const finalAmount = parseFloat(document.getElementById('totalAmount').textContent.replace(/[^\d.]/g, ''));
+                
+                // Get booking data from server session (already available in ViewBag)
+                const bookingData = @Html.Raw(Json.Serialize(ViewBag.BookingData));
+                
+                // Add URL parameters to form data for payment processing
+                const urlParams = new URLSearchParams(window.location.search);
                 formData.append('Amount', finalAmount);
                 formData.append('OriginalAmount', originalAmount);
                 formData.append('DiscountAmount', discountAmount);
                 formData.append('LoyaltyDiscountAmount', loyaltyDiscountAmount);
                 formData.append('LoyaltyPointsUsed', loyaltyPointsToUse);
+                
+                // Add booking data from URL parameters
+                formData.append('eventId', urlParams.get('eventId') || '');
+                formData.append('selectedSeats', urlParams.get('selectedSeats') || '');
+                formData.append('selectedTickets', urlParams.get('selectedTickets') || '');
+                formData.append('totalAmount', urlParams.get('totalAmount') || '');
+                
                 if (appliedPromoCode) {
                     formData.append('PromoCode', appliedPromoCode.PromoCode);
                 }
 
-                // Simulate payment processing
+                // Process payment
                 const response = await fetch('/Home/ProcessPayment', {
                     method: 'POST',
                     body: formData
@@ -472,8 +485,9 @@
             const container = document.getElementById('qrCodesContainer');
             container.innerHTML = '';
 
-            // Get selected seats from session storage
-            const selectedSeats = JSON.parse(sessionStorage.getItem('selectedSeats') || '[]');
+            // Get booking data from server session
+            const bookingData = @Html.Raw(Json.Serialize(ViewBag.BookingData));
+            const selectedSeats = bookingData.selectedSeats || [];
             const ticketIds = JSON.parse(sessionStorage.getItem('createdTicketIds') || '[]');
 
             if (selectedSeats.length === 0) {
