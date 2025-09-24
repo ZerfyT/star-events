@@ -293,8 +293,8 @@
 
 <div class="container">
     <!-- Header Section -->
-    <div class="header">
-        <div class="header-content">
+    <div class="">
+        <div class="">
             <h1 class="page-title">Booking History</h1>
             
             <!-- Search and Filter Section -->
@@ -777,16 +777,17 @@
             if (bookings.length === 0) {
                 showNoBookingsMessage();
                 return;
+            } else {
+                hideNoBookingsMessage();
             }
+            console.log(bookings);
 
             // Group bookings by date
-            const groupedBookings = groupBookingsByDate(bookings);
-            
-            container.innerHTML = '';
-            
-            Object.keys(groupedBookings).forEach(dateKey => {
-                const dateGroup = createDateGroup(dateKey, groupedBookings[dateKey]);
-                container.appendChild(dateGroup);
+            // const groupedBookings = groupBookingsByDate(bookings);
+
+            bookings.forEach(booking => {
+                const bookingCard = createBookingCard(booking);
+                container.appendChild(bookingCard);
             });
 
             // Show load more button if there are more bookings
@@ -892,7 +893,7 @@
                         <div class="booking-meta">
                             <span class="booking-id">Booking #BK${booking.bookingId.toString().padStart(6, '0')}</span>
                             <span class="seat-info">${booking.ticketCount} ticket(s) - ${uniqueTicketTypes.join(', ')}</span>
-                            <span class="amount">LKR ${booking.totalAmount.toLocaleString()}</span>
+                            <span class="amount">$ ${booking.totalAmount.toLocaleString()}</span>
                         </div>
                         <div class="event-details">
                             <div class="detail-item">
@@ -927,8 +928,15 @@
         }
 
         function showNoBookingsMessage() {
+            document.getElementById('bookingsContainer').innerHTML = '';
             document.getElementById('loadingSpinner').style.display = 'none';
             document.getElementById('noBookingsMessage').style.display = 'block';
+        }
+
+        function hideNoBookingsMessage() {
+            document.getElementById('bookingsContainer').innerHTML = '';
+            document.getElementById('loadingSpinner').style.display = 'none';
+            document.getElementById('noBookingsMessage').style.display = 'none';
         }
 
         function initializeEventListeners() {
@@ -1019,7 +1027,7 @@
                         <canvas id="modal-qr-${index}" class="qr-canvas mb-2"></canvas>
                         <div class="qr-info">
                             <h6>${seat}</h6>
-                            <p class="text-muted small">${ticketType} - LKR ${price.toLocaleString()}</p>
+                            <p class="text-muted small">${ticketType} - $ ${price.toLocaleString()}</p>
                             <button class="btn btn-sm btn-outline-primary" onclick="downloadTicketQR('modal-qr-${index}', '${seat}-${ticketType}')">
                                 <i class="bi bi-download"></i> Download
                             </button>
